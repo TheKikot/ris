@@ -16,6 +16,26 @@ def rectangle_movement(step):
 
   return twist
 
+def triangle_movement(step):
+
+  twist = Twist()
+  twist.linear.x = 0.1
+  step = step % 15
+
+  if step % 5 == 0:
+    twist.linear.x = 0
+    twist.angular.z = 2.09 #(120 / 360) * 2 * 3.14
+
+  return twist
+  
+def circle_movement(step):
+
+  twist = Twist()
+  twist.linear.x = 0.02
+  twist.angular.z = 0,017	#(1 / 360) * 2 * 3.14
+  step = step % 20
+
+  return twist
 
 def move_server_function(req):
     print("Shape: " + req.shape)
