@@ -14,6 +14,9 @@ int main(int argc, char **argv)
   pck2::sum srv;
 
   std::vector<int> ss(10);
+  
+  /* initialize random seed: */
+  srand (time(NULL));
 
   for(int i = 0; i < 10; i++){
 	ss[i] = rand() % 10;

@@ -25,12 +25,12 @@ bool manipulate(pck2::sum::Request  &req,
 	int currNum = atoi(pch);
 	sum += currNum;
 	pch = strtok(NULL, " ");
-  }
+  }	*/
 
-  res.comment = itoa(sum, res.comment, 10);
+  res.comment = sum;
 
-  ROS_INFO("request: %s, response: %s", req.content.c_str(), res.comment.c_str());
-  return true;*/
+  //ROS_INFO("request: %s, response: %s", req.content.c_str(), res.comment.c_str());
+
   return true;
 }
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
 
   ros::ServiceServer service = n.advertiseService("our_service_node/string", manipulate);
-  ROS_INFO("I am ready to mess up your string!");
+  ROS_INFO("I am ready to add your numbers!");
   ros::spin();
 
   return 0;

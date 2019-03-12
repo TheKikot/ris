@@ -6,6 +6,46 @@
 
 #IncludeRegexTransform: 
 
+/home/kikot/ROS/devel/include/pck2/sum.h
+ros/service_traits.h
+-
+pck2/sumRequest.h
+-
+pck2/sumResponse.h
+-
+
+/home/kikot/ROS/devel/include/pck2/sumRequest.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/home/kikot/ROS/devel/include/pck2/sumResponse.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
 /home/kikot/ROS/src/pck2/src/service_node.cpp
 ros/ros.h
 /home/kikot/ROS/src/pck2/src/ros/ros.h
@@ -226,6 +266,10 @@ boost/make_shared.hpp
 cstddef
 -
 memory
+-
+
+/opt/ros/kinetic/include/ros/message_operations.h
+ostream
 -
 
 /opt/ros/kinetic/include/ros/message_traits.h
