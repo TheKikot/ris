@@ -111,17 +111,6 @@ install/local/fast: install/local
 
 .PHONY : install/local/fast
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -132,6 +121,17 @@ install/strip: preinstall
 install/strip/fast: install/strip
 
 .PHONY : install/strip/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -166,51 +166,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-exercise1_generate_messages_nodejs: exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule
-
-.PHONY : exercise1_generate_messages_nodejs
-
-# fast build rule for target.
-exercise1_generate_messages_nodejs/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/build
-.PHONY : exercise1_generate_messages_nodejs/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-exercise1_generate_messages_cpp: exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule
-
-.PHONY : exercise1_generate_messages_cpp
-
-# fast build rule for target.
-exercise1_generate_messages_cpp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/build
-.PHONY : exercise1_generate_messages_cpp/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-exercise1_generate_messages_lisp: exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule
-
-.PHONY : exercise1_generate_messages_lisp
-
-# fast build rule for target.
-exercise1_generate_messages_lisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/build
-.PHONY : exercise1_generate_messages_lisp/fast
-
-# Convenience name for target.
 exercise1/CMakeFiles/client_node.dir/rule:
 	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/client_node.dir/rule
 .PHONY : exercise1/CMakeFiles/client_node.dir/rule
@@ -226,154 +181,19 @@ client_node/fast:
 .PHONY : client_node/fast
 
 # Convenience name for target.
-exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule
+exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule
 
 # Convenience name for target.
-exercise1_generate_messages_eus: exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule
+exercise1_generate_messages_py: exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule
 
-.PHONY : exercise1_generate_messages_eus
+.PHONY : exercise1_generate_messages_py
 
 # fast build rule for target.
-exercise1_generate_messages_eus/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/build
-.PHONY : exercise1_generate_messages_eus/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule
-.PHONY : exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule
-
-# Convenience name for target.
-_exercise1_generate_messages_check_deps_Reverse: exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule
-
-.PHONY : _exercise1_generate_messages_check_deps_Reverse
-
-# fast build rule for target.
-_exercise1_generate_messages_check_deps_Reverse/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/build.make exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/build
-.PHONY : _exercise1_generate_messages_check_deps_Reverse/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_genpy.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_genpy.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_genpy.dir/rule
-
-# Convenience name for target.
-exercise1_genpy: exercise1/CMakeFiles/exercise1_genpy.dir/rule
-
-.PHONY : exercise1_genpy
-
-# fast build rule for target.
-exercise1_genpy/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_genpy.dir/build.make exercise1/CMakeFiles/exercise1_genpy.dir/build
-.PHONY : exercise1_genpy/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/service_node.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/service_node.dir/rule
-.PHONY : exercise1/CMakeFiles/service_node.dir/rule
-
-# Convenience name for target.
-service_node: exercise1/CMakeFiles/service_node.dir/rule
-
-.PHONY : service_node
-
-# fast build rule for target.
-service_node/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/service_node.dir/build.make exercise1/CMakeFiles/service_node.dir/build
-.PHONY : service_node/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule
-.PHONY : exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule
-
-# Convenience name for target.
-_exercise1_generate_messages_check_deps_Greeting: exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule
-
-.PHONY : _exercise1_generate_messages_check_deps_Greeting
-
-# fast build rule for target.
-_exercise1_generate_messages_check_deps_Greeting/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/build.make exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/build
-.PHONY : _exercise1_generate_messages_check_deps_Greeting/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/publish_custom.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/publish_custom.dir/rule
-.PHONY : exercise1/CMakeFiles/publish_custom.dir/rule
-
-# Convenience name for target.
-publish_custom: exercise1/CMakeFiles/publish_custom.dir/rule
-
-.PHONY : publish_custom
-
-# fast build rule for target.
-publish_custom/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/publish_custom.dir/build.make exercise1/CMakeFiles/publish_custom.dir/build
-.PHONY : publish_custom/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_gencpp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_gencpp.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_gencpp.dir/rule
-
-# Convenience name for target.
-exercise1_gencpp: exercise1/CMakeFiles/exercise1_gencpp.dir/rule
-
-.PHONY : exercise1_gencpp
-
-# fast build rule for target.
-exercise1_gencpp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_gencpp.dir/build.make exercise1/CMakeFiles/exercise1_gencpp.dir/build
-.PHONY : exercise1_gencpp/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_genlisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_genlisp.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_genlisp.dir/rule
-
-# Convenience name for target.
-exercise1_genlisp: exercise1/CMakeFiles/exercise1_genlisp.dir/rule
-
-.PHONY : exercise1_genlisp
-
-# fast build rule for target.
-exercise1_genlisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_genlisp.dir/build.make exercise1/CMakeFiles/exercise1_genlisp.dir/build
-.PHONY : exercise1_genlisp/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/subscribe_custom.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/subscribe_custom.dir/rule
-.PHONY : exercise1/CMakeFiles/subscribe_custom.dir/rule
-
-# Convenience name for target.
-subscribe_custom: exercise1/CMakeFiles/subscribe_custom.dir/rule
-
-.PHONY : subscribe_custom
-
-# fast build rule for target.
-subscribe_custom/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/subscribe_custom.dir/build.make exercise1/CMakeFiles/subscribe_custom.dir/build
-.PHONY : subscribe_custom/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_generate_messages.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_generate_messages.dir/rule
-
-# Convenience name for target.
-exercise1_generate_messages: exercise1/CMakeFiles/exercise1_generate_messages.dir/rule
-
-.PHONY : exercise1_generate_messages
-
-# fast build rule for target.
-exercise1_generate_messages/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages.dir/build
-.PHONY : exercise1_generate_messages/fast
+exercise1_generate_messages_py/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_py.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_py.dir/build
+.PHONY : exercise1_generate_messages_py/fast
 
 # Convenience name for target.
 exercise1/CMakeFiles/exercise1_gennodejs.dir/rule:
@@ -391,6 +211,381 @@ exercise1_gennodejs/fast:
 .PHONY : exercise1_gennodejs/fast
 
 # Convenience name for target.
+exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+exercise1_generate_messages_nodejs: exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/rule
+
+.PHONY : exercise1_generate_messages_nodejs
+
+# fast build rule for target.
+exercise1_generate_messages_nodejs/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_nodejs.dir/build
+.PHONY : exercise1_generate_messages_nodejs/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+.PHONY : exercise1/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_py: exercise1/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+
+.PHONY : std_msgs_generate_messages_py
+
+# fast build rule for target.
+std_msgs_generate_messages_py/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/std_msgs_generate_messages_py.dir/build.make exercise1/CMakeFiles/std_msgs_generate_messages_py.dir/build
+.PHONY : std_msgs_generate_messages_py/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/publish_custom.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/publish_custom.dir/rule
+.PHONY : exercise1/CMakeFiles/publish_custom.dir/rule
+
+# Convenience name for target.
+publish_custom: exercise1/CMakeFiles/publish_custom.dir/rule
+
+.PHONY : publish_custom
+
+# fast build rule for target.
+publish_custom/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/publish_custom.dir/build.make exercise1/CMakeFiles/publish_custom.dir/build
+.PHONY : publish_custom/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/roscpp_generate_messages_py.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/roscpp_generate_messages_py.dir/rule
+.PHONY : exercise1/CMakeFiles/roscpp_generate_messages_py.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_py: exercise1/CMakeFiles/roscpp_generate_messages_py.dir/rule
+
+.PHONY : roscpp_generate_messages_py
+
+# fast build rule for target.
+roscpp_generate_messages_py/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/roscpp_generate_messages_py.dir/build.make exercise1/CMakeFiles/roscpp_generate_messages_py.dir/build
+.PHONY : roscpp_generate_messages_py/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+.PHONY : exercise1/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_eus: exercise1/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_eus
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_eus/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make exercise1/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
+.PHONY : rosgraph_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule
+.PHONY : exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule
+
+# Convenience name for target.
+_exercise1_generate_messages_check_deps_Reverse: exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/rule
+
+.PHONY : _exercise1_generate_messages_check_deps_Reverse
+
+# fast build rule for target.
+_exercise1_generate_messages_check_deps_Reverse/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/build.make exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Reverse.dir/build
+.PHONY : _exercise1_generate_messages_check_deps_Reverse/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+exercise1_generate_messages_eus: exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/rule
+
+.PHONY : exercise1_generate_messages_eus
+
+# fast build rule for target.
+exercise1_generate_messages_eus/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_eus.dir/build
+.PHONY : exercise1_generate_messages_eus/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_genpy.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_genpy.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_genpy.dir/rule
+
+# Convenience name for target.
+exercise1_genpy: exercise1/CMakeFiles/exercise1_genpy.dir/rule
+
+.PHONY : exercise1_genpy
+
+# fast build rule for target.
+exercise1_genpy/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_genpy.dir/build.make exercise1/CMakeFiles/exercise1_genpy.dir/build
+.PHONY : exercise1_genpy/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : exercise1/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_nodejs: exercise1/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_nodejs/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make exercise1/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
+.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+.PHONY : exercise1/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_cpp: exercise1/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+
+.PHONY : roscpp_generate_messages_cpp
+
+# fast build rule for target.
+roscpp_generate_messages_cpp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make exercise1/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+.PHONY : roscpp_generate_messages_cpp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/service_node.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/service_node.dir/rule
+.PHONY : exercise1/CMakeFiles/service_node.dir/rule
+
+# Convenience name for target.
+service_node: exercise1/CMakeFiles/service_node.dir/rule
+
+.PHONY : service_node
+
+# fast build rule for target.
+service_node/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/service_node.dir/build.make exercise1/CMakeFiles/service_node.dir/build
+.PHONY : service_node/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+.PHONY : exercise1/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_cpp: exercise1/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_cpp
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_cpp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make exercise1/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+.PHONY : rosgraph_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+.PHONY : exercise1/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_cpp: exercise1/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : std_msgs_generate_messages_cpp
+
+# fast build rule for target.
+std_msgs_generate_messages_cpp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make exercise1/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+.PHONY : std_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+exercise1_generate_messages_lisp: exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/rule
+
+.PHONY : exercise1_generate_messages_lisp
+
+# fast build rule for target.
+exercise1_generate_messages_lisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_lisp.dir/build
+.PHONY : exercise1_generate_messages_lisp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+.PHONY : exercise1/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_eus: exercise1/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+
+.PHONY : roscpp_generate_messages_eus
+
+# fast build rule for target.
+roscpp_generate_messages_eus/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/roscpp_generate_messages_eus.dir/build.make exercise1/CMakeFiles/roscpp_generate_messages_eus.dir/build
+.PHONY : roscpp_generate_messages_eus/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule
+.PHONY : exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule
+
+# Convenience name for target.
+_exercise1_generate_messages_check_deps_Greeting: exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/rule
+
+.PHONY : _exercise1_generate_messages_check_deps_Greeting
+
+# fast build rule for target.
+_exercise1_generate_messages_check_deps_Greeting/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/build.make exercise1/CMakeFiles/_exercise1_generate_messages_check_deps_Greeting.dir/build
+.PHONY : _exercise1_generate_messages_check_deps_Greeting/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
+.PHONY : exercise1/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_nodejs: exercise1/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : std_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+std_msgs_generate_messages_nodejs/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make exercise1/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
+.PHONY : std_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+.PHONY : exercise1/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_lisp: exercise1/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+
+.PHONY : roscpp_generate_messages_lisp
+
+# fast build rule for target.
+roscpp_generate_messages_lisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make exercise1/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+.PHONY : roscpp_generate_messages_lisp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/std_msgs_generate_messages_eus.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+.PHONY : exercise1/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_eus: exercise1/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+
+.PHONY : std_msgs_generate_messages_eus
+
+# fast build rule for target.
+std_msgs_generate_messages_eus/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make exercise1/CMakeFiles/std_msgs_generate_messages_eus.dir/build
+.PHONY : std_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+.PHONY : exercise1/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_lisp: exercise1/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : std_msgs_generate_messages_lisp
+
+# fast build rule for target.
+std_msgs_generate_messages_lisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make exercise1/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/subscribe_custom.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/subscribe_custom.dir/rule
+.PHONY : exercise1/CMakeFiles/subscribe_custom.dir/rule
+
+# Convenience name for target.
+subscribe_custom: exercise1/CMakeFiles/subscribe_custom.dir/rule
+
+.PHONY : subscribe_custom
+
+# fast build rule for target.
+subscribe_custom/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/subscribe_custom.dir/build.make exercise1/CMakeFiles/subscribe_custom.dir/build
+.PHONY : subscribe_custom/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_genlisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_genlisp.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_genlisp.dir/rule
+
+# Convenience name for target.
+exercise1_genlisp: exercise1/CMakeFiles/exercise1_genlisp.dir/rule
+
+.PHONY : exercise1_genlisp
+
+# fast build rule for target.
+exercise1_genlisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_genlisp.dir/build.make exercise1/CMakeFiles/exercise1_genlisp.dir/build
+.PHONY : exercise1_genlisp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_generate_messages.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_generate_messages.dir/rule
+
+# Convenience name for target.
+exercise1_generate_messages: exercise1/CMakeFiles/exercise1_generate_messages.dir/rule
+
+.PHONY : exercise1_generate_messages
+
+# fast build rule for target.
+exercise1_generate_messages/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages.dir/build
+.PHONY : exercise1_generate_messages/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+exercise1_generate_messages_cpp: exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/rule
+
+.PHONY : exercise1_generate_messages_cpp
+
+# fast build rule for target.
+exercise1_generate_messages_cpp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_cpp.dir/build
+.PHONY : exercise1_generate_messages_cpp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_gencpp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_gencpp.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_gencpp.dir/rule
+
+# Convenience name for target.
+exercise1_gencpp: exercise1/CMakeFiles/exercise1_gencpp.dir/rule
+
+.PHONY : exercise1_gencpp
+
+# fast build rule for target.
+exercise1_gencpp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_gencpp.dir/build.make exercise1/CMakeFiles/exercise1_gencpp.dir/build
+.PHONY : exercise1_gencpp/fast
+
+# Convenience name for target.
 exercise1/CMakeFiles/subscribe_string.dir/rule:
 	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/subscribe_string.dir/rule
 .PHONY : exercise1/CMakeFiles/subscribe_string.dir/rule
@@ -404,36 +599,6 @@ subscribe_string: exercise1/CMakeFiles/subscribe_string.dir/rule
 subscribe_string/fast:
 	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/subscribe_string.dir/build.make exercise1/CMakeFiles/subscribe_string.dir/build
 .PHONY : subscribe_string/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/exercise1_geneus.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_geneus.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_geneus.dir/rule
-
-# Convenience name for target.
-exercise1_geneus: exercise1/CMakeFiles/exercise1_geneus.dir/rule
-
-.PHONY : exercise1_geneus
-
-# fast build rule for target.
-exercise1_geneus/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_geneus.dir/build.make exercise1/CMakeFiles/exercise1_geneus.dir/build
-.PHONY : exercise1_geneus/fast
-
-# Convenience name for target.
-exercise1/CMakeFiles/hello_world.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/hello_world.dir/rule
-.PHONY : exercise1/CMakeFiles/hello_world.dir/rule
-
-# Convenience name for target.
-hello_world: exercise1/CMakeFiles/hello_world.dir/rule
-
-.PHONY : hello_world
-
-# fast build rule for target.
-hello_world/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/hello_world.dir/build.make exercise1/CMakeFiles/hello_world.dir/build
-.PHONY : hello_world/fast
 
 # Convenience name for target.
 exercise1/CMakeFiles/publish_string.dir/rule:
@@ -451,19 +616,79 @@ publish_string/fast:
 .PHONY : publish_string/fast
 
 # Convenience name for target.
-exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule
-.PHONY : exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule
+exercise1/CMakeFiles/hello_world.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/hello_world.dir/rule
+.PHONY : exercise1/CMakeFiles/hello_world.dir/rule
 
 # Convenience name for target.
-exercise1_generate_messages_py: exercise1/CMakeFiles/exercise1_generate_messages_py.dir/rule
+hello_world: exercise1/CMakeFiles/hello_world.dir/rule
 
-.PHONY : exercise1_generate_messages_py
+.PHONY : hello_world
 
 # fast build rule for target.
-exercise1_generate_messages_py/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_generate_messages_py.dir/build.make exercise1/CMakeFiles/exercise1_generate_messages_py.dir/build
-.PHONY : exercise1_generate_messages_py/fast
+hello_world/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/hello_world.dir/build.make exercise1/CMakeFiles/hello_world.dir/build
+.PHONY : hello_world/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+.PHONY : exercise1/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_py: exercise1/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_py
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_py/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make exercise1/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
+.PHONY : rosgraph_msgs_generate_messages_py/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+.PHONY : exercise1/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_lisp: exercise1/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_lisp
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_lisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make exercise1/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
+.PHONY : rosgraph_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+.PHONY : exercise1/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_nodejs: exercise1/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+
+.PHONY : roscpp_generate_messages_nodejs
+
+# fast build rule for target.
+roscpp_generate_messages_nodejs/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make exercise1/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
+.PHONY : roscpp_generate_messages_nodejs/fast
+
+# Convenience name for target.
+exercise1/CMakeFiles/exercise1_geneus.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 exercise1/CMakeFiles/exercise1_geneus.dir/rule
+.PHONY : exercise1/CMakeFiles/exercise1_geneus.dir/rule
+
+# Convenience name for target.
+exercise1_geneus: exercise1/CMakeFiles/exercise1_geneus.dir/rule
+
+.PHONY : exercise1_geneus
+
+# fast build rule for target.
+exercise1_geneus/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f exercise1/CMakeFiles/exercise1_geneus.dir/build.make exercise1/CMakeFiles/exercise1_geneus.dir/build
+.PHONY : exercise1_geneus/fast
 
 src/client_node.o: src/client_node.cpp.o
 
@@ -664,29 +889,44 @@ help:
 	@echo "... install"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... exercise1_generate_messages_nodejs"
-	@echo "... exercise1_generate_messages_cpp"
 	@echo "... install/local"
-	@echo "... exercise1_generate_messages_lisp"
 	@echo "... client_node"
-	@echo "... exercise1_generate_messages_eus"
-	@echo "... _exercise1_generate_messages_check_deps_Reverse"
-	@echo "... exercise1_genpy"
-	@echo "... service_node"
-	@echo "... _exercise1_generate_messages_check_deps_Greeting"
-	@echo "... publish_custom"
-	@echo "... exercise1_gencpp"
-	@echo "... exercise1_genlisp"
-	@echo "... subscribe_custom"
-	@echo "... exercise1_generate_messages"
-	@echo "... test"
-	@echo "... exercise1_gennodejs"
-	@echo "... subscribe_string"
-	@echo "... exercise1_geneus"
-	@echo "... hello_world"
-	@echo "... publish_string"
 	@echo "... install/strip"
 	@echo "... exercise1_generate_messages_py"
+	@echo "... test"
+	@echo "... exercise1_gennodejs"
+	@echo "... exercise1_generate_messages_nodejs"
+	@echo "... std_msgs_generate_messages_py"
+	@echo "... publish_custom"
+	@echo "... roscpp_generate_messages_py"
+	@echo "... rosgraph_msgs_generate_messages_eus"
+	@echo "... _exercise1_generate_messages_check_deps_Reverse"
+	@echo "... exercise1_generate_messages_eus"
+	@echo "... exercise1_genpy"
+	@echo "... rosgraph_msgs_generate_messages_nodejs"
+	@echo "... roscpp_generate_messages_cpp"
+	@echo "... service_node"
+	@echo "... rosgraph_msgs_generate_messages_cpp"
+	@echo "... std_msgs_generate_messages_cpp"
+	@echo "... exercise1_generate_messages_lisp"
+	@echo "... roscpp_generate_messages_eus"
+	@echo "... _exercise1_generate_messages_check_deps_Greeting"
+	@echo "... std_msgs_generate_messages_nodejs"
+	@echo "... roscpp_generate_messages_lisp"
+	@echo "... std_msgs_generate_messages_eus"
+	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... subscribe_custom"
+	@echo "... exercise1_genlisp"
+	@echo "... exercise1_generate_messages"
+	@echo "... exercise1_generate_messages_cpp"
+	@echo "... exercise1_gencpp"
+	@echo "... subscribe_string"
+	@echo "... publish_string"
+	@echo "... hello_world"
+	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... rosgraph_msgs_generate_messages_lisp"
+	@echo "... roscpp_generate_messages_nodejs"
+	@echo "... exercise1_geneus"
 	@echo "... src/client_node.o"
 	@echo "... src/client_node.i"
 	@echo "... src/client_node.s"

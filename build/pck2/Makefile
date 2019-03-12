@@ -90,16 +90,16 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
 
-# Special rule for the target test
-test/fast: test
+# Special rule for the target install/strip
+install/strip/fast: install/strip
 
-.PHONY : test/fast
+.PHONY : install/strip/fast
 
 # Special rule for the target install/local
 install/local: preinstall
@@ -112,17 +112,6 @@ install/local/fast: install/local
 
 .PHONY : install/local/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: install/strip
-
-.PHONY : install/strip/fast
-
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -132,6 +121,17 @@ list_install_components:
 list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -166,19 +166,19 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-pck2/CMakeFiles/publisher_node.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/publisher_node.dir/rule
-.PHONY : pck2/CMakeFiles/publisher_node.dir/rule
+pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule
+.PHONY : pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule
 
 # Convenience name for target.
-publisher_node: pck2/CMakeFiles/publisher_node.dir/rule
+_pck2_generate_messages_check_deps_sum: pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule
 
-.PHONY : publisher_node
+.PHONY : _pck2_generate_messages_check_deps_sum
 
 # fast build rule for target.
-publisher_node/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/publisher_node.dir/build.make pck2/CMakeFiles/publisher_node.dir/build
-.PHONY : publisher_node/fast
+_pck2_generate_messages_check_deps_sum/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/build.make pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/build
+.PHONY : _pck2_generate_messages_check_deps_sum/fast
 
 # Convenience name for target.
 pck2/CMakeFiles/pck2_gennodejs.dir/rule:
@@ -196,439 +196,19 @@ pck2_gennodejs/fast:
 .PHONY : pck2_gennodejs/fast
 
 # Convenience name for target.
-pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule
+pck2/CMakeFiles/pck2_gencpp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_gencpp.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_gencpp.dir/rule
 
 # Convenience name for target.
-pck2_generate_messages_nodejs: pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule
+pck2_gencpp: pck2/CMakeFiles/pck2_gencpp.dir/rule
 
-.PHONY : pck2_generate_messages_nodejs
+.PHONY : pck2_gencpp
 
 # fast build rule for target.
-pck2_generate_messages_nodejs/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/build.make pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/build
-.PHONY : pck2_generate_messages_nodejs/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/service_node2.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/service_node2.dir/rule
-.PHONY : pck2/CMakeFiles/service_node2.dir/rule
-
-# Convenience name for target.
-service_node2: pck2/CMakeFiles/service_node2.dir/rule
-
-.PHONY : service_node2
-
-# fast build rule for target.
-service_node2/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/service_node2.dir/build.make pck2/CMakeFiles/service_node2.dir/build
-.PHONY : service_node2/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-pck2_generate_messages_lisp: pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule
-
-.PHONY : pck2_generate_messages_lisp
-
-# fast build rule for target.
-pck2_generate_messages_lisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages_lisp.dir/build.make pck2/CMakeFiles/pck2_generate_messages_lisp.dir/build
-.PHONY : pck2_generate_messages_lisp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/client_node2.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/client_node2.dir/rule
-.PHONY : pck2/CMakeFiles/client_node2.dir/rule
-
-# Convenience name for target.
-client_node2: pck2/CMakeFiles/client_node2.dir/rule
-
-.PHONY : client_node2
-
-# fast build rule for target.
-client_node2/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/client_node2.dir/build.make pck2/CMakeFiles/client_node2.dir/build
-.PHONY : client_node2/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/pck2_geneus.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_geneus.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_geneus.dir/rule
-
-# Convenience name for target.
-pck2_geneus: pck2/CMakeFiles/pck2_geneus.dir/rule
-
-.PHONY : pck2_geneus
-
-# fast build rule for target.
-pck2_geneus/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_geneus.dir/build.make pck2/CMakeFiles/pck2_geneus.dir/build
-.PHONY : pck2_geneus/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/pck2_generate_messages_py.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages_py.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_generate_messages_py.dir/rule
-
-# Convenience name for target.
-pck2_generate_messages_py: pck2/CMakeFiles/pck2_generate_messages_py.dir/rule
-
-.PHONY : pck2_generate_messages_py
-
-# fast build rule for target.
-pck2_generate_messages_py/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages_py.dir/build.make pck2/CMakeFiles/pck2_generate_messages_py.dir/build
-.PHONY : pck2_generate_messages_py/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/pck2_genlisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_genlisp.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_genlisp.dir/rule
-
-# Convenience name for target.
-pck2_genlisp: pck2/CMakeFiles/pck2_genlisp.dir/rule
-
-.PHONY : pck2_genlisp
-
-# fast build rule for target.
-pck2_genlisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_genlisp.dir/build.make pck2/CMakeFiles/pck2_genlisp.dir/build
-.PHONY : pck2_genlisp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : pck2/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_py: pck2/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/std_msgs_generate_messages_py.dir/build.make pck2/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : pck2/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_py: pck2/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-.PHONY : roscpp_generate_messages_py
-
-# fast build rule for target.
-roscpp_generate_messages_py/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/roscpp_generate_messages_py.dir/build.make pck2/CMakeFiles/roscpp_generate_messages_py.dir/build
-.PHONY : roscpp_generate_messages_py/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-.PHONY : pck2/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_eus: pck2/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_eus
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_eus/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make pck2/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
-.PHONY : rosgraph_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : pck2/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: pck2/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make pck2/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : pck2/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_cpp: pck2/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-.PHONY : roscpp_generate_messages_cpp
-
-# fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make pck2/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : pck2/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: pck2/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_cpp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make pck2/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : pck2/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_cpp: pck2/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make pck2/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : pck2/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_eus: pck2/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-.PHONY : roscpp_generate_messages_eus
-
-# fast build rule for target.
-roscpp_generate_messages_eus/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/roscpp_generate_messages_eus.dir/build.make pck2/CMakeFiles/roscpp_generate_messages_eus.dir/build
-.PHONY : roscpp_generate_messages_eus/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : pck2/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_py: pck2/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_py
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make pck2/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : pck2/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: pck2/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_lisp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make pck2/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-.PHONY : pck2/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_nodejs: pck2/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-.PHONY : roscpp_generate_messages_nodejs
-
-# fast build rule for target.
-roscpp_generate_messages_nodejs/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make pck2/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
-.PHONY : roscpp_generate_messages_nodejs/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-.PHONY : pck2/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_nodejs: pck2/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : std_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-std_msgs_generate_messages_nodejs/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make pck2/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
-.PHONY : std_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/hello_world2.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/hello_world2.dir/rule
-.PHONY : pck2/CMakeFiles/hello_world2.dir/rule
-
-# Convenience name for target.
-hello_world2: pck2/CMakeFiles/hello_world2.dir/rule
-
-.PHONY : hello_world2
-
-# fast build rule for target.
-hello_world2/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/hello_world2.dir/build.make pck2/CMakeFiles/hello_world2.dir/build
-.PHONY : hello_world2/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/pck2_genpy.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_genpy.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_genpy.dir/rule
-
-# Convenience name for target.
-pck2_genpy: pck2/CMakeFiles/pck2_genpy.dir/rule
-
-.PHONY : pck2_genpy
-
-# fast build rule for target.
-pck2_genpy/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_genpy.dir/build.make pck2/CMakeFiles/pck2_genpy.dir/build
-.PHONY : pck2_genpy/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : pck2/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_lisp: pck2/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-.PHONY : roscpp_generate_messages_lisp
-
-# fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make pck2/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/std_msgs_generate_messages_eus.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-.PHONY : pck2/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_eus: pck2/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-.PHONY : std_msgs_generate_messages_eus
-
-# fast build rule for target.
-std_msgs_generate_messages_eus/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make pck2/CMakeFiles/std_msgs_generate_messages_eus.dir/build
-.PHONY : std_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : pck2/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: pck2/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make pck2/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/pck2_generate_messages.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_generate_messages.dir/rule
-
-# Convenience name for target.
-pck2_generate_messages: pck2/CMakeFiles/pck2_generate_messages.dir/rule
-
-.PHONY : pck2_generate_messages
-
-# fast build rule for target.
-pck2_generate_messages/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages.dir/build.make pck2/CMakeFiles/pck2_generate_messages.dir/build
-.PHONY : pck2_generate_messages/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule
-.PHONY : pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule
-
-# Convenience name for target.
-_pck2_generate_messages_check_deps_sum: pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/rule
-
-.PHONY : _pck2_generate_messages_check_deps_sum
-
-# fast build rule for target.
-_pck2_generate_messages_check_deps_sum/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/build.make pck2/CMakeFiles/_pck2_generate_messages_check_deps_sum.dir/build
-.PHONY : _pck2_generate_messages_check_deps_sum/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule
-.PHONY : pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule
-
-# Convenience name for target.
-_pck2_generate_messages_check_deps_homework_message: pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule
-
-.PHONY : _pck2_generate_messages_check_deps_homework_message
-
-# fast build rule for target.
-_pck2_generate_messages_check_deps_homework_message/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/build.make pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/build
-.PHONY : _pck2_generate_messages_check_deps_homework_message/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/subscriber_node.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/subscriber_node.dir/rule
-.PHONY : pck2/CMakeFiles/subscriber_node.dir/rule
-
-# Convenience name for target.
-subscriber_node: pck2/CMakeFiles/subscriber_node.dir/rule
-
-.PHONY : subscriber_node
-
-# fast build rule for target.
-subscriber_node/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/subscriber_node.dir/build.make pck2/CMakeFiles/subscriber_node.dir/build
-.PHONY : subscriber_node/fast
-
-# Convenience name for target.
-pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule
-.PHONY : pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule
-
-# Convenience name for target.
-_pck2_generate_messages_check_deps_movesrv: pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule
-
-.PHONY : _pck2_generate_messages_check_deps_movesrv
-
-# fast build rule for target.
-_pck2_generate_messages_check_deps_movesrv/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/build.make pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/build
-.PHONY : _pck2_generate_messages_check_deps_movesrv/fast
+pck2_gencpp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_gencpp.dir/build.make pck2/CMakeFiles/pck2_gencpp.dir/build
+.PHONY : pck2_gencpp/fast
 
 # Convenience name for target.
 pck2/CMakeFiles/pck2_generate_messages_cpp.dir/rule:
@@ -661,19 +241,214 @@ pck2_generate_messages_eus/fast:
 .PHONY : pck2_generate_messages_eus/fast
 
 # Convenience name for target.
-pck2/CMakeFiles/pck2_gencpp.dir/rule:
-	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_gencpp.dir/rule
-.PHONY : pck2/CMakeFiles/pck2_gencpp.dir/rule
+pck2/CMakeFiles/pck2_generate_messages.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_generate_messages.dir/rule
 
 # Convenience name for target.
-pck2_gencpp: pck2/CMakeFiles/pck2_gencpp.dir/rule
+pck2_generate_messages: pck2/CMakeFiles/pck2_generate_messages.dir/rule
 
-.PHONY : pck2_gencpp
+.PHONY : pck2_generate_messages
 
 # fast build rule for target.
-pck2_gencpp/fast:
-	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_gencpp.dir/build.make pck2/CMakeFiles/pck2_gencpp.dir/build
-.PHONY : pck2_gencpp/fast
+pck2_generate_messages/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages.dir/build.make pck2/CMakeFiles/pck2_generate_messages.dir/build
+.PHONY : pck2_generate_messages/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule
+.PHONY : pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule
+
+# Convenience name for target.
+_pck2_generate_messages_check_deps_homework_message: pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/rule
+
+.PHONY : _pck2_generate_messages_check_deps_homework_message
+
+# fast build rule for target.
+_pck2_generate_messages_check_deps_homework_message/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/build.make pck2/CMakeFiles/_pck2_generate_messages_check_deps_homework_message.dir/build
+.PHONY : _pck2_generate_messages_check_deps_homework_message/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+pck2_generate_messages_nodejs: pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/rule
+
+.PHONY : pck2_generate_messages_nodejs
+
+# fast build rule for target.
+pck2_generate_messages_nodejs/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/build.make pck2/CMakeFiles/pck2_generate_messages_nodejs.dir/build
+.PHONY : pck2_generate_messages_nodejs/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/pck2_genlisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_genlisp.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_genlisp.dir/rule
+
+# Convenience name for target.
+pck2_genlisp: pck2/CMakeFiles/pck2_genlisp.dir/rule
+
+.PHONY : pck2_genlisp
+
+# fast build rule for target.
+pck2_genlisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_genlisp.dir/build.make pck2/CMakeFiles/pck2_genlisp.dir/build
+.PHONY : pck2_genlisp/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/pck2_generate_messages_py.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages_py.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_generate_messages_py.dir/rule
+
+# Convenience name for target.
+pck2_generate_messages_py: pck2/CMakeFiles/pck2_generate_messages_py.dir/rule
+
+.PHONY : pck2_generate_messages_py
+
+# fast build rule for target.
+pck2_generate_messages_py/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages_py.dir/build.make pck2/CMakeFiles/pck2_generate_messages_py.dir/build
+.PHONY : pck2_generate_messages_py/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/hello_world2.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/hello_world2.dir/rule
+.PHONY : pck2/CMakeFiles/hello_world2.dir/rule
+
+# Convenience name for target.
+hello_world2: pck2/CMakeFiles/hello_world2.dir/rule
+
+.PHONY : hello_world2
+
+# fast build rule for target.
+hello_world2/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/hello_world2.dir/build.make pck2/CMakeFiles/hello_world2.dir/build
+.PHONY : hello_world2/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/pck2_genpy.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_genpy.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_genpy.dir/rule
+
+# Convenience name for target.
+pck2_genpy: pck2/CMakeFiles/pck2_genpy.dir/rule
+
+.PHONY : pck2_genpy
+
+# fast build rule for target.
+pck2_genpy/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_genpy.dir/build.make pck2/CMakeFiles/pck2_genpy.dir/build
+.PHONY : pck2_genpy/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/publisher_node.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/publisher_node.dir/rule
+.PHONY : pck2/CMakeFiles/publisher_node.dir/rule
+
+# Convenience name for target.
+publisher_node: pck2/CMakeFiles/publisher_node.dir/rule
+
+.PHONY : publisher_node
+
+# fast build rule for target.
+publisher_node/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/publisher_node.dir/build.make pck2/CMakeFiles/publisher_node.dir/build
+.PHONY : publisher_node/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule
+.PHONY : pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule
+
+# Convenience name for target.
+_pck2_generate_messages_check_deps_movesrv: pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/rule
+
+.PHONY : _pck2_generate_messages_check_deps_movesrv
+
+# fast build rule for target.
+_pck2_generate_messages_check_deps_movesrv/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/build.make pck2/CMakeFiles/_pck2_generate_messages_check_deps_movesrv.dir/build
+.PHONY : _pck2_generate_messages_check_deps_movesrv/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/subscriber_node.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/subscriber_node.dir/rule
+.PHONY : pck2/CMakeFiles/subscriber_node.dir/rule
+
+# Convenience name for target.
+subscriber_node: pck2/CMakeFiles/subscriber_node.dir/rule
+
+.PHONY : subscriber_node
+
+# fast build rule for target.
+subscriber_node/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/subscriber_node.dir/build.make pck2/CMakeFiles/subscriber_node.dir/build
+.PHONY : subscriber_node/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/pck2_geneus.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_geneus.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_geneus.dir/rule
+
+# Convenience name for target.
+pck2_geneus: pck2/CMakeFiles/pck2_geneus.dir/rule
+
+.PHONY : pck2_geneus
+
+# fast build rule for target.
+pck2_geneus/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_geneus.dir/build.make pck2/CMakeFiles/pck2_geneus.dir/build
+.PHONY : pck2_geneus/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/client_node2.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/client_node2.dir/rule
+.PHONY : pck2/CMakeFiles/client_node2.dir/rule
+
+# Convenience name for target.
+client_node2: pck2/CMakeFiles/client_node2.dir/rule
+
+.PHONY : client_node2
+
+# fast build rule for target.
+client_node2/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/client_node2.dir/build.make pck2/CMakeFiles/client_node2.dir/build
+.PHONY : client_node2/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule
+.PHONY : pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+pck2_generate_messages_lisp: pck2/CMakeFiles/pck2_generate_messages_lisp.dir/rule
+
+.PHONY : pck2_generate_messages_lisp
+
+# fast build rule for target.
+pck2_generate_messages_lisp/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/pck2_generate_messages_lisp.dir/build.make pck2/CMakeFiles/pck2_generate_messages_lisp.dir/build
+.PHONY : pck2_generate_messages_lisp/fast
+
+# Convenience name for target.
+pck2/CMakeFiles/service_node2.dir/rule:
+	cd /home/kikot/ROS/build && $(MAKE) -f CMakeFiles/Makefile2 pck2/CMakeFiles/service_node2.dir/rule
+.PHONY : pck2/CMakeFiles/service_node2.dir/rule
+
+# Convenience name for target.
+service_node2: pck2/CMakeFiles/service_node2.dir/rule
+
+.PHONY : service_node2
+
+# fast build rule for target.
+service_node2/fast:
+	cd /home/kikot/ROS/build && $(MAKE) -f pck2/CMakeFiles/service_node2.dir/build.make pck2/CMakeFiles/service_node2.dir/build
+.PHONY : service_node2/fast
 
 src/client_node.o: src/client_node.cpp.o
 
@@ -819,44 +594,29 @@ help:
 	@echo "... install"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... test"
-	@echo "... install/local"
-	@echo "... install/strip"
-	@echo "... publisher_node"
-	@echo "... pck2_gennodejs"
-	@echo "... pck2_generate_messages_nodejs"
-	@echo "... list_install_components"
-	@echo "... service_node2"
-	@echo "... pck2_generate_messages_lisp"
-	@echo "... client_node2"
-	@echo "... pck2_geneus"
-	@echo "... pck2_generate_messages_py"
-	@echo "... pck2_genlisp"
-	@echo "... std_msgs_generate_messages_py"
-	@echo "... roscpp_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_eus"
-	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... roscpp_generate_messages_eus"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_nodejs"
-	@echo "... std_msgs_generate_messages_nodejs"
-	@echo "... hello_world2"
-	@echo "... pck2_genpy"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... pck2_generate_messages"
 	@echo "... _pck2_generate_messages_check_deps_sum"
-	@echo "... _pck2_generate_messages_check_deps_homework_message"
-	@echo "... subscriber_node"
-	@echo "... _pck2_generate_messages_check_deps_movesrv"
+	@echo "... pck2_gennodejs"
+	@echo "... pck2_gencpp"
 	@echo "... pck2_generate_messages_cpp"
 	@echo "... pck2_generate_messages_eus"
-	@echo "... pck2_gencpp"
+	@echo "... pck2_generate_messages"
+	@echo "... _pck2_generate_messages_check_deps_homework_message"
+	@echo "... install/strip"
+	@echo "... pck2_generate_messages_nodejs"
+	@echo "... pck2_genlisp"
+	@echo "... pck2_generate_messages_py"
+	@echo "... install/local"
+	@echo "... hello_world2"
+	@echo "... pck2_genpy"
+	@echo "... publisher_node"
+	@echo "... _pck2_generate_messages_check_deps_movesrv"
+	@echo "... subscriber_node"
+	@echo "... pck2_geneus"
+	@echo "... client_node2"
+	@echo "... list_install_components"
+	@echo "... pck2_generate_messages_lisp"
+	@echo "... service_node2"
+	@echo "... test"
 	@echo "... src/client_node.o"
 	@echo "... src/client_node.i"
 	@echo "... src/client_node.s"

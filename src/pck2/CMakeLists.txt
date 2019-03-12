@@ -57,7 +57,6 @@ add_service_files(
   sum.srv
 )
 
-generate_messages(DEPENDENCIES std_msgs)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -67,10 +66,10 @@ generate_messages(DEPENDENCIES std_msgs)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   std_msgs  # Or other packages containing msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -106,6 +105,7 @@ catkin_package(
 #  LIBRARIES pck2
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
+	CATKIN_DEPENDS rospy roscpp message_runtime
 )
 
 ###########
@@ -145,7 +145,7 @@ add_executable(client_node2 src/client_node.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
+#add_dependencies(client_node custom_msg_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -157,6 +157,11 @@ target_link_libraries(publisher_node ${catkin_LIBRARIES})
 target_link_libraries(subscriber_node ${catkin_LIBRARIES})
 target_link_libraries(service_node2 ${catkin_LIBRARIES})
 target_link_libraries(client_node2 ${catkin_LIBRARIES})
+
+add_dependencies(client_node pck2_generate_messages_cpp)
+add_dependencies(publisher_node pck2_generate_messages_cpp)
+add_dependencies(subscriber_node pck2_generate_messages_cpp)
+add_dependencies(service_node pck2_generate_messages_cpp)
 
 
 #############
