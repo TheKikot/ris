@@ -1,0 +1,8 @@
+prefix=/home/kikot/ROS/devel
+
+Name: pck2
+Description: Description of pck2
+Version: 0.0.0
+Cflags: -I/home/kikot/ROS/devel/include
+Libs: -L/home/kikot/ROS/devel/lib 
+Requires: 

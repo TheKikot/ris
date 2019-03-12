@@ -1,0 +1,2 @@
+exercise1:exercise2:pck2
+-DCATKIN_DEVEL_PREFIX=/home/kikot/ROS/devel -DCMAKE_INSTALL_PREFIX=/home/kikot/ROS/install -G Unix Makefiles
