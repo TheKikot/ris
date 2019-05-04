@@ -95,10 +95,6 @@ class The_Ring:
         # Marker array object used for visualizations
         self.marker_array = MarkerArray()
         self.marker_num = 1
-
-        # Subscribe to the image and/or depth topic
-        # self.image_sub = rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
-        # self.depth_sub = rospy.Subscriber("/camera/depth_registered/image_raw", Image, self.depth_callback)
         
         
 
@@ -170,34 +166,39 @@ class The_Ring:
 
 
     def image_callback(self,krneki):
-    	print('I got a new image!')
-	data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
+    	try:
+    		#data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
+    		data = rospy.wait_for_message('/camera/depth_registered/image_raw', Image)
+    		print('I got a new image!')
+    		
+    	except Exception as e:
+    		print(e)
 
-	#cv2.imshow("Image window1",data)
 
         try:
             print('converting image')
-            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            cv_image = self.bridge.imgmsg_to_cv2(data, "16UC1")
             print('image converted!')
         except CvBridgeError as e:
             print(e)
         
         #640x480
         cv_image = cv_image[0:240, 0:640]
-            
-        #cv2.imshow("Image window2",cv_image)
 
         # Set the dimensions of the image
         self.dims = cv_image.shape
 
-        # Tranform image to gayscale
-        gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-        #cv2.imshow("Image window3",gray)
-
         # Do histogram equlization
-        img = cv2.equalizeHist(gray)
-        #cv2.imshow("Image window",img)
+        #img = cv2.equalizeHist(cv_image)
 
+
+        image_1 = cv_image / 65536.0 * 255
+        image_1 = image_1 / np.max(image_1) * 255
+
+        image_viz = np.array(image_1, dtype= np.uint8)
+
+        img = image_viz
+				
         # Binarize the image
         #ret, thresh = cv2.threshold(img, 50, 255, 0)
 	thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 151,2)
@@ -237,17 +238,17 @@ class The_Ring:
                 e1 = elps[n]
                 e2 = elps[m]
                 dist = np.sqrt(((e1[0][0] - e2[0][0]) ** 2 + (e1[0][1] - e2[0][1]) ** 2))
-                #dist2 = abs(e1[1][1]/e1[1][0] - e2[1][1]/e2[1][0])
+                dist2 = abs(e1[1][1]/e1[1][0] - e2[1][1]/e2[1][0])
                 sizediff = abs(e1[1][1] - e2[1][1]) + abs(e1[1][0] - e2[1][0])
                 #             print dist
-                if dist < 5: #and dist2 < 0.2 and sizediff < 150:
+                if dist < 5 and dist2 < 0.2 and sizediff < 150:
                     candidates.append((e1,e2))
                     candidates_cnt.append((ellipseContours[n], ellipseContours[m]))
 
 	print("Processing is done! found", len(candidates), "candidates for rings")
 	if len(candidates) < 1:
 		a = random.randrange(1000)
-		cv2.imwrite('camera_image_'+ str(a) + '.jpeg', cv_image)
+		cv2.imwrite('camera_image_'+ str(a) + '.jpeg', img)
 		cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
 		return []
 		
@@ -309,15 +310,15 @@ class The_Ring:
 		
 		# Convert the depth image to a Numpy array since most cv2 functions
 		# require Numpy arrays.
-		depth_array = np.array(depth_image, dtype=np.float32)
+		#depth_array = np.array(depth_image, dtype=np.float32)
 		# Normalize the depth image to fall between 0 (black) and 1 (white)
-		cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
+		#cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
 		# At this point you can display the result properly:
 		# cv2.imshow('Depth Image', depth_display_image)
 		# If you write it as it si, the result will be a image with only 0 to 1 values.
 		# To actually store in a this a image like the one we are showing its needed
 		# to reescale the otuput to 255 gray scale.
-		cv2.imwrite('depth_circles_image_'+ a + '.png',depth_array*255)
+		#cv2.imwrite('depth_circles_image_'+ a + '.png',depth_array*255)
 		
 		#cv2.imshow("Image window",cv_image)
 		#cv2.waitKey(0)
