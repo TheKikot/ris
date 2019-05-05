@@ -17,12 +17,12 @@ from task1.srv import *
 
 class The_Ring:
 
-    def check_if_floating(self, e1, c1, e2, c2, depth_image):
+
+    def get_distance(self, e1, c1, e2, c2, depth_image, bgr_image):
 
         size = (e1[1][0]+e1[1][1])/2
         center = (e1[0][1], e1[0][0])
 
-        centerDepth = np.mean( depth_image[int(e1[0][1]-2):int(e1[0][1]+2), int(e1[0][0]-2):int(e1[0][0]+2)] )
         c1 = c1[0]
         c2 = c2[0]
         point1X = c1[0][0]
@@ -76,12 +76,15 @@ class The_Ring:
         por4X = (point4X + closest4[0])/2
         por4Y = (point4Y + closest4[1])/2
 
-        avgRingDepth = depth_image[por1Y, por1X] + depth_image[por2Y, por2X] + depth_image[por3Y, por3X] + depth_image[por4Y, por4X] / 4
+        avgRingDepth = (depth_image[por1Y, por1X]/4 + depth_image[por2Y, por2X]/4 + depth_image[por3Y, por3X]/4 + depth_image[por4Y, por4X]/4)
+        
+        avgRed = (bgr_image[por1Y, por1X, 2]/4 + bgr_image[por2Y, por2X, 2]/4 + bgr_image[por3Y, por3X, 2]/4 + bgr_image[por4Y, por4X, 2]/4)
+        
+        avgBlue = (bgr_image[por1Y, por1X, 0]/4 + bgr_image[por2Y, por2X, 0]/4 + bgr_image[por3Y, por3X, 0]/4 + bgr_image[por4Y, por4X, 0]/4)
+        
+        avgGreen = (bgr_image[por1Y, por1X, 1]/4 + bgr_image[por2Y, por2X, 1]/4 + bgr_image[por3Y, por3X, 1]/4 + bgr_image[por4Y, por4X, 1]/4)
 
-        if(abs(avgRingDepth - centerDepth) > 100) :
-            return avgRingDepth
-
-        return -1
+        return [avgRingDepth, avgBlue, avgGreen, avgRed]
 
     def __init__(self):
         rospy.init_node('image_converter', anonymous=True)
@@ -185,13 +188,20 @@ class The_Ring:
         #640x480
         cv_image = cv_image[0:240, 0:640]
         #cv2.imwrite('original_image_.jpeg', cv_image)
+        
+        # shranimo podatke za racunanje oddaljenosti obroca
+        depth_info = cv_image
+        
+        #print(depth_info[120, 320])
 
         # Set the dimensions of the image
         self.dims = cv_image.shape
 
         # Do histogram equlization
         #img = cv2.equalizeHist(cv_image)
-        cv_image[cv_image <= np.max(cv_image)*0.05] = np.max(cv_image)
+        max_val = np.max(cv_image)
+        cv_image[cv_image <= max_val*0.05] = max_val
+        cv_image[cv_image >= max_val*0.6] = max_val
         #cv2.imwrite('image_after_removing_shadows.jpeg', cv_image)
         #cv2.imwrite('image.jpeg', cv_image)
         #cv_image = cv2.threshold(img, 50, 255, 0)
@@ -206,9 +216,7 @@ class The_Ring:
 
         img = image_viz
 				
-        # Binarize the image
-        #thresh = cv2.threshold(img, 254, 0, cv2.THRESH_TOZERO_INV)
-        
+        #thresh = cv2.threshold(image_1, 170, 255, cv2.THRESH_TOZERO_INV)
 	thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 151,2)
         cv2.imwrite('image_after_thresh_.jpeg', thresh)
 	
@@ -216,9 +224,10 @@ class The_Ring:
 	#cv2.waitKey(0)
 	
 	# filetring image
-	kernel = np.ones((3,3), np.uint8)
+	kernel = np.ones((5,5), np.uint8)
 	thresh = cv2.dilate(thresh, kernel, iterations = 1)
 	thresh = cv2.erode(thresh, kernel, iterations = 1)
+	#thresh = cv2.bitwise_not(thresh)
 	
 	
         # Extract contours
@@ -251,7 +260,7 @@ class The_Ring:
                 dist2 = abs(e1[1][1]/e1[1][0] - e2[1][1]/e2[1][0])
                 sizediff = abs(e1[1][1] - e2[1][1]) + abs(e1[1][0] - e2[1][0])
                 #             print dist
-                if dist < 5 and dist2 < 0.2 and sizediff < 150:
+                if dist < 20 and dist2 < 0.4 and sizediff < 200:
                     candidates.append((e1,e2))
                     candidates_cnt.append((ellipseContours[n], ellipseContours[m]))
 
@@ -275,6 +284,7 @@ class The_Ring:
         cv_image = rospy.wait_for_message('/camera/rgb/image_raw', Image)
         cv_image = self.bridge.imgmsg_to_cv2(cv_image, "bgr8")
         cv_image = cv_image[0:240, 0:640]
+        rgb_image = cv_image
         
         for n in range(len(candidates)) :
             e = candidates[n]
@@ -282,6 +292,8 @@ class The_Ring:
 	    # the centers of the ellipses
             e1 = e[0]
             e2 = e[1]
+            c1 = c[0]
+            c2 = c[1]
 
 	    # drawing the ellipses on the image
             
@@ -318,6 +330,20 @@ class The_Ring:
             
             cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
             cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
+            distBGR = self.get_distance(e1,c1,e2,c2, depth_info, rgb_image)
+            print(distBGR[0])
+            self.get_pose(e1, distBGR[0]/1000.0)
+            
+            print("B: " + str(distBGR[1]) + " G: " + str(distBGR[2]) + " R: " + str(distBGR[3]))
+            
+            if(distBGR[1]-40 > distBGR[2] and distBGR[1]-40 > distBGR[3]):
+            	print("found blue ring")
+            elif(distBGR[3]-40 > distBGR[2] and distBGR[3]-40 > distBGR[1]):
+            	print("found red ring")
+            elif(distBGR[1]<100 and 100 > distBGR[2] and 100 > distBGR[3]):
+            	print("found black ring")
+            else:
+            	print("found green ring")
 
             
 
