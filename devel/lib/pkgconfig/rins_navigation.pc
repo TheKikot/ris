@@ -1,0 +1,8 @@
+prefix=/home/kikot/ROS/devel
+
+Name: rins_navigation
+Description: Description of rins_navigation
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/kikot/ROS/devel/lib 
+Requires: 

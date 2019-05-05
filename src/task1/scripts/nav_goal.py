@@ -126,6 +126,8 @@ rospy.init_node('map_navigation', anonymous=False)
 ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 rospy.Subscriber('markers', Marker, addLocation)
 rospy.Subscriber('amcl_pose', PoseWithCovarianceStamped, updatePosition)
+# subscriber za laser scan
+#rospy.Subscriber('', )
 ringLocationsX = []
 ringLocationsY = []
 seq = -1
@@ -135,9 +137,11 @@ seq = -1
 while(not ac.wait_for_server(rospy.Duration.from_sec(2.0))):
               rospy.loginfo("Waiting for the move_base action server to come up")
 
+'''
+
 goal = []
 
-'''
+
 
 goalk = MoveBaseGoal()
 #0
@@ -217,17 +221,16 @@ goal.append(goalk)
 '''
 
 ringsCollected = 0
+goal = MoveBaseGoal()
 
 while ringsCollected < 3:
 	rospy.loginfo("Searching for a place to go")
 
-	
-
-
+	goal = getGoal()
 
 	rospy.loginfo("Sending goal")
 	#rospy.loginfo(goal[i].target_pose.pose.position.x)
-	ac.send_goal(goal[i])
+	ac.send_goal(goal)
 	goal_state = GoalStatus.PENDING
 	while (not goal_state == GoalStatus.SUCCEEDED):
 
@@ -240,7 +243,7 @@ while ringsCollected < 3:
 		else:
 			rospy.loginfo("The goal was reached!")
 			
-			qOrg = [0, 0, goal[i].target_pose.pose.orientation.z, goal[i].target_pose.pose.orientation.z]
+			qOrg = [0, 0, goal.target_pose.pose.orientation.z, goal.target_pose.pose.orientation.z]
 			
 			(x, y, z) = euler_from_quaternion(qOrg)
 			
@@ -251,12 +254,12 @@ while ringsCollected < 3:
 				
 				q = quaternion_from_euler(0, 0, z + j * (3.14/4.0))
 				
-				goal[i].target_pose.pose.orientation.z = q[2]
-				goal[i].target_pose.pose.orientation.w = q[3]
+				goal.target_pose.pose.orientation.z = q[2]
+				goal.target_pose.pose.orientation.w = q[3]
 				# got to position
     				rospy.loginfo("Sending goal")
 				#rospy.loginfo(goal[i].target_pose.pose.position.x)
-				ac.send_goal(goal[i])
+				ac.send_goal(goal)
 				goal_state = GoalStatus.PENDING
 				while (not goal_state == GoalStatus.SUCCEEDED):
 					ac.wait_for_result(rospy.Duration(0.5))

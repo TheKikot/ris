@@ -1,0 +1,8 @@
+prefix=/home/kikot/ROS/install
+
+Name: exercise6
+Description: Description of exercise6
+Version: 0.0.0
+Cflags: -I/home/kikot/ROS/install/include
+Libs: -L/home/kikot/ROS/install/lib 
+Requires: 

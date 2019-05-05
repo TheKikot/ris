@@ -120,6 +120,13 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/kikot/ROS/build/exercise1/cmake_install.cmake")
   include("/home/kikot/ROS/build/exercise2/cmake_install.cmake")
   include("/home/kikot/ROS/build/pck2/cmake_install.cmake")
+  include("/home/kikot/ROS/build/exercise3/cmake_install.cmake")
+  include("/home/kikot/ROS/build/exercise6/cmake_install.cmake")
+  include("/home/kikot/ROS/build/task1/cmake_install.cmake")
+  include("/home/kikot/ROS/build/exercise4/cmake_install.cmake")
+  include("/home/kikot/ROS/build/exercise5/cmake_install.cmake")
+  include("/home/kikot/ROS/build/pcl_demos/cmake_install.cmake")
+  include("/home/kikot/ROS/build/rins_navigation/cmake_install.cmake")
 
 endif()
 
