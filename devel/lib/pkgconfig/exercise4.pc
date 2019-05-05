@@ -1,8 +1,0 @@
-prefix=/home/kikot/ROS/devel
-
-Name: exercise4
-Description: Description of exercise4
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/kikot/ROS/devel/lib 
-Requires: 

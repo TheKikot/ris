@@ -1,8 +1,0 @@
-prefix=/home/kikot/ROS/devel
-
-Name: task1
-Description: Description of task1
-Version: 0.0.0
-Cflags: -I/home/kikot/ROS/devel/include
-Libs: -L/home/kikot/ROS/devel/lib 
-Requires: 

@@ -1,8 +1,0 @@
-prefix=/home/kikot/ROS/install
-
-Name: pck2
-Description: Description of pck2
-Version: 0.0.0
-Cflags: -I/home/kikot/ROS/install/include
-Libs: -L/home/kikot/ROS/install/lib 
-Requires: rospy roscpp message_runtime

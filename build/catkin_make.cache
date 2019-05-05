@@ -1,2 +1,0 @@
-exercise1:exercise2:exercise3:exercise4:exercise5:exercise6:pck2:pcl_demos:rins_navigation:task1
--DCATKIN_DEVEL_PREFIX=/home/kikot/ROS/devel -DCMAKE_INSTALL_PREFIX=/home/kikot/ROS/install -G Unix Makefiles

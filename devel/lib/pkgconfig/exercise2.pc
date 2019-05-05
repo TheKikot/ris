@@ -1,8 +1,0 @@
-prefix=/home/kikot/ROS/devel
-
-Name: exercise2
-Description: Description of exercise2
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/kikot/ROS/devel/lib 
-Requires: message_runtime
