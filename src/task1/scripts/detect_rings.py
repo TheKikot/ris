@@ -184,6 +184,7 @@ class The_Ring:
         
         #640x480
         cv_image = cv_image[0:240, 0:640]
+        #cv2.imwrite('original_image_.jpeg', cv_image)
 
         # Set the dimensions of the image
         self.dims = cv_image.shape
@@ -191,12 +192,15 @@ class The_Ring:
         # Do histogram equlization
         #img = cv2.equalizeHist(cv_image)
         cv_image[cv_image <= np.max(cv_image)*0.05] = np.max(cv_image)
+        #cv2.imwrite('image_after_removing_shadows.jpeg', cv_image)
         #cv2.imwrite('image.jpeg', cv_image)
         #cv_image = cv2.threshold(img, 50, 255, 0)
 				
 
         image_1 = cv_image / 65536.0 * 255
+        #cv2.imwrite('image_after_65536.jpeg', cv_image)        
         image_1 = image_1 / np.max(image_1) * 255
+        #cv2.imwrite('hist_stretch_.jpeg', cv_image)
 
         image_viz = np.array(image_1, dtype= np.uint8)
 
@@ -206,10 +210,15 @@ class The_Ring:
         #thresh = cv2.threshold(img, 254, 0, cv2.THRESH_TOZERO_INV)
         
 	thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 151,2)
+        cv2.imwrite('image_after_thresh_.jpeg', thresh)
+	
 	#cv2.imshow("Image window2",thresh)
 	#cv2.waitKey(0)
+	
+	# filetring image
 	kernel = np.ones((3,3), np.uint8)
-	#thresh = cv2.dilate(thresh, kernel, iterations = 1)
+	thresh = cv2.dilate(thresh, kernel, iterations = 1)
+	thresh = cv2.erode(thresh, kernel, iterations = 1)
 	
 	
         # Extract contours
@@ -249,20 +258,24 @@ class The_Ring:
 	print("Processing is done! found", len(candidates), "candidates for rings")
 	if len(candidates) < 1:
 		a = random.randrange(1000)
+		
 		cv2.imwrite('camera_image_'+ str(a) + '.jpeg', img)
 		cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
 		return []
-		
-		#'''
+	depth_img = []
+	'''
         try:
             #depth_img = rospy.wait_for_message('/camera/depth_registered/image_raw', Image)
             depth_img = rospy.wait_for_message('/camera/depth/image_raw', Image)
             print("success")
         except Exception as e:
             print(e)
-		#'''
-		
-        # Extract the depth from the depth image
+	'''
+        # getting rgb image
+        cv_image = rospy.wait_for_message('/camera/rgb/image_raw', Image)
+        cv_image = self.bridge.imgmsg_to_cv2(cv_image, "bgr8")
+        cv_image = cv_image[0:240, 0:640]
+        
         for n in range(len(candidates)) :
             e = candidates[n]
             c = candidates_cnt[n]
@@ -286,6 +299,8 @@ class The_Ring:
             y_min = y1 if y1 > 0 else 0
             y_max = y2 if y2 < cv_image.shape[1] else cv_image.shape[1]
 
+            
+            '''
             depth_image = self.bridge.imgmsg_to_cv2(depth_img, "16UC1")
             #org size 640x480
             depth_image = depth_image[0:240, 0:640]
@@ -298,13 +313,17 @@ class The_Ring:
             else:
                 cv2.ellipse(cv_image, e1, (0, 255, 0), 2)
                 cv2.ellipse(cv_image, e2, (0, 255, 0), 2)
-
+						'''
+            #self.get_pose(e1, dist/1000.0)
             
+            cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
+            cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
 
             
 
 	if len(candidates)>0:
 		print("neki")
+		
 		a = str(random.randrange(1000))
 		cv2.imwrite('circles_camera_image_'+ a + '.jpeg', cv_image)
 		cv2.imwrite('circles_camera_image_'+ a + '_threshed.jpeg', thresh)
