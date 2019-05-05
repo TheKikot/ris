@@ -5,7 +5,7 @@ import rospy
 import actionlib
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from geometry_msgs.msg import Quaternion, PoseWithCovarianceStamped
+from geometry_msgs.msg import Twist, Quaternion, PoseWithCovarianceStamped
 from sensor_msgs.msg import LaserScan
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from visualization_msgs.msg import Marker, MarkerArray
@@ -89,8 +89,8 @@ def goToPosition(ringX, ortX, ringY, ortY):
 	goalk.target_pose.header.stamp = rospy.Time.now()
 	goalk.target_pose.pose.position.x = pos1X
 	goalk.target_pose.pose.position.y = pos1Y
-	goalk.target_pose.pose.orientation.z = q1[2]
-	goalk.target_pose.pose.orientation.w = q1[3]
+	goalk.target_pose.pose.orientation.z = q2[2]
+	goalk.target_pose.pose.orientation.w = q2[3]
 	
 	print("first goal")
 	print("pending:")
@@ -107,32 +107,72 @@ def goToPosition(ringX, ortX, ringY, ortY):
 	
 	goal_state = ac.get_state()
 	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
-		print(goal_state)
 		ac.wait_for_result(rospy.Duration(0.5))
 		goal_state = ac.get_state()
 	
-	print(goal_state)
+	if(goal_state == GoalStatus.SUCCEEDED):
+		grabRing()
+	else:
+		print("first goal failed")
+		print("alternative goal")
 	
-	print("next goal")
+		goalk.target_pose.header.stamp = rospy.Time.now()
+		goalk.target_pose.pose.position.x = pos2X
+		goalk.target_pose.pose.position.y = pos2Y
+		goalk.target_pose.pose.orientation.z = q1[2]
+		goalk.target_pose.pose.orientation.w = q1[3]
 	
-	goalk.target_pose.header.stamp = rospy.Time.now()
-	goalk.target_pose.pose.position.x = pos2X
-	goalk.target_pose.pose.position.y = pos2Y
-	goalk.target_pose.pose.orientation.z = q2[2]
-	goalk.target_pose.pose.orientation.w = q2[3]
+		ac.send_goal(goalk)
 	
-	ac.send_goal(goalk)
-	
-	goal_state = ac.get_state()
-	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
-		print(goal_state)
-		ac.wait_for_result(rospy.Duration(0.5))
 		goal_state = ac.get_state()
+		while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
+			ac.wait_for_result(rospy.Duration(0.5))
+			goal_state = ac.get_state()
 
-	print(goal_state)	
+		if(goal_state == GoalStatus.SUCCEEDED):
+			grabRing()
+		else:
+			print("failed both times, killme")	
+		
+		
 	print("finished")
 	return
 
+
+def grabRing():
+	pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+	r = rospy.Rate(10) #10hz
+	
+	twist_msg = Twist()
+	twist_msg.linear.x = 1.0
+	twist_msg.linear.y = 0.0
+	twist_msg.linear.z = 0.0
+	twist_msg.angular.x = 0.0
+	twist_msg.angular.y = 0.0
+	twist_msg.angular.z = 0.0
+	
+	
+	time = 0.0
+	while time < 0.4:	
+		pub.publish(twist_msg)
+		r.sleep()
+		time += 0.2
+	
+	twist_msg.linear.x = 0.0
+	pub.publish(twist_msg)
+	
+	twist_msg.angular.z = 1.0
+	
+	time = 0.0
+	while time < 1.0:	
+		pub.publish(twist_msg)
+		r.sleep()
+		time += 0.2
+	
+	twist_msg.angular.z = 0.0
+	pub.publish(twist_msg)
+	
+	return
 
 
 goal_state = GoalStatus.LOST
