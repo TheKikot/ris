@@ -24,7 +24,7 @@ posZ = 0
 rotW = 0
 rotZ = 0
 # razdalja, na kateri lahko poberemo obroc
-odmik = 0.17
+odmik = 0.2
 
 circleCounter = 0
 newCircle = 0
@@ -39,19 +39,10 @@ def updatePosition(pos):
 	rotZ = pos.pose.pose.orientation.z
 	
 
-
 def addLocation(data):
-	#a = 0.0 + data.pose.position.x
-	#b = 0.0 + data.pose.position.y
-	#global seq
-
-	#ringLocationsX.append(data.pose.position.x)
-	#ringLocationsY.append(data.pose.position.y)
 	
-	#print("before calling go to circle")
 	print("picking up ring")
 	pickUpRing(data.pose.position.x, data.pose.position.y)
-	#print("after calling go to circle")
 	return
 
 def pickUpRing(ringX, ringY):
@@ -59,8 +50,6 @@ def pickUpRing(ringX, ringY):
 	# vektor v smeri obroca v x in y koordinatah
 	razX =  posX - ringX
 	razY =  posY - ringY
-	
-	#raz = (razX**2 + razY**2)**(1/2)
 	
 	# vektor, pravokoten na vektor v smeri obroca
 	
@@ -86,39 +75,62 @@ def goToPosition(ringX, ortX, ringY, ortY):
 	pos2X = ringX-ortX
 	pos2Y = ringY-ortY
 	
+	# izracunamo kote
+	qOrg = [0, 0, rotZ, rotW]
+			
+	(x, y, z) = euler_from_quaternion(qOrg)
+	
+	q1 = quaternion_from_euler(0, 0, z - (3.14/2.0))
+	q2 = quaternion_from_euler(0, 0, z + (3.14/2.0))
+
 	goalk = MoveBaseGoal()
 	
 	goalk.target_pose.header.frame_id = "map"
 	goalk.target_pose.header.stamp = rospy.Time.now()
 	goalk.target_pose.pose.position.x = pos1X
 	goalk.target_pose.pose.position.y = pos1Y
-	goalk.target_pose.pose.orientation.z = -0.996
-	goalk.target_pose.pose.orientation.w = 0.084
+	goalk.target_pose.pose.orientation.z = q1[2]
+	goalk.target_pose.pose.orientation.w = q1[3]
 	
 	print("first goal")
+	print("pending:")
+	print(GoalStatus.PENDING)
+	print("active:")
+	print(GoalStatus.ACTIVE)
+	print("success:")
+	print(GoalStatus.SUCCEEDED)
+	print("aborted:")
+	print(GoalStatus.ABORTED)
+	
 	
 	ac.send_goal(goalk)
 	
 	goal_state = ac.get_state()
 	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
+		print(goal_state)
 		ac.wait_for_result(rospy.Duration(0.5))
 		goal_state = ac.get_state()
-		print(goal_state)
+	
+	print(goal_state)
 	
 	print("next goal")
 	
 	goalk.target_pose.header.stamp = rospy.Time.now()
 	goalk.target_pose.pose.position.x = pos2X
 	goalk.target_pose.pose.position.y = pos2Y
+	goalk.target_pose.pose.orientation.z = q2[2]
+	goalk.target_pose.pose.orientation.w = q2[3]
 	
 	ac.send_goal(goalk)
 	
 	goal_state = ac.get_state()
 	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
+		print(goal_state)
 		ac.wait_for_result(rospy.Duration(0.5))
 		goal_state = ac.get_state()
-		print(goal_state)
-	
+
+	print(goal_state)	
+	print("finished")
 	return
 
 
@@ -149,7 +161,14 @@ try:
 	get_ring_location()
 except rospy.ServiceException, e:
 	print "Service call failed: %s"%e
-
+	
+	
+try:
+	rospy.spin()
+except KeyboardInterrupt:
+  print("Shutting down")
+#while(True):
+#	a=1
 '''
 while ringsCollected < 3:
 	rospy.loginfo("Searching for a place to go")
