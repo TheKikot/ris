@@ -190,7 +190,10 @@ class The_Ring:
 
         # Do histogram equlization
         #img = cv2.equalizeHist(cv_image)
-
+        cv_image[cv_image <= np.max(cv_image)*0.05] = np.max(cv_image)
+        #cv2.imwrite('image.jpeg', cv_image)
+        #cv_image = cv2.threshold(img, 50, 255, 0)
+				
 
         image_1 = cv_image / 65536.0 * 255
         image_1 = image_1 / np.max(image_1) * 255
@@ -200,15 +203,13 @@ class The_Ring:
         img = image_viz
 				
         # Binarize the image
-        #ret, thresh = cv2.threshold(img, 50, 255, 0)
+        #thresh = cv2.threshold(img, 254, 0, cv2.THRESH_TOZERO_INV)
+        
 	thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 151,2)
-	#cv2.imshow("Image window",gray)
 	#cv2.imshow("Image window2",thresh)
 	#cv2.waitKey(0)
 	kernel = np.ones((3,3), np.uint8)
 	#thresh = cv2.dilate(thresh, kernel, iterations = 1)
-	#cv2.imshow("Image window3", thresh)
-	#cv2.waitKey(0)
 	
 	
         # Extract contours

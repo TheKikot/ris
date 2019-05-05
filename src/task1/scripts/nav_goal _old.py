@@ -101,7 +101,15 @@ def addLocation(data):
 	global seq
 	#global wantsToCheckCircle
 	#wantsToCheckCircle = 0
-
+	'''
+	if seq == -1:
+		seq = data.header.seq
+	else:
+		if seq == data.header.seq:
+			return
+		else:
+			seq = data.header.seq
+			'''
 			
 	for i in ringLocationsX:
 		if abs(i-data.pose.position.x) < 1.5:
@@ -137,8 +145,6 @@ while(not ac.wait_for_server(rospy.Duration.from_sec(2.0))):
 
 goal = []
 
-'''
-
 goalk = MoveBaseGoal()
 #0
 #Sending a goal to the to a certain position in the map
@@ -160,6 +166,34 @@ goalk.target_pose.pose.orientation.z = 0.91
 goalk.target_pose.pose.orientation.w = 0.084
 
 goal.append(goalk)
+
+
+'''
+goalk = MoveBaseGoal()
+
+#2
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -0.44
+goalk.target_pose.pose.position.y = -0.34
+goalk.target_pose.pose.orientation.z = -0.996
+goalk.target_pose.pose.orientation.w = 0.084
+
+goal.append(goalk)
+
+
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -1.916
+goalk.target_pose.pose.position.y = -1.336
+goalk.target_pose.pose.orientation.z = 0.990
+goalk.target_pose.pose.orientation.w = 0.141
+
+goal.append(goalk)
+'''
+
 
 goalk = MoveBaseGoal()
 
@@ -214,17 +248,10 @@ goalk.target_pose.pose.orientation.z = 0.897
 goalk.target_pose.pose.orientation.w = 0.442
 goal.append(goalk)
 
-'''
-
-ringsCollected = 0
-
-while ringsCollected < 3:
-	rospy.loginfo("Searching for a place to go")
-
-	
 
 
 
+for i in range(0,7):
 	rospy.loginfo("Sending goal")
 	#rospy.loginfo(goal[i].target_pose.pose.position.x)
 	ac.send_goal(goal[i])
