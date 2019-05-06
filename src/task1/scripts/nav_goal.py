@@ -213,8 +213,8 @@ goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
 goalk.target_pose.header.stamp = rospy.Time.now()
-goalk.target_pose.pose.position.x = -1.720
-goalk.target_pose.pose.position.y = -3.204
+goalk.target_pose.pose.position.x = -1.6
+goalk.target_pose.pose.position.y = -3.4
 goalk.target_pose.pose.orientation.z = 0.8717
 goalk.target_pose.pose.orientation.w = 0.49
 
@@ -293,8 +293,8 @@ goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
 goalk.target_pose.header.stamp = rospy.Time.now()
-goalk.target_pose.pose.position.x = -0.9593
-goalk.target_pose.pose.position.y = -0.7441
+goalk.target_pose.pose.position.x = -1.0
+goalk.target_pose.pose.position.y = -0.65
 goalk.target_pose.pose.orientation.z = -0.339
 goalk.target_pose.pose.orientation.w = 0.9407
 
