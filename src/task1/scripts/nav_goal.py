@@ -235,8 +235,8 @@ goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
 goalk.target_pose.header.stamp = rospy.Time.now()
-goalk.target_pose.pose.position.x = -0.8742
-goalk.target_pose.pose.position.y = -2.552
+goalk.target_pose.pose.position.x = -0.8342
+goalk.target_pose.pose.position.y = -2.752
 goalk.target_pose.pose.orientation.z = 0.860
 goalk.target_pose.pose.orientation.w = 0.5102
 
@@ -263,7 +263,9 @@ goalk.target_pose.pose.orientation.z = 0.2485
 goalk.target_pose.pose.orientation.w = 0.9686
 
 goal.append(goalk)
-	
+
+
+'''	
 goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
@@ -274,6 +276,7 @@ goalk.target_pose.pose.orientation.z = 0.4073
 goalk.target_pose.pose.orientation.w = 0.9132
 
 goal.append(goalk)
+'''
 	
 goalk = MoveBaseGoal()
 
@@ -285,7 +288,7 @@ goalk.target_pose.pose.orientation.z = 0.9136
 goalk.target_pose.pose.orientation.w = 0.4065
 
 goal.append(goalk)	
-	
+'''	
 goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
@@ -294,6 +297,28 @@ goalk.target_pose.pose.position.x = -0.9593
 goalk.target_pose.pose.position.y = -0.7441
 goalk.target_pose.pose.orientation.z = -0.339
 goalk.target_pose.pose.orientation.w = 0.9407
+
+goal.append(goalk)
+'''
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = 0.4636
+goalk.target_pose.pose.position.y = -0.8139
+goalk.target_pose.pose.orientation.z = -0.9018
+goalk.target_pose.pose.orientation.w = 0.4319
+
+goal.append(goalk)
+
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = 0.0305
+goalk.target_pose.pose.position.y = -0.1618
+goalk.target_pose.pose.orientation.z = -0.8938
+goalk.target_pose.pose.orientation.w = 0.4484
 
 goal.append(goalk)
 

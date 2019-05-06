@@ -23,21 +23,32 @@ class The_Ring:
     red = False
     black = False
 
-    def get_distance(self, e1, c1, e2, c2, depth_image, bgr_image):
+    def get_distance(self, c1, c2, depth_image, bgr_image):
 
-        size = (e1[1][0]+e1[1][1])/2
-        center = (e1[0][1], e1[0][0])
+        #size = (e1[1][0]+e1[1][1])/2
+        #center = (e1[0][1], e1[0][0])
 
-        c1 = c1[0]
-        c2 = c2[0]
-        point1X = c1[0][0]
-        point1Y = c1[0][1]
-        point2X = c1[int(len(c1) / 4)][0]
-        point2Y = c1[int(len(c1) / 4)][1]
-        point3X = c1[int(len(c1) / 4) * 2][0]
-        point3Y = c1[int(len(c1) / 4) * 2][1]
-        point4X = c1[int(len(c1)-1)][0]
-        point4Y = c1[int(len(c1)-1)][1]
+        '''
+        print("lengths")
+        print(len(c1))
+        print(len(c1[0]))
+        print(len(c1[0][0]))
+        '''
+				
+
+        
+        point1X = c1[0][0][0]
+        #print(point1X)
+        point1Y = c1[0][0][1]
+        #print(point1Y)
+        point2X = c1[int(len(c1) / 4)][0][0]
+        point2Y = c1[int(len(c1) / 4)][0][1]
+        point3X = c1[int(len(c1) / 4) * 2][0][0]
+        #print(point3X)
+        point3Y = c1[int(len(c1) / 4) * 2][0][1]
+        #print(point3Y)
+        point4X = c1[int(len(c1) / 4) * 3][0][0]
+        point4Y = c1[int(len(c1) / 4) * 3][0][1]
 
         min1 = 1000000000
         closest1 = c1[0]
@@ -48,26 +59,26 @@ class The_Ring:
         min4 = 1000000000
         closest4 = c1[0]
 
-        for i in c2 :
-            dist1 = np.sqrt((i[0]-point1X) ** 2 + (i[1] - point1Y) ** 2)
+        for i in range(0, len(c2)) :
+            dist1 = np.sqrt((c2[i][0][0]-point1X) ** 2 + (c2[i][0][1] - point1Y) ** 2)
             if dist1 < min1 :
                 min1 = dist1
-                closest1 = i
+                closest1 = c2[i][0]
 
-            dist2 = np.sqrt((i[0]-point2X) ** 2 + (i[1] - point2Y) ** 2)
+            dist2 = np.sqrt((c2[i][0][0]-point2X) ** 2 + (c2[i][0][1] - point2Y) ** 2)
             if dist2 < min2 :
                 min2 = dist2
-                closest2 = i
+                closest2 = c2[i][0]
 
-            dist3 = np.sqrt((i[0]-point3X) ** 2 + (i[1] - point3Y) ** 2)
+            dist3 = np.sqrt((c2[i][0][0]-point3X) ** 2 + (c2[i][0][1] - point3Y) ** 2)
             if dist3 < min3 :
                 min3 = dist3
-                closest3 = i
+                closest3 = c2[i][0]
 
-            dist4 = np.sqrt((i[0]-point4X) ** 2 + (i[1] - point4Y) ** 2)
+            dist4 = np.sqrt((c2[i][0][0]-point4X) ** 2 + (c2[i][0][1] - point4Y) ** 2)
             if dist4 < min4 :
                 min4 = dist4
-                closest4 = i
+                closest4 = c2[i][0]
       
         por1X = (point1X + closest1[0])/2
         por1Y = (point1Y + closest1[1])/2
@@ -88,7 +99,14 @@ class The_Ring:
         avgBlue = (bgr_image[por1Y, por1X, 0]/4 + bgr_image[por2Y, por2X, 0]/4 + bgr_image[por3Y, por3X, 0]/4 + bgr_image[por4Y, por4X, 0]/4)
         
         avgGreen = (bgr_image[por1Y, por1X, 1]/4 + bgr_image[por2Y, por2X, 1]/4 + bgr_image[por3Y, por3X, 1]/4 + bgr_image[por4Y, por4X, 1]/4)
-
+        
+        '''
+        print("pixel 1: " + str(bgr_image[por1Y, por1X, 0]) + " " + str(bgr_image[por1Y, por1X, 1]) + " " + str(bgr_image[por1Y, por1X, 2]))
+        print("pixel 2: " + str(bgr_image[por2Y, por2X, 0]) + " " + str(bgr_image[por2Y, por2X, 1]) + " " + str(bgr_image[por2Y, por2X, 2]))
+        print("pixel 3: " + str(bgr_image[por3Y, por3X, 0]) + " " + str(bgr_image[por3Y, por3X, 1]) + " " + str(bgr_image[por3Y, por3X, 2]))
+        print("pixel 4: " + str(bgr_image[por4Y, por4X, 0]) + " " + str(bgr_image[por4Y, por4X, 1]) + " " + str(bgr_image[por4Y, por4X, 2]))
+        '''
+				
         return [avgRingDepth, avgBlue, avgGreen, avgRed]
 
     def __init__(self):
@@ -206,7 +224,7 @@ class The_Ring:
         #img = cv2.equalizeHist(cv_image)
         max_val = np.max(cv_image)
         cv_image[cv_image <= max_val*0.05] = max_val
-        cv_image[cv_image >= max_val*0.6] = max_val
+        cv_image[cv_image >= max_val*0.5] = max_val
         #cv2.imwrite('image_after_removing_shadows.jpeg', cv_image)
         #cv2.imwrite('image.jpeg', cv_image)
         #cv_image = cv2.threshold(img, 50, 255, 0)
@@ -223,7 +241,7 @@ class The_Ring:
 				
         #thresh = cv2.threshold(image_1, 170, 255, cv2.THRESH_TOZERO_INV)
 	thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 151,2)
-        cv2.imwrite('image_after_thresh_.jpeg', thresh)
+        #cv2.imwrite('image_after_thresh_.jpeg', thresh)
 	
 	#cv2.imshow("Image window2",thresh)
 	#cv2.waitKey(0)
@@ -270,12 +288,12 @@ class The_Ring:
                     candidates_cnt.append((ellipseContours[n], ellipseContours[m]))
 
 	print("Processing is done! found", len(candidates), "candidates for rings")
-	if len(candidates) < 1:
-		a = random.randrange(1000)
+	#if len(candidates) < 1:
+		#a = random.randrange(1000)
 		
-		cv2.imwrite('camera_image_'+ str(a) + '.jpeg', img)
-		cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
-		return []
+		#cv2.imwrite('camera_image_'+ str(a) + '.jpeg', img)
+		#cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
+		#return []
 	depth_img = []
 	'''
         try:
@@ -335,7 +353,7 @@ class The_Ring:
             
             cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
             cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
-            distBGR = self.get_distance(e1,c1,e2,c2, depth_info, rgb_image)
+            distBGR = self.get_distance(c1,c2, depth_info, rgb_image)
             print(distBGR[0])
             
             
@@ -348,27 +366,27 @@ class The_Ring:
             		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found blue ring again")
-            elif(distBGR[3]-40 > distBGR[2] and distBGR[3]-40 > distBGR[1]):
+            elif(distBGR[3]-35 > distBGR[2] and distBGR[3]-35 > distBGR[1]):
             	if(self.red == False):
             		print("found red ring")
             		self.red = True
             		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found red ring again")
-            elif(distBGR[1]<120 and 120 > distBGR[2] and 120 > distBGR[3]):
-            	if(self.black == False):
-            		print("found black ring")
-            		self.black = True
-            		self.get_pose(e1, distBGR[0]/1000.0)
-            	else:
-            		print("found black ring again")
-            else:
+            elif(abs(distBGR[2]-distBGR[3]) > 30):
             	if(self.green == False):
             		print("found green ring")
             		self.green = True
             		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found green ring again")
+            else:
+            	if(self.black == False):
+            		print("found black ring")
+            		self.black = True
+            		self.get_pose(e1, distBGR[0]/1000.0)
+            	else:
+            		print("found black ring again")
 
             
 
@@ -377,7 +395,7 @@ class The_Ring:
 		
 		a = str(random.randrange(1000))
 		cv2.imwrite('circles_camera_image_'+ a + '.jpeg', cv_image)
-		cv2.imwrite('circles_camera_image_'+ a + '_threshed.jpeg', thresh)
+		#cv2.imwrite('circles_camera_image_'+ a + '_threshed.jpeg', thresh)
 		
 		# Convert the depth image to a Numpy array since most cv2 functions
 		# require Numpy arrays.
