@@ -15,8 +15,13 @@ from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
 from task1.srv import *
 
-class The_Ring:
 
+
+class The_Ring:
+    green = False
+    blue = False
+    red = False
+    black = False
 
     def get_distance(self, e1, c1, e2, c2, depth_image, bgr_image):
 
@@ -332,18 +337,38 @@ class The_Ring:
             cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
             distBGR = self.get_distance(e1,c1,e2,c2, depth_info, rgb_image)
             print(distBGR[0])
-            self.get_pose(e1, distBGR[0]/1000.0)
+            
             
             print("B: " + str(distBGR[1]) + " G: " + str(distBGR[2]) + " R: " + str(distBGR[3]))
             
             if(distBGR[1]-40 > distBGR[2] and distBGR[1]-40 > distBGR[3]):
-            	print("found blue ring")
+            	if(self.blue == False):
+            		print("found blue ring")
+            		self.blue = True
+            		self.get_pose(e1, distBGR[0]/1000.0)
+            	else:
+            		print("found blue ring again")
             elif(distBGR[3]-40 > distBGR[2] and distBGR[3]-40 > distBGR[1]):
-            	print("found red ring")
-            elif(distBGR[1]<100 and 100 > distBGR[2] and 100 > distBGR[3]):
-            	print("found black ring")
+            	if(self.red == False):
+            		print("found red ring")
+            		self.red = True
+            		self.get_pose(e1, distBGR[0]/1000.0)
+            	else:
+            		print("found red ring again")
+            elif(distBGR[1]<120 and 120 > distBGR[2] and 120 > distBGR[3]):
+            	if(self.black == False):
+            		print("found black ring")
+            		self.black = True
+            		self.get_pose(e1, distBGR[0]/1000.0)
+            	else:
+            		print("found black ring again")
             else:
-            	print("found green ring")
+            	if(self.green == False):
+            		print("found green ring")
+            		self.green = True
+            		self.get_pose(e1, distBGR[0]/1000.0)
+            	else:
+            		print("found green ring again")
 
             
 

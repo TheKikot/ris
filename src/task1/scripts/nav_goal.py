@@ -23,6 +23,9 @@ posY = 0
 posZ = 0
 rotW = 0
 rotZ = 0
+twisting = 0
+processing = 0
+
 # razdalja, na kateri lahko poberemo obroc
 odmik = 0.2
 
@@ -40,12 +43,14 @@ def updatePosition(pos):
 	
 
 def addLocation(data):
-	
+	global newCircle
+	newCircle = 1
 	print("picking up ring")
 	pickUpRing(data.pose.position.x, data.pose.position.y)
 	return
 
 def pickUpRing(ringX, ringY):
+	
 	
 	# vektor v smeri obroca v x in y koordinatah
 	razX =  posX - ringX
@@ -112,6 +117,7 @@ def goToPosition(ringX, ortX, ringY, ortY):
 	
 	if(goal_state == GoalStatus.SUCCEEDED):
 		grabRing()
+		grabRing()
 	else:
 		print("first goal failed")
 		print("alternative goal")
@@ -131,20 +137,26 @@ def goToPosition(ringX, ortX, ringY, ortY):
 
 		if(goal_state == GoalStatus.SUCCEEDED):
 			grabRing()
+			grabRing()
 		else:
 			print("failed both times, killme")	
 		
 		
 	print("finished")
+	global twisting, newCircle
+	twisting = 0
+	newCircle = 0
 	return
 
 
 def grabRing():
-	pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-	r = rospy.Rate(10) #10hz
+	global twisting
+	twisting = 1
+	pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
+	r = rospy.Rate(5) #
 	
 	twist_msg = Twist()
-	twist_msg.linear.x = 1.0
+	twist_msg.linear.x = 0.05
 	twist_msg.linear.y = 0.0
 	twist_msg.linear.z = 0.0
 	twist_msg.angular.x = 0.0
@@ -153,21 +165,21 @@ def grabRing():
 	
 	
 	time = 0.0
-	while time < 0.4:	
+	while time < 0.7:	
 		pub.publish(twist_msg)
 		r.sleep()
-		time += 0.2
+		time += 0.1
 	
 	twist_msg.linear.x = 0.0
 	pub.publish(twist_msg)
 	
-	twist_msg.angular.z = 1.0
+	twist_msg.angular.z = 1.15
 	
 	time = 0.0
-	while time < 1.0:	
+	while time < 2.7:	
 		pub.publish(twist_msg)
 		r.sleep()
-		time += 0.2
+		time += 0.1
 	
 	twist_msg.angular.z = 0.0
 	pub.publish(twist_msg)
@@ -192,50 +204,129 @@ while(not ac.wait_for_server(rospy.Duration.from_sec(2.0))):
 
 
 
-ringsCollected = 0
-goal = MoveBaseGoal()
 
-rospy.wait_for_service('get_ring_location')
-try:
-	get_ring_location = rospy.ServiceProxy('get_ring_location', GetLocation)
-	get_ring_location()
-except rospy.ServiceException, e:
-	print "Service call failed: %s"%e
-	
-	
-try:
-	rospy.spin()
-except KeyboardInterrupt:
-  print("Shutting down")
-#while(True):
-#	a=1
-'''
-while ringsCollected < 3:
-	rospy.loginfo("Searching for a place to go")
-	
-	
-	
-	goal = getGoal()
 
+	
+	
+goal = []
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -1.720
+goalk.target_pose.pose.position.y = -3.204
+goalk.target_pose.pose.orientation.z = 0.8717
+goalk.target_pose.pose.orientation.w = 0.49
+
+goal.append(goalk)
+
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -2.305
+goalk.target_pose.pose.position.y = -3.154
+goalk.target_pose.pose.orientation.z = 0.2275
+goalk.target_pose.pose.orientation.w = 0.9737
+
+goal.append(goalk)
+
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -0.8742
+goalk.target_pose.pose.position.y = -2.552
+goalk.target_pose.pose.orientation.z = 0.860
+goalk.target_pose.pose.orientation.w = 0.5102
+
+goal.append(goalk)
+
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -1.8644
+goalk.target_pose.pose.position.y = -1.2515
+goalk.target_pose.pose.orientation.z = 0.3529
+goalk.target_pose.pose.orientation.w = 0.9356
+
+goal.append(goalk)
+
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -1.016
+goalk.target_pose.pose.position.y = -1.1712
+goalk.target_pose.pose.orientation.z = 0.2485
+goalk.target_pose.pose.orientation.w = 0.9686
+
+goal.append(goalk)
+	
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -0.3139
+goalk.target_pose.pose.position.y = -1.7228
+goalk.target_pose.pose.orientation.z = 0.4073
+goalk.target_pose.pose.orientation.w = 0.9132
+
+goal.append(goalk)
+	
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = 0.6023
+goalk.target_pose.pose.position.y = -1.2186
+goalk.target_pose.pose.orientation.z = 0.9136
+goalk.target_pose.pose.orientation.w = 0.4065
+
+goal.append(goalk)	
+	
+goalk = MoveBaseGoal()
+
+goalk.target_pose.header.frame_id = "map"
+goalk.target_pose.header.stamp = rospy.Time.now()
+goalk.target_pose.pose.position.x = -0.9593
+goalk.target_pose.pose.position.y = -0.7441
+goalk.target_pose.pose.orientation.z = -0.339
+goalk.target_pose.pose.orientation.w = 0.9407
+
+goal.append(goalk)
+
+
+for i in range(0,7):
+
+	while(twisting == 1 or newCircle == 1):
+		continue
+	
+	#lahko posljem naslednjo lokacijo
 	rospy.loginfo("Sending goal")
-	#rospy.loginfo(goal[i].target_pose.pose.position.x)
-	ac.send_goal(goal)
-	goal_state = GoalStatus.PENDING
-	while (not goal_state == GoalStatus.SUCCEEDED):
 
+	ac.send_goal(goal[i])
+	goal_state = GoalStatus.PENDING
+	
+	#waiting to arrive to destination
+	while (not goal_state == GoalStatus.SUCCEEDED):
 		ac.wait_for_result(rospy.Duration(2))
 		goal_state = ac.get_state()
-		#Possible States Are: PENDING, ACTIVE, RECALLED, REJECTED, PREEMPTED, ABORTED, SUCCEEDED, LOST.
+	#at destination
+		
+	#getting picture, analyzing, getting any rings
+	rospy.wait_for_service('get_ring_location')
+	try:
+		get_ring_location = rospy.ServiceProxy('get_ring_location', GetLocation)
+		get_ring_location()
+	except rospy.ServiceException, e:
+		print "Service call failed: %s"%e
 
-		if not goal_state == GoalStatus.SUCCEEDED:
-			rospy.loginfo("The goal has not been reached yet! Checking again in 2s.")
-		else:
-			rospy.loginfo("The goal was reached!")
-			
-						
+					
 						
 GoalStatus.SUCCEEDED
 
-'''
+
 
 
