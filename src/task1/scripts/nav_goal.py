@@ -156,7 +156,7 @@ def grabRing():
 	r = rospy.Rate(5) #
 	
 	twist_msg = Twist()
-	twist_msg.linear.x = 0.05
+	twist_msg.linear.x = 0.07
 	twist_msg.linear.y = 0.0
 	twist_msg.linear.z = 0.0
 	twist_msg.angular.x = 0.0
@@ -265,7 +265,7 @@ goalk.target_pose.pose.orientation.w = 0.9686
 goal.append(goalk)
 
 
-'''	
+	
 goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
@@ -276,19 +276,19 @@ goalk.target_pose.pose.orientation.z = 0.4073
 goalk.target_pose.pose.orientation.w = 0.9132
 
 goal.append(goalk)
-'''
+
 	
 goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
 goalk.target_pose.header.stamp = rospy.Time.now()
-goalk.target_pose.pose.position.x = 0.6023
-goalk.target_pose.pose.position.y = -1.2186
+goalk.target_pose.pose.position.x = 0.7523
+goalk.target_pose.pose.position.y = -1.4186
 goalk.target_pose.pose.orientation.z = 0.9136
 goalk.target_pose.pose.orientation.w = 0.4065
 
 goal.append(goalk)	
-'''	
+
 goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
@@ -299,7 +299,7 @@ goalk.target_pose.pose.orientation.z = -0.339
 goalk.target_pose.pose.orientation.w = 0.9407
 
 goal.append(goalk)
-'''
+
 goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
@@ -323,7 +323,7 @@ goalk.target_pose.pose.orientation.w = 0.4484
 goal.append(goalk)
 
 
-for i in range(0,7):
+for i in range(0,10):
 
 	while(twisting == 1 or newCircle == 1):
 		continue
