@@ -360,31 +360,31 @@ class The_Ring:
             print("B: " + str(distBGR[1]) + " G: " + str(distBGR[2]) + " R: " + str(distBGR[3]))
             
             if(distBGR[1]-40 > distBGR[2] and distBGR[1]-40 > distBGR[3]):
+            	self.get_pose(e1, distBGR[0]/1000.0)
             	if(self.blue == False):
             		print("found blue ring")
             		self.blue = True
-            		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found blue ring again")
             elif(distBGR[3]-35 > distBGR[2] and distBGR[3]-35 > distBGR[1]):
+            	self.get_pose(e1, distBGR[0]/1000.0)
             	if(self.red == False):
             		print("found red ring")
             		self.red = True
-            		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found red ring again")
             elif(abs(distBGR[2]-distBGR[3]) > 30):
+            	self.get_pose(e1, distBGR[0]/1000.0)
             	if(self.green == False):
             		print("found green ring")
             		self.green = True
-            		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found green ring again")
             else:
+            	self.get_pose(e1, distBGR[0]/1000.0)
             	if(self.black == False):
             		print("found black ring")
             		self.black = True
-            		self.get_pose(e1, distBGR[0]/1000.0)
             	else:
             		print("found black ring again")
 

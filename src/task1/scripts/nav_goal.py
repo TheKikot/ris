@@ -246,8 +246,8 @@ goalk = MoveBaseGoal()
 
 goalk.target_pose.header.frame_id = "map"
 goalk.target_pose.header.stamp = rospy.Time.now()
-goalk.target_pose.pose.position.x = -1.8644
-goalk.target_pose.pose.position.y = -1.2515
+goalk.target_pose.pose.position.x = -1.9
+goalk.target_pose.pose.position.y = -1.2815
 goalk.target_pose.pose.orientation.z = 0.3529
 goalk.target_pose.pose.orientation.w = 0.9356
 
@@ -323,7 +323,7 @@ goalk.target_pose.pose.orientation.w = 0.4484
 goal.append(goalk)
 
 
-for i in range(0,10):
+for i in range(0,11):
 
 	while(twisting == 1 or newCircle == 1):
 		continue
@@ -335,7 +335,7 @@ for i in range(0,10):
 	goal_state = GoalStatus.PENDING
 	
 	#waiting to arrive to destination
-	while (not goal_state == GoalStatus.SUCCEEDED):
+	while (not goal_state == GoalStatus.SUCCEEDED and not goal_state == GoalStatus.ABORTED):
 		ac.wait_for_result(rospy.Duration(2))
 		goal_state = ac.get_state()
 	#at destination
