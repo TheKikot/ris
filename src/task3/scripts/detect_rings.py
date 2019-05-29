@@ -17,72 +17,7 @@ from task1.srv import *
 
 class The_Ring:
 
-    def check_if_floating(self, e1, c1, e2, c2, depth_image):
-
-        size = (e1[1][0]+e1[1][1])/2
-        center = (e1[0][1], e1[0][0])
-
-        centerDepth = np.mean( depth_image[int(e1[0][1]-2):int(e1[0][1]+2), int(e1[0][0]-2):int(e1[0][0]+2)] )
-        c1 = c1[0]
-        c2 = c2[0]
-        point1X = c1[0][0]
-        point1Y = c1[0][1]
-        point2X = c1[int(len(c1) / 4)][0]
-        point2Y = c1[int(len(c1) / 4)][1]
-        point3X = c1[int(len(c1) / 4) * 2][0]
-        point3Y = c1[int(len(c1) / 4) * 2][1]
-        point4X = c1[int(len(c1)-1)][0]
-        point4Y = c1[int(len(c1)-1)][1]
-
-        min1 = 1000000000
-        closest1 = c1[0]
-        min2 = 1000000000
-        closest2 = c1[0]
-        min3 = 1000000000
-        closest3 = c1[0]
-        min4 = 1000000000
-        closest4 = c1[0]
-
-        for i in c2 :
-            dist1 = np.sqrt((i[0]-point1X) ** 2 + (i[1] - point1Y) ** 2)
-            if dist1 < min1 :
-                min1 = dist1
-                closest1 = i
-
-            dist2 = np.sqrt((i[0]-point2X) ** 2 + (i[1] - point2Y) ** 2)
-            if dist2 < min2 :
-                min2 = dist2
-                closest2 = i
-
-            dist3 = np.sqrt((i[0]-point3X) ** 2 + (i[1] - point3Y) ** 2)
-            if dist3 < min3 :
-                min3 = dist3
-                closest3 = i
-
-            dist4 = np.sqrt((i[0]-point4X) ** 2 + (i[1] - point4Y) ** 2)
-            if dist4 < min4 :
-                min4 = dist4
-                closest4 = i
-      
-        por1X = (point1X + closest1[0])/2
-        por1Y = (point1Y + closest1[1])/2
-
-        por2X = (point2X + closest2[0])/2
-        por2Y = (point2Y + closest2[1])/2
-
-        por3X = (point3X + closest3[0])/2
-        por3Y = (point3Y + closest3[1])/2
-
-        por4X = (point4X + closest4[0])/2
-        por4Y = (point4Y + closest4[1])/2
-
-        avgRingDepth = depth_image[por1Y, por1X] + depth_image[por2Y, por2X] + depth_image[por3Y, por3X] + depth_image[por4Y, por4X] / 4
-
-        if(abs(avgRingDepth - centerDepth) > 100) :
-            return avgRingDepth
-
-        return -1
-
+    
     def __init__(self):
         rospy.init_node('image_converter', anonymous=True)
 
@@ -255,6 +190,7 @@ class The_Ring:
         try:
             #depth_img = rospy.wait_for_message('/camera/depth_registered/image_raw', Image)
             depth_img = rospy.wait_for_message('/camera/depth/image_raw', Image)
+            depth_img = depth_img[0:240, 0:640]
             print("success")
         except Exception as e:
             print(e)
