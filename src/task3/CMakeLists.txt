@@ -26,6 +26,17 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_geometry_msgs
 )
 
+## Add service files
+add_service_files(
+   FILES
+   GetLocation.srv
+#   Service2.srv
+)
+
+generate_messages(
+	DEPENDENCIES
+)
+
 ## Add include directories
 include_directories(
 	${Boost_INCLUDE_DIRS}
