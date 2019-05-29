@@ -9,7 +9,7 @@ def call_detection(points):
 	print("klicem funkcijo")
 	points_pub = rospy.Publisher("input", PointCloud2, queue_size=1)
 	points_pub.publish(points)	
-	rospy.sleep(3)
+	rospy.sleep(1)
 
 
 
