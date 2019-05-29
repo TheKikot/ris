@@ -15,40 +15,24 @@ from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
 from task1.srv import *
 
-
-
 class The_Ring:
-    green = False
-    blue = False
-    red = False
-    black = False
 
-    def get_distance(self, c1, c2, depth_image, bgr_image):
+    def check_if_floating(self, e1, c1, e2, c2, depth_image):
 
-        #size = (e1[1][0]+e1[1][1])/2
-        #center = (e1[0][1], e1[0][0])
+        size = (e1[1][0]+e1[1][1])/2
+        center = (e1[0][1], e1[0][0])
 
-        '''
-        print("lengths")
-        print(len(c1))
-        print(len(c1[0]))
-        print(len(c1[0][0]))
-        '''
-				
-
-        
-        point1X = c1[0][0][0]
-        #print(point1X)
-        point1Y = c1[0][0][1]
-        #print(point1Y)
-        point2X = c1[int(len(c1) / 4)][0][0]
-        point2Y = c1[int(len(c1) / 4)][0][1]
-        point3X = c1[int(len(c1) / 4) * 2][0][0]
-        #print(point3X)
-        point3Y = c1[int(len(c1) / 4) * 2][0][1]
-        #print(point3Y)
-        point4X = c1[int(len(c1) / 4) * 3][0][0]
-        point4Y = c1[int(len(c1) / 4) * 3][0][1]
+        centerDepth = np.mean( depth_image[int(e1[0][1]-2):int(e1[0][1]+2), int(e1[0][0]-2):int(e1[0][0]+2)] )
+        c1 = c1[0]
+        c2 = c2[0]
+        point1X = c1[0][0]
+        point1Y = c1[0][1]
+        point2X = c1[int(len(c1) / 4)][0]
+        point2Y = c1[int(len(c1) / 4)][1]
+        point3X = c1[int(len(c1) / 4) * 2][0]
+        point3Y = c1[int(len(c1) / 4) * 2][1]
+        point4X = c1[int(len(c1)-1)][0]
+        point4Y = c1[int(len(c1)-1)][1]
 
         min1 = 1000000000
         closest1 = c1[0]
@@ -59,26 +43,26 @@ class The_Ring:
         min4 = 1000000000
         closest4 = c1[0]
 
-        for i in range(0, len(c2)) :
-            dist1 = np.sqrt((c2[i][0][0]-point1X) ** 2 + (c2[i][0][1] - point1Y) ** 2)
+        for i in c2 :
+            dist1 = np.sqrt((i[0]-point1X) ** 2 + (i[1] - point1Y) ** 2)
             if dist1 < min1 :
                 min1 = dist1
-                closest1 = c2[i][0]
+                closest1 = i
 
-            dist2 = np.sqrt((c2[i][0][0]-point2X) ** 2 + (c2[i][0][1] - point2Y) ** 2)
+            dist2 = np.sqrt((i[0]-point2X) ** 2 + (i[1] - point2Y) ** 2)
             if dist2 < min2 :
                 min2 = dist2
-                closest2 = c2[i][0]
+                closest2 = i
 
-            dist3 = np.sqrt((c2[i][0][0]-point3X) ** 2 + (c2[i][0][1] - point3Y) ** 2)
+            dist3 = np.sqrt((i[0]-point3X) ** 2 + (i[1] - point3Y) ** 2)
             if dist3 < min3 :
                 min3 = dist3
-                closest3 = c2[i][0]
+                closest3 = i
 
-            dist4 = np.sqrt((c2[i][0][0]-point4X) ** 2 + (c2[i][0][1] - point4Y) ** 2)
+            dist4 = np.sqrt((i[0]-point4X) ** 2 + (i[1] - point4Y) ** 2)
             if dist4 < min4 :
                 min4 = dist4
-                closest4 = c2[i][0]
+                closest4 = i
       
         por1X = (point1X + closest1[0])/2
         por1Y = (point1Y + closest1[1])/2
@@ -92,22 +76,12 @@ class The_Ring:
         por4X = (point4X + closest4[0])/2
         por4Y = (point4Y + closest4[1])/2
 
-        avgRingDepth = (depth_image[por1Y, por1X]/4 + depth_image[por2Y, por2X]/4 + depth_image[por3Y, por3X]/4 + depth_image[por4Y, por4X]/4)
-        
-        avgRed = (bgr_image[por1Y, por1X, 2]/4 + bgr_image[por2Y, por2X, 2]/4 + bgr_image[por3Y, por3X, 2]/4 + bgr_image[por4Y, por4X, 2]/4)
-        
-        avgBlue = (bgr_image[por1Y, por1X, 0]/4 + bgr_image[por2Y, por2X, 0]/4 + bgr_image[por3Y, por3X, 0]/4 + bgr_image[por4Y, por4X, 0]/4)
-        
-        avgGreen = (bgr_image[por1Y, por1X, 1]/4 + bgr_image[por2Y, por2X, 1]/4 + bgr_image[por3Y, por3X, 1]/4 + bgr_image[por4Y, por4X, 1]/4)
-        
-        '''
-        print("pixel 1: " + str(bgr_image[por1Y, por1X, 0]) + " " + str(bgr_image[por1Y, por1X, 1]) + " " + str(bgr_image[por1Y, por1X, 2]))
-        print("pixel 2: " + str(bgr_image[por2Y, por2X, 0]) + " " + str(bgr_image[por2Y, por2X, 1]) + " " + str(bgr_image[por2Y, por2X, 2]))
-        print("pixel 3: " + str(bgr_image[por3Y, por3X, 0]) + " " + str(bgr_image[por3Y, por3X, 1]) + " " + str(bgr_image[por3Y, por3X, 2]))
-        print("pixel 4: " + str(bgr_image[por4Y, por4X, 0]) + " " + str(bgr_image[por4Y, por4X, 1]) + " " + str(bgr_image[por4Y, por4X, 2]))
-        '''
-				
-        return [avgRingDepth, avgBlue, avgGreen, avgRed]
+        avgRingDepth = depth_image[por1Y, por1X] + depth_image[por2Y, por2X] + depth_image[por3Y, por3X] + depth_image[por4Y, por4X] / 4
+
+        if(abs(avgRingDepth - centerDepth) > 100) :
+            return avgRingDepth
+
+        return -1
 
     def __init__(self):
         rospy.init_node('image_converter', anonymous=True)
@@ -121,6 +95,10 @@ class The_Ring:
         # Marker array object used for visualizations
         self.marker_array = MarkerArray()
         self.marker_num = 1
+
+        # Subscribe to the image and/or depth topic
+        # self.image_sub = rospy.Subscriber("/camera/rgb/image_raw", Image, self.image_callback)
+        # self.depth_sub = rospy.Subscriber("/camera/depth_registered/image_raw", Image, self.depth_callback)
         
         
 
@@ -192,65 +170,44 @@ class The_Ring:
 
 
     def image_callback(self,krneki):
-    	try:
-    		#data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
-    		data = rospy.wait_for_message('/camera/depth_registered/image_raw', Image)
-    		print('I got a new image!')
-    		
-    	except Exception as e:
-    		print(e)
+    	print('I got a new image!')
+	data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
 
+	#cv2.imshow("Image window1",data)
 
         try:
             print('converting image')
-            cv_image = self.bridge.imgmsg_to_cv2(data, "16UC1")
+            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
             print('image converted!')
         except CvBridgeError as e:
             print(e)
         
         #640x480
         cv_image = cv_image[0:240, 0:640]
-        #cv2.imwrite('original_image_.jpeg', cv_image)
-        
-        # shranimo podatke za racunanje oddaljenosti obroca
-        depth_info = cv_image
-        
-        #print(depth_info[120, 320])
+            
+        #cv2.imshow("Image window2",cv_image)
 
         # Set the dimensions of the image
         self.dims = cv_image.shape
 
+        # Tranform image to gayscale
+        gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+        #cv2.imshow("Image window3",gray)
+
         # Do histogram equlization
-        #img = cv2.equalizeHist(cv_image)
-        max_val = np.max(cv_image)
-        cv_image[cv_image <= max_val*0.05] = max_val
-        cv_image[cv_image >= max_val*0.5] = max_val
-        #cv2.imwrite('image_after_removing_shadows.jpeg', cv_image)
-        #cv2.imwrite('image.jpeg', cv_image)
-        #cv_image = cv2.threshold(img, 50, 255, 0)
-				
+        img = cv2.equalizeHist(gray)
+        #cv2.imshow("Image window",img)
 
-        image_1 = cv_image / 65536.0 * 255
-        #cv2.imwrite('image_after_65536.jpeg', cv_image)        
-        image_1 = image_1 / np.max(image_1) * 255
-        #cv2.imwrite('hist_stretch_.jpeg', cv_image)
-
-        image_viz = np.array(image_1, dtype= np.uint8)
-
-        img = image_viz
-				
-        #thresh = cv2.threshold(image_1, 170, 255, cv2.THRESH_TOZERO_INV)
+        # Binarize the image
+        #ret, thresh = cv2.threshold(img, 50, 255, 0)
 	thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 151,2)
-        #cv2.imwrite('image_after_thresh_.jpeg', thresh)
-	
+	#cv2.imshow("Image window",gray)
 	#cv2.imshow("Image window2",thresh)
 	#cv2.waitKey(0)
-	
-	# filetring image
-	kernel = np.ones((5,5), np.uint8)
-	thresh = cv2.dilate(thresh, kernel, iterations = 1)
-	thresh = cv2.erode(thresh, kernel, iterations = 1)
-	#thresh = cv2.bitwise_not(thresh)
+	kernel = np.ones((3,3), np.uint8)
+	#thresh = cv2.dilate(thresh, kernel, iterations = 1)
+	#cv2.imshow("Image window3", thresh)
+	#cv2.waitKey(0)
 	
 	
         # Extract contours
@@ -280,43 +237,36 @@ class The_Ring:
                 e1 = elps[n]
                 e2 = elps[m]
                 dist = np.sqrt(((e1[0][0] - e2[0][0]) ** 2 + (e1[0][1] - e2[0][1]) ** 2))
-                dist2 = abs(e1[1][1]/e1[1][0] - e2[1][1]/e2[1][0])
+                #dist2 = abs(e1[1][1]/e1[1][0] - e2[1][1]/e2[1][0])
                 sizediff = abs(e1[1][1] - e2[1][1]) + abs(e1[1][0] - e2[1][0])
                 #             print dist
-                if dist < 20 and dist2 < 0.4 and sizediff < 200:
+                if dist < 5: #and dist2 < 0.2 and sizediff < 150:
                     candidates.append((e1,e2))
                     candidates_cnt.append((ellipseContours[n], ellipseContours[m]))
 
 	print("Processing is done! found", len(candidates), "candidates for rings")
-	#if len(candidates) < 1:
-		#a = random.randrange(1000)
+	if len(candidates) < 1:
+		a = random.randrange(1000)
+		cv2.imwrite('camera_image_'+ str(a) + '.jpeg', cv_image)
+		cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
+		return []
 		
-		#cv2.imwrite('camera_image_'+ str(a) + '.jpeg', img)
-		#cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
-		#return []
-	depth_img = []
-	'''
+		#'''
         try:
             #depth_img = rospy.wait_for_message('/camera/depth_registered/image_raw', Image)
             depth_img = rospy.wait_for_message('/camera/depth/image_raw', Image)
             print("success")
         except Exception as e:
             print(e)
-	'''
-        # getting rgb image
-        cv_image = rospy.wait_for_message('/camera/rgb/image_raw', Image)
-        cv_image = self.bridge.imgmsg_to_cv2(cv_image, "bgr8")
-        cv_image = cv_image[0:240, 0:640]
-        rgb_image = cv_image
-        
+		#'''
+		
+        # Extract the depth from the depth image
         for n in range(len(candidates)) :
             e = candidates[n]
             c = candidates_cnt[n]
 	    # the centers of the ellipses
             e1 = e[0]
             e2 = e[1]
-            c1 = c[0]
-            c2 = c[1]
 
 	    # drawing the ellipses on the image
             
@@ -334,8 +284,6 @@ class The_Ring:
             y_min = y1 if y1 > 0 else 0
             y_max = y2 if y2 < cv_image.shape[1] else cv_image.shape[1]
 
-            
-            '''
             depth_image = self.bridge.imgmsg_to_cv2(depth_img, "16UC1")
             #org size 640x480
             depth_image = depth_image[0:240, 0:640]
@@ -348,66 +296,28 @@ class The_Ring:
             else:
                 cv2.ellipse(cv_image, e1, (0, 255, 0), 2)
                 cv2.ellipse(cv_image, e2, (0, 255, 0), 2)
-						'''
-            #self.get_pose(e1, dist/1000.0)
+
             
-            cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
-            cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
-            distBGR = self.get_distance(c1,c2, depth_info, rgb_image)
-            print(distBGR[0])
-            
-            
-            print("B: " + str(distBGR[1]) + " G: " + str(distBGR[2]) + " R: " + str(distBGR[3]))
-            
-            if(distBGR[1]-40 > distBGR[2] and distBGR[1]-40 > distBGR[3]):
-            	self.get_pose(e1, distBGR[0]/1000.0)
-            	if(self.blue == False):
-            		print("found blue ring")
-            		self.blue = True
-            	else:
-            		print("found blue ring again")
-            elif(distBGR[3]-35 > distBGR[2] and distBGR[3]-35 > distBGR[1]):
-            	self.get_pose(e1, distBGR[0]/1000.0)
-            	if(self.red == False):
-            		print("found red ring")
-            		self.red = True
-            	else:
-            		print("found red ring again")
-            elif(abs(distBGR[2]-distBGR[3]) > 30):
-            	self.get_pose(e1, distBGR[0]/1000.0)
-            	if(self.green == False):
-            		print("found green ring")
-            		self.green = True
-            	else:
-            		print("found green ring again")
-            else:
-            	self.get_pose(e1, distBGR[0]/1000.0)
-            	if(self.black == False):
-            		print("found black ring")
-            		self.black = True
-            	else:
-            		print("found black ring again")
 
             
 
 	if len(candidates)>0:
 		print("neki")
-		
 		a = str(random.randrange(1000))
 		cv2.imwrite('circles_camera_image_'+ a + '.jpeg', cv_image)
-		#cv2.imwrite('circles_camera_image_'+ a + '_threshed.jpeg', thresh)
+		cv2.imwrite('circles_camera_image_'+ a + '_threshed.jpeg', thresh)
 		
 		# Convert the depth image to a Numpy array since most cv2 functions
 		# require Numpy arrays.
-		#depth_array = np.array(depth_image, dtype=np.float32)
+		depth_array = np.array(depth_image, dtype=np.float32)
 		# Normalize the depth image to fall between 0 (black) and 1 (white)
-		#cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
+		cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
 		# At this point you can display the result properly:
 		# cv2.imshow('Depth Image', depth_display_image)
 		# If you write it as it si, the result will be a image with only 0 to 1 values.
 		# To actually store in a this a image like the one we are showing its needed
 		# to reescale the otuput to 255 gray scale.
-		#cv2.imwrite('depth_circles_image_'+ a + '.png',depth_array*255)
+		cv2.imwrite('depth_circles_image_'+ a + '.png',depth_array*255)
 		
 		#cv2.imshow("Image window",cv_image)
 		#cv2.waitKey(0)
