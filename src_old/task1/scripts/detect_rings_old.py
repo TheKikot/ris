@@ -22,7 +22,7 @@ class The_Ring:
         size = (e1[1][0]+e1[1][1])/2
         center = (e1[0][1], e1[0][0])
 
-        centerDepth = np.mean( depth_image[int(e1[0][1]-2):int(e1[0][1]+2), int(e1[0][0]-2):int(e1[0][0]+2)] )
+        centerDepth = np.mean( depth_image[int(e1[0][1]), int(e1[0][0])] )
         c1 = c1[0]
         c2 = c2[0]
         point1X = c1[0][0]

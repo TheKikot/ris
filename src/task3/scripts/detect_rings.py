@@ -181,21 +181,23 @@ class The_Ring:
 
 	print("Processing is done! found", len(candidates), "candidates for rings")
 	if len(candidates) < 1:
+		print("1")
 		a = random.randrange(1000)
 		cv2.imwrite('camera_image_'+ str(a) + '.jpeg', cv_image)
 		cv2.imwrite('camera_image_'+ str(a) + '_threshed.jpeg', thresh)
 		return []
 		
 		#'''
+        print("2")
         try:
             #depth_img = rospy.wait_for_message('/camera/depth_registered/image_raw', Image)
             depth_img = rospy.wait_for_message('/camera/depth/image_raw', Image)
-            depth_img = depth_img[0:240, 0:640]
+            #depth_img = depth_img[0:240, 0:640]
             print("success")
         except Exception as e:
             print(e)
 		#'''
-		
+        print("3")
         # Extract the depth from the depth image
         for n in range(len(candidates)) :
             e = candidates[n]
@@ -209,31 +211,32 @@ class The_Ring:
 
             size = (e1[1][0]+e1[1][1])/2
             center = (e1[0][1], e1[0][0])
-
+            print(4)
             x1 = int(center[0] - size / 2)
             x2 = int(center[0] + size / 2)
             x_min = x1 if x1>0 else 0
             x_max = x2 if x2<cv_image.shape[0] else cv_image.shape[0]
-
+            print(5)
             y1 = int(center[1] - size / 2)
             y2 = int(center[1] + size / 2)
             y_min = y1 if y1 > 0 else 0
             y_max = y2 if y2 < cv_image.shape[1] else cv_image.shape[1]
 
-            depth_image = self.bridge.imgmsg_to_cv2(depth_img, "16UC1")
+            print(6)
+
+            #depth_image = self.bridge.imgmsg_to_cv2(depth_img, "16UC1")
             #org size 640x480
-            depth_image = depth_image[0:240, 0:640]
+            #depth_image = depth_image[0:240, 0:640]
+            depth_image = depth_img
 
-            dist = self.check_if_floating(e1, c[0], e2, c[1], depth_image)
-            if dist != -1 :
-                self.get_pose(e1, dist/1000.0)
-                cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
-                cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
-            else:
-                cv2.ellipse(cv_image, e1, (0, 255, 0), 2)
-                cv2.ellipse(cv_image, e2, (0, 255, 0), 2)
+						
+            dist = np.mean( depth_image[int(e1[0][1]), int(e1[0][0])] )
+            #self.check_if_floating(e1, c[0], e2, c[1], depth_image)
+            self.get_pose(e1, dist/1000.0)
+            cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
+            cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
 
-            
+            print(7)
 
             
 
