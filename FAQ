@@ -1,2 +1,6 @@
 cylinder_segmentation pošilja na cylinders
 detect_rings_reformated pošilja na rings
+
+installirat treba
+pytesseract
+sklearn
