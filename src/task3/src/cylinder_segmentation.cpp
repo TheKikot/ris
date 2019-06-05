@@ -112,7 +112,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setNormalDistanceWeight (0.1);
   seg.setMaxIterations (5000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.06, 0.1);
+  seg.setRadiusLimits (0.06, 0.2);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 
