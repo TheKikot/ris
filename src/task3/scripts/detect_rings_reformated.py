@@ -42,7 +42,7 @@ class The_Ring:
 
         # Publiser for the visualization markers
 
-        self.markers_pub = rospy.Publisher('markers', Marker,
+        self.markers_pub = rospy.Publisher('rings', Marker,
                 queue_size=1)
 
         # Object we use for transforming between coordinate frames
