@@ -16,7 +16,9 @@ from cv_bridge import CvBridge, CvBridgeError
 from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
 from task3.srv import *
+from sklearn.neighbors import KNeighborsClassifier
 import pytesseract
+import urllib2
 
 #--------- QR ------------
 
@@ -47,7 +49,52 @@ print(params.adaptiveThreshWinSizeStep)
 
 #--------- QR --------------
 
+
 class The_Ring:
+
+    global model
+    global features
+    global label
+
+    def test_recognition(self):
+        self.get_online_data('http://box.vicos.si/rins/w.txt')
+        global label
+        #print(label)
+        self.build_classifier()
+        print(self.get_prediction(1,5))
+
+    def get_online_data(self, url):
+        # Then we cen get the contents
+        resp = urllib2.urlopen(url)
+        text = resp.read()
+
+        # Split the text into lines
+        lines = text.splitlines()
+
+        global features
+        global label
+
+        features = []
+        label = []
+
+        # Extract the data from the text.
+        # You should modify these lines so you put the extracted points into
+        # whatever structure you need for the learning of the classifier.
+        for line in lines[1:]: # For each line except the first (this is the description line)
+            x1, x2, y = [float(x) for x in line.split(',')] # x1 and x2 are inputs and y is the output
+            features.append([x1,x2])
+            label.append(y)
+
+
+    def build_classifier(self):
+        global model, features, label
+        model = KNeighborsClassifier(n_neighbors = 5)
+        model.fit(features, label)
+    
+
+    def get_prediction(self, x, y):
+        global model
+        return model.predict([[x,y]])
 
     def __init__(self):
         rospy.init_node('image_converter', anonymous=True)
@@ -692,6 +739,7 @@ class The_Ring:
 def main():
 
     ring_finder = The_Ring()
+    #ring_finder.test_recognition()
 
     try:
         rospy.spin()
