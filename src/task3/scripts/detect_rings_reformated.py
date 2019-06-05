@@ -73,6 +73,7 @@ class The_Ring:
 
         self.markers_pub = rospy.Publisher('rings', Marker,
                 queue_size=1)
+        self.normals_pub = rospy.Publisher('normals', Marker, queue_size=1)
 
         # Object we use for transforming between coordinate frames
 
@@ -84,18 +85,7 @@ class The_Ring:
         self.service = rospy.Service('get_ring_location', GetLocation,
                 self.image_callback)
 
-    def get_pose(self, e, c1, c2, depth_image):
-
-
-        #size = (e1[1][0]+e1[1][1])/2
-        #center = (e1[0][1], e1[0][0])
-
-        '''
-        print("lengths")
-        print(len(c1))
-        print(len(c1[0]))
-        print(len(c1[0][0]))
-        '''
+    def get_pose(self, e, c1, c2, depth_image, bgr_image):
                 
 
         
@@ -154,15 +144,15 @@ class The_Ring:
         por4X = (point4X + closest4[0])/2
         por4Y = (point4Y + closest4[1])/2
 
-        avgRingDepth = (depth_image[por1Y, por1X]/4 + depth_image[por2Y, por2X]/4 + depth_image[por3Y, por3X]/4 + depth_image[por4Y, por4X]/4)
-        
+        #avgRingDepth = (depth_image[por1Y, por1X]/4 + depth_image[por2Y, por2X]/4 + depth_image[por3Y, por3X]/4 + depth_image[por4Y, por4X]/4)
+        avgRingDepth = depth_image[int(e[0][1]), int(e[0][0])]
         avgRed = (bgr_image[por1Y, por1X, 2]/4 + bgr_image[por2Y, por2X, 2]/4 + bgr_image[por3Y, por3X, 2]/4 + bgr_image[por4Y, por4X, 2]/4)
         
         avgBlue = (bgr_image[por1Y, por1X, 0]/4 + bgr_image[por2Y, por2X, 0]/4 + bgr_image[por3Y, por3X, 0]/4 + bgr_image[por4Y, por4X, 0]/4)
         
         avgGreen = (bgr_image[por1Y, por1X, 1]/4 + bgr_image[por2Y, por2X, 1]/4 + bgr_image[por3Y, por3X, 1]/4 + bgr_image[por4Y, por4X, 1]/4)
          
-        
+        #print("distance, BGR", avgRingDepth, avgBlue, avgGreen, avgRed);
 
         # Calculate the position of the detected ellipse
 
@@ -176,31 +166,71 @@ class The_Ring:
 
         # Get the angles in the base_link relative coordinate system
 
-        (x_center, y_center) = (avgRingDepth * np.cos(angle_to_center), avgRingDepth
+        (x_center, y_center) = (avgRingDepth/1000.0 * np.cos(angle_to_center), avgRingDepth/1000.0
                   * np.sin(angle_to_center))
+        #print("x,y,center", x_center, y_center)
+
+        size = (e[1][0]+e[1][1])/2
+        center = (e[0][1], e[0][0])
+
+        #print("image shape", bgr_image.shape)
+
+        x1 = int(center[0] )
+        x2 = int(center[0] )
+        x_min = x1 if x1>0 else 0
+        x_max = x2 if x2<bgr_image.shape[0] else bgr_image.shape[0]
+        #print("x_min, x_max", x_min, x_max)
+
+        y1 = int(center[1] - size / 2)
+        y2 = int(center[1] + size / 2)
+        y_min = y1 if y1 > 0 else 0
+        y_max = y2 if y2 < bgr_image.shape[1] else bgr_image.shape[1]
+        #print("y_min, y_max", y_min, y_max)
+
+        # Draw a diagonal blue line with thickness of 5 px
+        #cv2.line(bgr_image,(y_min,x_min),(y_max,x_max),(255,0,0),5)
+        #cv2.imwrite('debug.jpeg', bgr_image)
+
+        # Convert the depth image to a Numpy array since most cv2 functions
+        # require Numpy arrays.
+
+        #depth_array = np.array(depth_image, dtype=np.float32)
+
+        # Normalize the depth image to fall between 0 (black) and 1 (white)
+
+        #cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
+
+        # At this point you can display the result properly:
+        # If you write it as it si, the result will be a image with only 0 to 1 values.
+        # To actually store in a this a image like the one we are showing its needed
+        # to reescale the otuput to 255 gray scale.
+
+        #cv2.imwrite('debug_depth.png', depth_array * 255)
+
         
         # POINT 1
 
-        elipse_x = self.dims[1] / 2 - por1X #morde sta zamenjana x in y
-        elipse_y = self.dims[0] / 2 - por1Y
+        elipse_x = self.dims[1] / 2 - y_min #morde sta zamenjana x in y
+        elipse_y = self.dims[0] / 2 - x_min
         angle_to_point1 = np.arctan2(elipse_x, k_f)
-        (x_1, y_1) = (depth_image[por1Y, por1X] * np.cos(angle_to_point1), depth_image[por1Y, por1X]
+        (x_1, y_1) = (depth_image[x_min, y_min]/1000.0 * np.cos(angle_to_point1), depth_image[x_min, y_min]/1000.0
                   * np.sin(angle_to_point1))
 
-        # POINT 3
+        # POINT 2
 
-        elipse_x = self.dims[1] / 2 - por3X #morde sta zamenjana x in y
-        elipse_y = self.dims[0] / 2 - por3Y
+        elipse_x = self.dims[1] / 2 - y_max #morde sta zamenjana x in y
+        elipse_y = self.dims[0] / 2 - x_max
         angle_to_point2 = np.arctan2(elipse_x, k_f)
-        (x_2, y_2) = (depth_image[por3Y, por3X] * np.cos(angle_to_point2), depth_image[por3Y, por3X]
+        (x_2, y_2) = (depth_image[x_max, y_max]/1000.0 * np.cos(angle_to_point2), depth_image[x_max, y_max]/1000.0
                   * np.sin(angle_to_point2))
+
+        #print("koti", angle_to_center, angle_to_point1, angle_to_point2)
+        #print("x1, y1, x2, y2 pred transformom", x_1, y_1, x_2, y_2)
+
+        #print("avgDepth, depth_levo, depth_desno", avgRingDepth, depth_image[x_min, y_min], depth_image[x_max, y_max])
         
 
-        # CALCULATING NORMAL
-        # {x,y} -> {y,-x}
-
-        normala = [y_1-y_2, -(x_1-x_2)]
-        print(normala)
+        
 
 
 
@@ -212,9 +242,12 @@ class The_Ring:
         point_s.header.frame_id = 'camera_rgb_optical_frame'
         point_s.header.stamp = rospy.Time(0)
 
+        
+
         # Get the point in the "map" coordinate system
 
         point_world = self.tf_buf.transform(point_s, 'map')
+        #print("center", point_world.point.x, point_world.point.y)
 
         # Create a Pose object with the same position
 
@@ -223,6 +256,40 @@ class The_Ring:
         pose.position.y = point_world.point.y
         pose.position.z = point_world.point.z
 
+        # POINT 1
+
+        point_s1 = PointStamped()
+        point_s1.point.x = -y_1
+        point_s1.point.y = 0
+        point_s1.point.z = x_1
+        point_s1.header.frame_id = 'camera_rgb_optical_frame'
+        point_s1.header.stamp = rospy.Time(0)
+
+        # Get the point in the "map" coordinate system
+
+        point_world1 = self.tf_buf.transform(point_s1, 'map')
+
+        x_1 = point_world1.point.x
+        y_1 = point_world1.point.y
+
+        # POINT 2
+
+        point_s2 = PointStamped()
+        point_s2.point.x = -y_2
+        point_s2.point.y = 0
+        point_s2.point.z = x_2
+        point_s2.header.frame_id = 'camera_rgb_optical_frame'
+        point_s2.header.stamp = rospy.Time(0)
+
+        # Get the point in the "map" coordinate system
+
+        point_world2 = self.tf_buf.transform(point_s2, 'map')
+
+        x_2 = point_world2.point.x
+        y_2 = point_world2.point.y
+
+        
+        # Marker for circle
         # Create a marker used for visualization
 
         self.marker_num += 1
@@ -239,9 +306,37 @@ class The_Ring:
         marker.color = ColorRGBA(0, 1, 0, 1)
         self.markers_pub.publish(marker)
 
-        #self.marker_array.markers.append(marker)
 
-        #self.markers_pub.publish(self.marker_array)
+        # CALCULATING NORMAL
+        # {x,y} -> {y,-x}
+        #print("x1, y1, x2, y2", x_1, y_1, x_2, y_2)
+        #xy = [x_1-x_2, y_1-y_2]
+        #print(xy)
+        normala = [y_1-y_2, -(x_1-x_2)]
+        #print("normala", normala)
+        normala[0] = normala[0] / ((normala[0]**2+normala[1]**2)**(1/2))
+        normala[1] = normala[1] / ((normala[0]**2+normala[1]**2)**(1/2))
+        #print("normalizirana normala", normala)
+
+        pose3 = Pose()
+        pose3.position.x = point_world.point.x + normala[0]
+        pose3.position.y = point_world.point.y + normala[1]
+        pose3.position.z = point_world.point.z
+
+        # Marker for point perpendicular
+        self.marker_num += 1
+        marker = Marker()
+        marker.header.stamp = point_world.header.stamp
+        marker.header.frame_id = point_world.header.frame_id
+        marker.pose = pose3
+        marker.type = Marker.CUBE
+        marker.action = Marker.ADD
+        marker.frame_locked = False
+        marker.lifetime = rospy.Duration.from_sec(10)
+        marker.id = self.marker_num
+        marker.scale = Vector3(0.1, 0.1, 0.1)
+        marker.color = ColorRGBA(1, 1, 1, 1)
+        self.normals_pub.publish(marker)
 
     def image_callback(self, krneki):
         print('I got a new image!')
@@ -405,12 +500,15 @@ class The_Ring:
 
             # depth_image = depth_img
 
-            dist = depth_image[int(e1[0][1]), int(e1[0][0])]
+            #dist = depth_image[int(e1[0][1]), int(e1[0][0])]
             #print(dist)
 
             # self.check_if_floating(e1, c[0], e2, c[1], depth_image)
 
-            self.get_pose(e1, dist / 1000.0)
+            #self.get_pose(e1, dist / 1000.0)
+
+            self.get_pose(e1, c[0], c[1], depth_image, cv_image_copy)
+
             cv2.ellipse(cv_image, e1, (255, 0, 0), 2)
             cv2.ellipse(cv_image, e2, (255, 0, 0), 2)
 
