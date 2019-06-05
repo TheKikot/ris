@@ -84,36 +84,131 @@ class The_Ring:
         self.service = rospy.Service('get_ring_location', GetLocation,
                 self.image_callback)
 
-    def get_pose(self, e, dist):
+    def get_pose(self, e, c1, c2, depth_image):
+
+
+        #size = (e1[1][0]+e1[1][1])/2
+        #center = (e1[0][1], e1[0][0])
+
+        '''
+        print("lengths")
+        print(len(c1))
+        print(len(c1[0]))
+        print(len(c1[0][0]))
+        '''
+                
+
+        
+        point1X = c1[0][0][0]
+        #print(point1X)
+        point1Y = c1[0][0][1]
+        #print(point1Y)
+        point2X = c1[int(len(c1) / 4)][0][0]
+        point2Y = c1[int(len(c1) / 4)][0][1]
+        point3X = c1[int(len(c1) / 4) * 2][0][0]
+        #print(point3X)
+        point3Y = c1[int(len(c1) / 4) * 2][0][1]
+        #print(point3Y)
+        point4X = c1[int(len(c1) / 4) * 3][0][0]
+        point4Y = c1[int(len(c1) / 4) * 3][0][1]
+
+        min1 = 1000000000
+        closest1 = c1[0]
+        min2 = 1000000000
+        closest2 = c1[0]
+        min3 = 1000000000
+        closest3 = c1[0]
+        min4 = 1000000000
+        closest4 = c1[0]
+
+        for i in range(0, len(c2)) :
+            dist1 = np.sqrt((c2[i][0][0]-point1X) ** 2 + (c2[i][0][1] - point1Y) ** 2)
+            if dist1 < min1 :
+                min1 = dist1
+                closest1 = c2[i][0]
+
+            dist2 = np.sqrt((c2[i][0][0]-point2X) ** 2 + (c2[i][0][1] - point2Y) ** 2)
+            if dist2 < min2 :
+                min2 = dist2
+                closest2 = c2[i][0]
+
+            dist3 = np.sqrt((c2[i][0][0]-point3X) ** 2 + (c2[i][0][1] - point3Y) ** 2)
+            if dist3 < min3 :
+                min3 = dist3
+                closest3 = c2[i][0]
+
+            dist4 = np.sqrt((c2[i][0][0]-point4X) ** 2 + (c2[i][0][1] - point4Y) ** 2)
+            if dist4 < min4 :
+                min4 = dist4
+                closest4 = c2[i][0]
+      
+        por1X = (point1X + closest1[0])/2
+        por1Y = (point1Y + closest1[1])/2
+
+        por2X = (point2X + closest2[0])/2
+        por2Y = (point2Y + closest2[1])/2
+
+        por3X = (point3X + closest3[0])/2
+        por3Y = (point3Y + closest3[1])/2
+
+        por4X = (point4X + closest4[0])/2
+        por4Y = (point4Y + closest4[1])/2
+
+        avgRingDepth = (depth_image[por1Y, por1X]/4 + depth_image[por2Y, por2X]/4 + depth_image[por3Y, por3X]/4 + depth_image[por4Y, por4X]/4)
+        
+        avgRed = (bgr_image[por1Y, por1X, 2]/4 + bgr_image[por2Y, por2X, 2]/4 + bgr_image[por3Y, por3X, 2]/4 + bgr_image[por4Y, por4X, 2]/4)
+        
+        avgBlue = (bgr_image[por1Y, por1X, 0]/4 + bgr_image[por2Y, por2X, 0]/4 + bgr_image[por3Y, por3X, 0]/4 + bgr_image[por4Y, por4X, 0]/4)
+        
+        avgGreen = (bgr_image[por1Y, por1X, 1]/4 + bgr_image[por2Y, por2X, 1]/4 + bgr_image[por3Y, por3X, 1]/4 + bgr_image[por4Y, por4X, 1]/4)
+         
+        
 
         # Calculate the position of the detected ellipse
 
+        # CENTER
         k_f = 525  # kinect focal length in pixels
 
         elipse_x = self.dims[1] / 2 - e[0][0]
         elipse_y = self.dims[0] / 2 - e[0][1]
 
-        angle_to_target = np.arctan2(elipse_x, k_f)
+        angle_to_center = np.arctan2(elipse_x, k_f)
 
         # Get the angles in the base_link relative coordinate system
 
-        (x, y) = (dist * np.cos(angle_to_target), dist
-                  * np.sin(angle_to_target))
+        (x_center, y_center) = (avgRingDepth * np.cos(angle_to_center), avgRingDepth
+                  * np.sin(angle_to_center))
+        
+        # POINT 1
 
-        # ## Define a stamped message for transformation - directly in "base_frame"
-        # point_s = PointStamped()
-        # point_s.point.x = x
-        # point_s.point.y = y
-        # point_s.point.z = 0.3
-        # point_s.header.frame_id = "base_link"
-        # point_s.header.stamp = rospy.Time(0)
+        elipse_x = self.dims[1] / 2 - por1X #morde sta zamenjana x in y
+        elipse_y = self.dims[0] / 2 - por1Y
+        angle_to_point1 = np.arctan2(elipse_x, k_f)
+        (x_1, y_1) = (depth_image[por1Y, por1X] * np.cos(angle_to_point1), depth_image[por1Y, por1X]
+                  * np.sin(angle_to_point1))
 
-        # Define a stamped message for transformation - in the "camera rgb frame"
+        # POINT 3
+
+        elipse_x = self.dims[1] / 2 - por3X #morde sta zamenjana x in y
+        elipse_y = self.dims[0] / 2 - por3Y
+        angle_to_point2 = np.arctan2(elipse_x, k_f)
+        (x_2, y_2) = (depth_image[por3Y, por3X] * np.cos(angle_to_point2), depth_image[por3Y, por3X]
+                  * np.sin(angle_to_point2))
+        
+
+        # CALCULATING NORMAL
+        # {x,y} -> {y,-x}
+
+        normala = [y_1-y_2, -(x_1-x_2)]
+        print(normala)
+
+
+
 
         point_s = PointStamped()
-        point_s.point.x = -y
+        point_s.point.x = -y_center
         point_s.point.y = 0
-        point_s.point.z = x
+        point_s.point.z = x_center
         point_s.header.frame_id = 'camera_rgb_optical_frame'
         point_s.header.stamp = rospy.Time(0)
 
