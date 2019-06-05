@@ -60,7 +60,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   // Build a passthrough filter to remove spurious NaNs
   pass.setInputCloud (cloud);
   pass.setFilterFieldName ("z");
-  pass.setFilterLimits (0, 2.5);
+  pass.setFilterLimits (0, 2.3);
   pass.filter (*cloud_filtered);
   std::cerr << "PointCloud after filtering has: " << cloud_filtered->points.size () << " data points." << std::endl;
 
@@ -75,7 +75,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_NORMAL_PLANE);
   seg.setNormalDistanceWeight (0.1);
   seg.setMethodType (pcl::SAC_RANSAC);
-  seg.setMaxIterations (500);
+  seg.setMaxIterations (100);
   seg.setDistanceThreshold (0.015);
   seg.setInputCloud (cloud_filtered);
   seg.setInputNormals (cloud_normals);
@@ -110,9 +110,9 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_CYLINDER);
   seg.setMethodType (pcl::SAC_RANSAC);
   seg.setNormalDistanceWeight (0.1);
-  seg.setMaxIterations (10000);
+  seg.setMaxIterations (5000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.06, 0.2);
+  seg.setRadiusLimits (0.06, 0.1);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 
