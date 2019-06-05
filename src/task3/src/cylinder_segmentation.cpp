@@ -66,11 +66,11 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 
   pass.setInputCloud (cloud_filtered);
   pass.setFilterFieldName ("y");
-  pass.setFilterLimits (0.2, 0.6);
+  pass.setFilterLimits (-0.1, 0.3);
   pass.filter (*cloud_filtered);
   std::cerr << "PointCloud after filtering y has: " << cloud_filtered->points.size () << " data points." << std::endl;
-
-  std::cerr << cloud_filtered->points;
+	
+  
 
   // Estimate point normals
   ne.setSearchMethod (tree);
@@ -101,6 +101,11 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   extract.filter (*cloud_plane);
   std::cerr << "PointCloud representing the planar component: " << cloud_plane->points.size () << " data points." << std::endl;
   
+  /*
+  for (int i = 0; i < cloud_plane->points.size(); i+= 20)
+  	std::cerr << "plane: " << cloud_plane->points[i].y << std::endl;
+  	*/
+
   pcl::PCLPointCloud2 outcloud_plane;
   pcl::toPCLPointCloud2 (*cloud_plane, outcloud_plane);
   pubx.publish (outcloud_plane);
@@ -120,7 +125,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setNormalDistanceWeight (0.1);
   seg.setMaxIterations (5000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.08, 0.14);
+  seg.setRadiusLimits (0.06, 0.2);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 
@@ -139,7 +144,11 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   else
   {
 	  std::cerr << "PointCloud representing the cylindrical component: " << cloud_cylinder->points.size () << " data points." << std::endl;
-          
+    /*      
+    for (int i = 0; i < cloud_cylinder->points.size(); i+= 20)
+		std::cerr << "cylinder: " << cloud_cylinder->points[i].y << std::endl;
+	*/
+
           pcl::compute3DCentroid (*cloud_cylinder, centroid);
           std::cerr << "centroid of the cylindrical component: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << std::endl;
 
