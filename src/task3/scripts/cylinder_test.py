@@ -8,7 +8,7 @@ from std_msgs.msg import String
 
 
 def main():
-	print("setting up node")
+	#print("setting up node")
 	rospy.init_node('cylinder_test', anonymous=False)
 	
 	rospy.wait_for_service('detect_cylinder')

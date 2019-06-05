@@ -12,7 +12,8 @@ callFunction = False
 def change_global_variable(g):
 	global callFunction
 	callFunction = True
-	print("!")
+	print("omogocam zaznavo valjev")
+	return []
 
 def call_detection(points):
 	global callFunction
@@ -31,7 +32,7 @@ def main():
 	rospy.init_node('cylinder_detection', anonymous=False)
 	
 	points_sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, call_detection)
-	call_srv = rospy.Service('detect_cylinder', GetLocation, call_detection)
+	call_srv = rospy.Service('detect_cylinder', GetLocation, change_global_variable)
 
 	try:
 		rospy.spin()
