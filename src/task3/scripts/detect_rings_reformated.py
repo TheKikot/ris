@@ -17,6 +17,30 @@ from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
 from task3.srv import *
 
+#--------- QR ------------
+
+import pyzbar.pyzbar as pyzbar
+
+dictm = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+
+# The object that we will pass to the markerDetect function
+params =  cv2.aruco.DetectorParameters_create()
+
+print(params.adaptiveThreshConstant) 
+print(params.adaptiveThreshWinSizeMax)
+print(params.adaptiveThreshWinSizeMin)
+print(params.minCornerDistanceRate)
+print(params.adaptiveThreshWinSizeStep)
+
+# To see description of the parameters
+# https://docs.opencv.org/3.3.1/d1/dcd/structcv_1_1aruco_1_1DetectorParameters.html
+
+# You can set these parameters to get better marker detections
+params.adaptiveThreshConstant = 25
+adaptiveThreshWinSizeStep = 2
+
+
+#--------- QR --------------
 
 class The_Ring:
 
@@ -300,7 +324,7 @@ class The_Ring:
             # print(7)
 
         if len(candidates) > 0:
-            print('neki')
+            print('Found ', len(candidates), 'circles')
             a = str(random.randrange(1000))
             cv2.imwrite('circles_camera_image_' + a + '.jpeg', cv_image)
             cv2.imwrite('circles_camera_image_' + a + '_threshed.jpeg',
@@ -324,12 +348,46 @@ class The_Ring:
 
             cv2.imwrite('depth_circles_image_' + a + '.png',
                         depth_array * 255)
+
+            print("Looking for QR codes")
+            # Find a QR code in the image
+            decodedObjects = pyzbar.decode(cv_image)
+            
+            #print(decodedObjects)
+            
+            if len(decodedObjects) == 1:
+                dObject = decodedObjects[0]
+                print("Found 1 QR code in the image!")
+                print("Data: ", dObject.data,'\n')
+                
+                # Visualize the detected QR code in the image
+                points  = dObject.polygon
+                if len(points) > 4 : 
+                    hull = cv2.convexHull(np.array([point for point in points], dtype=np.float32))
+                    hull = list(map(tuple, np.squeeze(hull)))
+                else : 
+                    hull = points;
+                 
+                ## Number of points in the convex hull
+                n = len(hull)
+             
+                ## Draw the convext hull
+                for j in range(0,n):
+                    cv2.line(cv_image, hull[j], hull[ (j+1) % n], (0,255,0), 2)
+                    
+                cv2.imshow('Warped image',cv_image)
+                cv2.waitKey(1)
+                    
+            elif len(decodedObjects)==0:
+                print("No QR code in the image")
+            else:
+                print("Found more than 1 QR code")
         else:
 
             # cv2.imshow("Image window",cv_image)
             # cv2.waitKey(0)
 
-            print('neki2')
+            print('Didnt find any circles. ')
 
         return []
 
