@@ -2,7 +2,7 @@
 
 import sys
 import rospy
-from task1.srv import *
+from task3.srv import *
 
 def get_location_client():
     # get image
