@@ -70,6 +70,8 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pass.filter (*cloud_filtered);
   std::cerr << "PointCloud after filtering y has: " << cloud_filtered->points.size () << " data points." << std::endl;
 
+  std::cerr << cloud_filtered->points;
+
   // Estimate point normals
   ne.setSearchMethod (tree);
   ne.setInputCloud (cloud_filtered);
