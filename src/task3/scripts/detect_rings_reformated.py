@@ -16,6 +16,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
 from task3.srv import *
+import pytesseract
 
 #--------- QR ------------
 
@@ -36,8 +37,12 @@ print(params.adaptiveThreshWinSizeStep)
 # https://docs.opencv.org/3.3.1/d1/dcd/structcv_1_1aruco_1_1DetectorParameters.html
 
 # You can set these parameters to get better marker detections
-params.adaptiveThreshConstant = 25
-adaptiveThreshWinSizeStep = 2
+#params.adaptiveThreshConstant = 25
+#adaptiveThreshWinSizeStep = 2
+#params.adaptiveThreshWinSizeMin = 40
+#params.adaptiveThreshWinSizeMax = 60
+#params.minCornerDistanceRate = 100000
+#params.adaptiveThreshWinSizeStep = 10
 
 
 #--------- QR --------------
@@ -147,7 +152,6 @@ class The_Ring:
         print('I got a new image!')
         data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
 
-        #cv2.imshow("Image window1",data)
 
         try:
             print('converting image')
@@ -158,9 +162,8 @@ class The_Ring:
 
         # 640x480
 
-        cv_image = cv_image[180:380, 0:640]
-
-        # cv2.imshow("Image window2",cv_image)
+        #cv_image = cv_image[80:420, 0:640]
+        cv_image_copy = cv_image.copy()
 
         # Set the dimensions of the image
 
@@ -170,13 +173,11 @@ class The_Ring:
 
         gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 
-        # cv2.imshow("Image window3",gray)
 
         # Do histogram equlization
 
         img = cv2.equalizeHist(gray)
 
-        # cv2.imshow("Image window",img)
 
         # Binarize the image
         # ret, thresh = cv2.threshold(img, 50, 255, 0)
@@ -190,14 +191,11 @@ class The_Ring:
             2,
             )
 
-        #cv2.imshow("Image window",gray)
-        #cv2.imshow("Image window2",thresh)
         #cv2.waitKey(0)
 
         kernel = np.ones((3, 3), np.uint8)
 
         #thresh = cv2.dilate(thresh, kernel, iterations = 1)
-        #cv2.imshow("Image window3", thresh)
         #cv2.waitKey(0)
 
         # Extract contours
@@ -308,12 +306,12 @@ class The_Ring:
 
             # org size 640x480
 
-            depth_image = depth_image[180:380, 0:640]
+            #depth_image = depth_image[80:420, 0:640]
 
             # depth_image = depth_img
 
             dist = depth_image[int(e1[0][1]), int(e1[0][0])]
-            print(dist)
+            #print(dist)
 
             # self.check_if_floating(e1, c[0], e2, c[1], depth_image)
 
@@ -325,9 +323,9 @@ class The_Ring:
 
         if len(candidates) > 0:
             print('Found ', len(candidates), 'circles')
-            #a = str(random.randrange(1000))
-            #cv2.imwrite('circles_camera_image_' + a + '.jpeg', cv_image)
-            #cv2.imwrite('circles_camera_image_' + a + '_threshed.jpeg', thresh)
+            a = str(random.randrange(1000))
+            cv2.imwrite('circles_camera_image_' + a + '.jpeg', cv_image)
+            cv2.imwrite('circles_camera_image_' + a + '_threshed.jpeg', thresh)
 
             # Convert the depth image to a Numpy array since most cv2 functions
             # require Numpy arrays.
@@ -339,50 +337,144 @@ class The_Ring:
             #cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
 
             # At this point you can display the result properly:
-            # cv2.imshow('Depth Image', depth_display_image)
             # If you write it as it si, the result will be a image with only 0 to 1 values.
             # To actually store in a this a image like the one we are showing its needed
             # to reescale the otuput to 255 gray scale.
 
             #cv2.imwrite('depth_circles_image_' + a + '.png', depth_array * 255)
 
-            print("Looking for QR codes")
-            # Find a QR code in the image
-            decodedObjects = pyzbar.decode(cv_image)
+            corners, ids, rejected_corners = cv2.aruco.detectMarkers(cv_image_copy,dictm,parameters=params)
             
-            #print(decodedObjects)
-            
-            if len(decodedObjects) == 1:
-                dObject = decodedObjects[0]
-                print("Found 1 QR code in the image!")
-                print("Data: ", dObject.data,'\n')
-                
-                # Visualize the detected QR code in the image
-                points  = dObject.polygon
-                if len(points) > 4 : 
-                    hull = cv2.convexHull(np.array([point for point in points], dtype=np.float32))
-                    hull = list(map(tuple, np.squeeze(hull)))
-                else : 
-                    hull = points;
-                 
-                ## Number of points in the convex hull
-                n = len(hull)
-             
-                ## Draw the convext hull
-                for j in range(0,n):
-                    cv2.line(cv_image, hull[j], hull[ (j+1) % n], (0,255,0), 2)
-                    
-                cv2.imwrite('QR_image_.png',
-                        cv_image)
-                    
-            elif len(decodedObjects)==0:
-                print("No QR code in the image")
-            else:
-                print("Found more than 1 QR code")
-        else:
+            # Increase proportionally if you want a larger image
+            image_size=(351,248,3)
+            marker_side=50
 
-            # cv2.imshow("Image window",cv_image)
-            # cv2.waitKey(0)
+            img_out = np.zeros(image_size, np.uint8)
+            out_pts = np.array([[marker_side/2,img_out.shape[0]-marker_side/2],
+                                [img_out.shape[1]-marker_side/2,img_out.shape[0]-marker_side/2],
+                                [marker_side/2,marker_side/2],
+                                [img_out.shape[1]-marker_side/2,marker_side/2]])
+
+            src_points = np.zeros((4,2))
+            cens_mars = np.zeros((4,2))
+
+            if not ids is None:
+                if len(ids)==4:
+                    print('4 Markers detected')
+            
+                    for idx in ids:
+                        # Calculate the center point of all markers
+                        cors = np.squeeze(corners[idx[0]-1])
+                        cen_mar = np.mean(cors,axis=0)
+                        cens_mars[idx[0]-1]=cen_mar
+                        cen_point = np.mean(cens_mars,axis=0)
+                
+                    for coords in cens_mars:
+                        #  Map the correct source points
+                        if coords[0]<cen_point[0] and coords[1]<cen_point[1]:
+                            src_points[2]=coords
+                        elif coords[0]<cen_point[0] and coords[1]>cen_point[1]:
+                            src_points[0]=coords
+                        elif coords[0]>cen_point[0] and coords[1]<cen_point[1]:
+                            src_points[3]=coords
+                        else:
+                            src_points[1]=coords
+
+                    h, status = cv2.findHomography(src_points, out_pts)
+                    img_out = cv2.warpPerspective(cv_image_copy, h, (img_out.shape[1],img_out.shape[0]))
+                    
+                    ################################################
+                    #### Extraction of digits starts here
+                    ################################################
+                    
+                    # Cut out everything but the numbers
+                    
+                    
+                    # Convert the image to grayscale
+                    img_out = cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY)
+                    cv2.imwrite('img_out_pre_threshold.jpeg', img_out)
+                    img_out_QR = img_out[105:241, 50:195]
+                    
+                    # Option 1 - use ordinairy threshold the image to get a black and white image
+                    ret,img_out = cv2.threshold(img_out,100,255,0)
+
+                    # Option 1 - use adaptive thresholding
+                    #img_out = cv2.adaptiveThreshold(img_out,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,5)
+
+                    img_out_digits = img_out[125:221,50:195]
+                    
+                    
+                    # Use Otsu's thresholding
+                    #ret,img_out = cv2.threshold(img_out,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+                    
+                    # Pass some options to tesseract
+                    config = '--psm 13 outputbase nobatch digits'
+                    
+                    # Visualize the image we are passing to Tesseract
+                    cv2.imwrite('img_out_digits.jpeg', img_out_digits)
+                    cv2.imwrite('img_out_QR.jpeg', img_out_QR)
+                    
+                    # Extract text from image
+                    text = pytesseract.image_to_string(img_out_digits, config = config)
+                    
+                    # Check and extract data from text
+                    print('Extracted>>',text)
+                    
+                    # Remove any whitespaces from the left and right
+                    text = text.strip()
+                    
+      #             # If the extracted text is of the right length
+                    if len(text)==2:
+                        x=int(text[0])
+                        y=int(text[1])
+                        print('The extracted datapoints are x=%d, y=%d' % (x,y))
+                    else:
+                        print('The extracted text has is of length %d. Aborting processing' % len(text))
+                        print("Looking for QR codes")
+                        # Find a QR code in the image
+                        decodedObjects = pyzbar.decode(img_out_QR)
+                        cv2.imwrite('cv_image_copy.png',
+                                    cv_image_copy)
+                        
+                        #print(decodedObjects)
+                        
+                        if len(decodedObjects) == 1:
+                            dObject = decodedObjects[0]
+                            print("Found 1 QR code in the image!")
+                            print("Data: ", dObject.data,'\n')
+                            
+                            # Visualize the detected QR code in the image
+                            points  = dObject.polygon
+                            if len(points) > 4 : 
+                                hull = cv2.convexHull(np.array([point for point in points], dtype=np.float32))
+                                hull = list(map(tuple, np.squeeze(hull)))
+                            else : 
+                                hull = points;
+                             
+                            ## Number of points in the convex hull
+                            n = len(hull)
+                         
+                            ## Draw the convext hull
+                            for j in range(0,n):
+                                cv2.line(img_out_QR, hull[j], hull[ (j+1) % n], (0,255,0), 2)
+                                
+                            cv2.imwrite('QR_image_.png',
+                                    img_out_QR)
+                                
+                        elif len(decodedObjects)==0:
+                            print("No QR code in the image")
+                            #TODO mapa
+                        else:
+                            print("Found more than 1 QR code")
+
+                    
+                else:
+                    print('The number of markers is not ok:',len(ids))
+            else:
+                 print('No markers found')
+
+            
+        else:
 
             print('Didnt find any circles. ')
 
@@ -402,8 +494,6 @@ class The_Ring:
 
         image_viz = np.array(image_1, dtype=np.uint8)
 
-        cv2.imshow('Depth window', image_viz)
-        cv2.waitKey(1)
 
 
 def main():
