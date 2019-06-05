@@ -123,9 +123,9 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_CYLINDER);
   seg.setMethodType (pcl::SAC_RANSAC);
   seg.setNormalDistanceWeight (0.1);
-  seg.setMaxIterations (5000);
+  seg.setMaxIterations (10000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.06, 0.2);
+  seg.setRadiusLimits (0.08, 0.16);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 

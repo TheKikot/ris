@@ -4,14 +4,25 @@ import rospy
 #import python-pcl
 from sensor_msgs.msg import PointCloud2
 import sensor_msgs.point_cloud2 as pc2
+from task3.srv import *
+from std_msgs.msg import String
+
+callFunction = False
+
+def change_global_variable(g):
+	global callFunction
+	callFunction = True
+	print("!")
 
 def call_detection(points):
-	print("klicem funkcijo")
-	points_pub = rospy.Publisher("input", PointCloud2, queue_size=1)
-	points_pub.publish(points)	
-	rospy.sleep(1)
-
-
+	global callFunction
+	if(callFunction):
+		print("klicem funkcijo")
+		points_pub = rospy.Publisher("input", PointCloud2, queue_size=1)
+		points_pub.publish(points)
+		callFunction = False
+	else:
+		rospy.sleep(1)
 
 
 
@@ -20,6 +31,7 @@ def main():
 	rospy.init_node('cylinder_detection', anonymous=False)
 	
 	points_sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, call_detection)
+	call_srv = rospy.Service('detect_cylinder', GetLocation, call_detection)
 
 	try:
 		rospy.spin()
