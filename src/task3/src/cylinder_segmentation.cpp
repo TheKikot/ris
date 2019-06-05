@@ -75,8 +75,8 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_NORMAL_PLANE);
   seg.setNormalDistanceWeight (0.1);
   seg.setMethodType (pcl::SAC_RANSAC);
-  seg.setMaxIterations (100);
-  seg.setDistanceThreshold (0.03);
+  seg.setMaxIterations (500);
+  seg.setDistanceThreshold (0.015);
   seg.setInputCloud (cloud_filtered);
   seg.setInputNormals (cloud_normals);
   // Obtain the plane inliers and coefficients
@@ -219,7 +219,7 @@ main (int argc, char** argv)
 
   // For transforming between coordinate frames
   tf2_ros::TransformListener tf2_listener(tf2_buffer);
-
+  //ros::ServiceServer service = n.advertiseService("get_cylinder_location", GetLocation);
   // Create a ROS subscriber for the input point cloud
   ros::Subscriber sub = nh.subscribe ("input", 1, cloud_cb);
 
