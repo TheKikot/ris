@@ -60,7 +60,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   // Build a passthrough filter to remove spurious NaNs
   pass.setInputCloud (cloud);
   pass.setFilterFieldName ("z");
-  pass.setFilterLimits (0, 4);
+  pass.setFilterLimits (0, 2.5);
   pass.filter (*cloud_filtered);
   std::cerr << "PointCloud after filtering has: " << cloud_filtered->points.size () << " data points." << std::endl;
 
