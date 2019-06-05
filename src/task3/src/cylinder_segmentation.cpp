@@ -62,7 +62,13 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pass.setFilterFieldName ("z");
   pass.setFilterLimits (0, 2.3);
   pass.filter (*cloud_filtered);
-  std::cerr << "PointCloud after filtering has: " << cloud_filtered->points.size () << " data points." << std::endl;
+  std::cerr << "PointCloud after filtering z has: " << cloud_filtered->points.size () << " data points." << std::endl;
+
+  pass.setInputCloud (cloud_filtered);
+  pass.setFilterFieldName ("y");
+  pass.setFilterLimits (0.1, 0.6);
+  pass.filter (*cloud_filtered);
+  std::cerr << "PointCloud after filtering y has: " << cloud_filtered->points.size () << " data points." << std::endl;
 
   // Estimate point normals
   ne.setSearchMethod (tree);
@@ -112,7 +118,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setNormalDistanceWeight (0.1);
   seg.setMaxIterations (5000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.06, 0.2);
+  seg.setRadiusLimits (0.08, 0.14);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 
