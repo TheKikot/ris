@@ -325,20 +325,18 @@ class The_Ring:
 
         if len(candidates) > 0:
             print('Found ', len(candidates), 'circles')
-            a = str(random.randrange(1000))
-            cv2.imwrite('circles_camera_image_' + a + '.jpeg', cv_image)
-            cv2.imwrite('circles_camera_image_' + a + '_threshed.jpeg',
-                        thresh)
+            #a = str(random.randrange(1000))
+            #cv2.imwrite('circles_camera_image_' + a + '.jpeg', cv_image)
+            #cv2.imwrite('circles_camera_image_' + a + '_threshed.jpeg', thresh)
 
             # Convert the depth image to a Numpy array since most cv2 functions
             # require Numpy arrays.
 
-            depth_array = np.array(depth_image, dtype=np.float32)
+            #depth_array = np.array(depth_image, dtype=np.float32)
 
             # Normalize the depth image to fall between 0 (black) and 1 (white)
 
-            cv2.normalize(depth_array, depth_array, 0, 1,
-                          cv2.NORM_MINMAX)
+            #cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
 
             # At this point you can display the result properly:
             # cv2.imshow('Depth Image', depth_display_image)
@@ -346,8 +344,7 @@ class The_Ring:
             # To actually store in a this a image like the one we are showing its needed
             # to reescale the otuput to 255 gray scale.
 
-            cv2.imwrite('depth_circles_image_' + a + '.png',
-                        depth_array * 255)
+            #cv2.imwrite('depth_circles_image_' + a + '.png', depth_array * 255)
 
             print("Looking for QR codes")
             # Find a QR code in the image
@@ -375,8 +372,8 @@ class The_Ring:
                 for j in range(0,n):
                     cv2.line(cv_image, hull[j], hull[ (j+1) % n], (0,255,0), 2)
                     
-                cv2.imshow('Warped image',cv_image)
-                cv2.waitKey(1)
+                cv2.imwrite('QR_image_.png',
+                        cv_image)
                     
             elif len(decodedObjects)==0:
                 print("No QR code in the image")
