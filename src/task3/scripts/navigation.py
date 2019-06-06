@@ -20,17 +20,17 @@ from nav_msgs.msg import OccupancyGrid
 #from task3.srv import *
 
 def read_map(staticMap):
-	print(staticMap[0])
+	print(len(staticMap)/ 512)
 
 def main():
 	rospy.init_node('navigation', anonymous=False)
 	rospy.wait_for_service('static_map')
 	try:
-		mapService = rospy.Service('static_map', GetMap)
-		staticMap = mapService().data
+		mapService = rospy.ServiceProxy('static_map', GetMap)
+		staticMap = mapService().map.data
 		read_map(staticMap)
-	except:
-		print("could not reach service")
+	except Exception, e:
+		print(e)
 
 if __name__ == '__main__':
 	main()
