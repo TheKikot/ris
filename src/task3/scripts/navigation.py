@@ -46,15 +46,15 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 	
 	goal.target_pose.header.frame_id = "map" 
 	goal.target_pose.header.stamp = rospy.Time.now()
-	goal.target_pose.pose.position.x = origX + resolucija * downsize * x
-	goal.target_pose.pose.position.y = origY + resolucija * downsize * y
+	goal.target_pose.pose.position.x = origX + resolucija * downsize * (x + 0.5)
+	goal.target_pose.pose.position.y = origY + resolucija * downsize * (y + 0.5)
 	goal.target_pose.pose.orientation = origOrient
 	print("pošiljam cilj: (", goal.target_pose.pose.position.x, ", ", goal.target_pose.pose.position.y, ")")
 	ac.send_goal(goal)
 	goal_state = ac.get_state()
 	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
 		ac.wait_for_result(rospy.Duration(2.0))
-		print("goal_state: ", goal_state)
+		#print("goal_state: ", goal_state)
 		goal_state = ac.get_state()
 	print("goal_state_fin: ", goal_state)
 
@@ -71,7 +71,7 @@ def read_map(mapData):
 	# dimenzije so naceloma 75 x 100
 	# downsize je količnik oz. faktor pomanjšanja
 	# 	pri resoluciji 0.05 in faktorju 4 so celice velike 20cm (malo manj kot roomb roomba)
-	downsize = 8
+	downsize = 4
 	
 	grid = [[0] * (visina/downsize) for i in range(0,	sirina/downsize)]
 	
@@ -87,7 +87,7 @@ def read_map(mapData):
 				grid[i/downsize][j/downsize] += 0
 			elif mapval == 100:
 				# zasedeno
-				grid[i/downsize][j/downsize] += 1
+				grid[i/downsize][j/downsize] = 1
 			elif mapval == -1:
 				# neznano
 				grid[i/downsize][j/downsize] = -1
@@ -104,9 +104,9 @@ def read_map(mapData):
 	
 	print("origin: ", origX, ", ", origY)
 	
-	for k in range(0, sirina/downsize):
-		for l in range(0, visina/downsize):
-			if(grid[k][l] == 0):
+	for k in range(1, sirina/downsize-1, 3):
+		for l in range(1, visina/downsize-1, 3):
+			if(grid[k][l] == 0 and grid[k+1][l] == 0 and grid[k-1][l] == 0 and grid[k][l+1] == 0 and grid[k][l-1] == 0):
 				poslji_cilj(origX, origY, origOrient, resolucija, downsize, l, k)
 				#poslji_marker(origX, origY, resolucija, downsize, k, l, k+l)
 
