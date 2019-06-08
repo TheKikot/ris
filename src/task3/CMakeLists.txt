@@ -34,9 +34,17 @@ add_service_files(
 #   Service2.srv
 )
 
+## Generate messages in the 'msg' folder
+add_message_files(
+   FILES
+   ringAndNormal.msg
+)
+
 generate_messages(
 	DEPENDENCIES
 )
+
+
 
 ## Add include directories
 include_directories(
