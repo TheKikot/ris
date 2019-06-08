@@ -11,7 +11,7 @@ def finished_scouting():
 	# get ring positions
 	rospy.wait_for_service('return_positions')
 	return_positions = rospy.ServiceProxy('return_positions', GetPositions)
-	a = return_positions()
+	ringAndCylinderAttributes = return_positions()
 
 
 	print(a)

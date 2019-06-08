@@ -16,12 +16,18 @@ class Ring():
 	count = 1
 	normalX = 0
 	normalY = 0
+	red = 0
+	green = 0
+	blue = 0
 
-	def __init__(self, x, y, normalX, normalY):
+	def __init__(self, x, y, normalX, normalY, red, green, blue):
 		self.x = x
 		self.y = y
 		self.normalX = normalX
 		self.normalY = normalY
+		self.red = red
+		self.green = green
+		self.blue = blue
 
 class Cylinder():
 
@@ -96,6 +102,10 @@ class Accumulator():
 		if(not self.rings == None):
 			for r in self.rings:
 				if self.sqr_distance(r.x, r.y, rn.ringX, rn.ringY) < 0.30:
+					# popravim barvno povprecje
+					r.red = (r.red * r.countcount + rn.red) / (r.count+1)
+					r.blue = (r.blue * r.countcount + rn.blue) / (r.count+1)
+					r.green = (r.green * r.countcount + rn.green) / (r.count+1)
 					r.count += 1
 					print('Found a match')
 					break

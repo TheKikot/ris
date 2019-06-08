@@ -384,6 +384,9 @@ class The_Ring:
         ringNormal.ringY = point_world.point.y
         ringNormal.normalX = point_world.point.x + normala[0]
         ringNormal.normalY = point_world.point.y + normala[1]
+        ringNormal.red = avgRed;
+        ringNormal.blue = avgBlue;
+        ringNormal.green = abgGreen;
         self.rn_pub.publish(ringNormal)
 
         return(avgRingDepth/1000)
