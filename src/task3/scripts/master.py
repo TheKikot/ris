@@ -3,10 +3,18 @@
 
 import rospy
 from task3.msg import *
+from task3.srv import *
+#from __future__ import print_function
 
 def finished_scouting():
 	# get cylinder positions
 	# get ring positions
+	rospy.wait_for_service('return_positions')
+	return_positions = rospy.ServiceProxy('return_positions', GetPositions)
+	a = return_positions()
+
+
+	print(a)
 
 	#TODO
 
@@ -30,15 +38,14 @@ def finished_scouting():
 
 def main():
 
+	rospy.init_node("master")
+	service = rospy.Service('start_master', GetLocation, finished_scouting)
+	
 
-	service = rospy.service('start_master', GetLocation, finished_scouting)
-
-    try:
-        rospy.spin()
-    except KeyboardInterrupt:
-        print('Shutting down')
-
-    cv2.destroyAllWindows()
+	try:
+		rospy.spin()
+	except KeyboardInterrupt:
+		print('Shutting down')
 
 
 if __name__ == '__main__':

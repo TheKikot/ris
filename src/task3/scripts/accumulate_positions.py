@@ -45,40 +45,44 @@ class Accumulator():
 		self.rings = None
 		self.cylinders = None
 
-	def return_positions(gp):
+	def return_positions(self, gp):
+
+		print(gp)
 
 		x = []
 		y = []
 		count = []
 		normalX = []
 		normalY = []
-
-		for r in self.rings:
-			x.append(r.x)
-			y.append(r.y)
-			count.append(r.count)
-			normalX.append(r.normalX)
-			normalY.append(r.normalY)
+		if(not self.rings == None):
+			for r in self.rings:
+				x.append(r.x)
+				y.append(r.y)
+				count.append(r.count)
+				normalX.append(r.normalX)
+				normalY.append(r.normalY)
 
 		cylX = []
 		cylY = []
 		cylCount = []
 
-		for c in self.cylinders:
-			cylX.append(c.x)
-			cylY.append(c.y)
-			cylCount.append(c.count)
+		if(not self.cylinders == None):
+			for c in self.cylinders:
+				cylX.append(c.x)
+				cylY.append(c.y)
+				cylCount.append(c.count)
 
-		gp.ringsX = x;
-		gp.ringsY = y;
-		gp.ringsCount = count
-		gp.normalX = normalX
-		gp.normalY = normalY
-		gp.cylnsX = cylX
-		gp.cylnsY = cylY
-		gp.cylnsCount = clyCount
+		gpResp = GetPositionsResponse()
+		gpResp.ringsX = x;
+		gpResp.ringsY = y;
+		gpResp.ringsCount = count
+		gpResp.normalsX = normalX
+		gpResp.normalsY = normalY
+		gpResp.cylnsX = cylX
+		gpResp.cylnsY = cylY
+		gpResp.cylnsCount = cylCount
 
-		return gp
+		return gpResp
 
 
 

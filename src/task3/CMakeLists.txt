@@ -30,6 +30,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
    FILES
    GetLocation.srv
+   GetPositions.srv
 #   Service2.srv
 )
 
