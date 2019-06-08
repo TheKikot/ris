@@ -1,6 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from task1.srv import *
+import rospy
 
+def main():
+    print("setting up node")
+    rospy.init_node('check_for_qr', anonymous=False)
+
+#    points_sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, call_detection)
+    call_srv = rospy.Service('check_qr', CheckForQR, check_for_QR)
+
+    try:
+        rospy.spin()
+    except KeyboardInterrupt:
+        print("Shutting down")
 
 def check_for_QR(self):
         
@@ -75,3 +88,6 @@ def check_for_QR(self):
         else:
             print("Found more than 1 QR code")
             return 0;
+
+if __name__ == "__main__":
+    main()
