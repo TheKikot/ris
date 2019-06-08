@@ -1,9 +1,11 @@
+
 ---
 float32[] ringsX
 float32[] ringsY
-int count
+int[] ringsCount
 float32[] normalsX
 float32[] normalsY
 float32[] cylnsX
 float32[] cylnsY
+int[] cylnsCount
 

@@ -7,6 +7,7 @@ import rospy
 from geometry_msgs.msg import PointStamped, Vector3, Pose
 from visualization_msgs.msg import Marker, MarkerArray
 from task3.msg import *
+from task3.srv import *
 
 class Ring():
 
@@ -40,8 +41,47 @@ class Accumulator():
         # Subscribe to the image and/or depth topic
 		self.rings_with_normals_sub = rospy.Subscriber("/rings_with_normals", ringAndNormal, self.new_ring_and_normal)
 		self.cylinder_sub = rospy.Subscriber("/cylinders", Marker, self.new_cylinder)
+		self.service = rospy.Service("/return_positions", GetPositions, self.return_positions)
 		self.rings = None
 		self.cylinders = None
+
+	def return_positions(gp):
+
+		x = []
+		y = []
+		count = []
+		normalX = []
+		normalY = []
+
+		for r in self.rings:
+			x.append(r.x)
+			y.append(r.y)
+			count.append(r.count)
+			normalX.append(r.normalX)
+			normalY.append(r.normalY)
+
+		cylX = []
+		cylY = []
+		cylCount = []
+
+		for c in self.cylinders:
+			cylX.append(c.x)
+			cylY.append(c.y)
+			cylCount.append(c.count)
+
+		gp.ringsX = x;
+		gp.ringsY = y;
+		gp.ringsCount = count
+		gp.normalX = normalX
+		gp.normalY = normalY
+		gp.cylnsX = cylX
+		gp.cylnsY = cylY
+		gp.cylnsCount = clyCount
+
+		return gp
+
+
+
 
 
 	def sqr_distance(self, x1, y1, x2, y2):
