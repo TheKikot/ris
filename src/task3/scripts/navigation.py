@@ -20,12 +20,45 @@ from nav_msgs.msg import OccupancyGrid, MapMetaData
 #from task3.srv import *
 
 def read_map(mapData):
+	#preberi podatke o zemljevidu
 	meta = mapData.info
 	staticMap = mapData.data
-	# dimenzije : 75 x 100
-	for i in range(0,100):
-		print(staticMap[i*75+0:i*75+75])
+	sirina = meta.width
+	visina = meta.height
+	resolucija = meta.resolution
+	# dimenzije so naceloma 75 x 100
+	# downsize je količnik oz. faktor pomanjšanja
+	downsize = 5
 	
+	grid = [[0] * (visina/downsize) for i in range(0,	sirina/downsize)]
+	
+	#print("visina: ", visina)
+	
+	for i in range(0, sirina):
+		#print("i: ",i)
+		for j in range(0, visina):
+			mapval = staticMap[i*visina + j]
+			if mapval == 0:
+				# prosto
+				grid[i/downsize][j/downsize] += 0
+			elif mapval == 100:
+				# zasedeno
+				grid[i/downsize][j/downsize] += 1
+			elif mapval == -1:
+				# neznano
+				grid[i/downsize][j/downsize] = -1
+			else:
+				# napaka
+				print("Nepričakovana vrednost na zemljevidu!")
+	
+	#print cele mreže
+	'''
+	for k in grid:
+		print(" ")
+		print(k)
+	'''
+	
+
 
 def main():
 	rospy.init_node('navigation', anonymous=False)
