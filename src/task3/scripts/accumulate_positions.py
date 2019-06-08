@@ -22,6 +22,15 @@ class Ring():
 		self.normalX = normalX
 		self.normalY = normalY
 
+class Cylinder():
+
+	x = 0
+	y = 0
+	count = 1
+
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
 
 
 class Accumulator():
@@ -30,9 +39,9 @@ class Accumulator():
 		rospy.init_node("accumulator")
         # Subscribe to the image and/or depth topic
 		self.rings_with_normals_sub = rospy.Subscriber("/rings_with_normals", ringAndNormal, self.new_ring_and_normal)
+		self.cylinder_sub = rospy.Subscriber("/cylinders", Marker, self.new_cylinder)
 		self.rings = None
-		self.normals = []
-		self.cylinders = []
+		self.cylinders = None
 
 
 	def sqr_distance(self, x1, y1, x2, y2):
@@ -51,6 +60,21 @@ class Accumulator():
 				print('Couldn\'t find a match, creating a new insesrtion on x:', rn.ringX, 'y:', rn.ringY)
 		else:
 			self.rings = [Ring(rn.ringX, rn.ringY, rn.normalX, rn.normalY)]
+
+	def new_cylinder(self, marker):
+		print('Recieved a new cylinder, looking for matches')
+		if(not self.cylinders == None):
+			for c in self.cylinders:
+				if self.sqr_distance(c.x, c.y, marker.pose.position.x, marker.pose.position.y) < 0.30:
+					c.count += 1
+					print('Found a match')
+					break
+			else:
+				self.cylinders.append(Cylinder(marker.pose.position.x, marker.pose.position.y))
+				print('Couldn\'t find a match, creating a new insesrtion on x:', marker.pose.position.x, 'y:', marker.pose.position.y)
+		else:
+			self.cylinders = [Cylinder(marker.pose.position.x, marker.pose.position.y)]
+
 
 
 def main():
