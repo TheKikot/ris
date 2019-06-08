@@ -19,6 +19,7 @@ from task3.srv import *
 from sklearn.neighbors import KNeighborsClassifier
 import pytesseract
 import urllib2
+from task3.msg import *
 
 #--------- QR ------------
 
@@ -121,6 +122,7 @@ class The_Ring:
         self.markers_pub = rospy.Publisher('rings', Marker,
                 queue_size=1)
         self.normals_pub = rospy.Publisher('normals', Marker, queue_size=1)
+        self.rn_pub = rospy.Publisher('rings_with_normals', ringAndNormal, queue_size=1)
 
         # Object we use for transforming between coordinate frames
 
@@ -276,20 +278,12 @@ class The_Ring:
 
         #print("avgDepth, depth_levo, depth_desno", avgRingDepth, depth_image[x_min, y_min], depth_image[x_max, y_max])
         
-
-        
-
-
-
-
         point_s = PointStamped()
         point_s.point.x = -y_center
         point_s.point.y = 0
         point_s.point.z = x_center
         point_s.header.frame_id = 'camera_rgb_optical_frame'
         point_s.header.stamp = rospy.Time(0)
-
-        
 
         # Get the point in the "map" coordinate system
 
@@ -384,6 +378,13 @@ class The_Ring:
         marker.scale = Vector3(0.1, 0.1, 0.1)
         marker.color = ColorRGBA(1, 1, 1, 1)
         self.normals_pub.publish(marker)
+
+        ringNormal = ringAndNormal()
+        ringNormal.ringX = point_world.point.x
+        ringNormal.ringY = point_world.point.y
+        ringNormal.normalX = point_world.point.x + normala[0]
+        ringNormal.normalY = point_world.point.y + normala[1]
+        self.rn_pub.publish(ringNormal)
 
         return(avgRingDepth/1000)
 
@@ -482,12 +483,13 @@ class The_Ring:
 
         print('Processing is done! found', len(candidates),
               'candidates for rings')
+        print()
         if len(candidates) < 1:
-            print('1')
-            a = random.randrange(1000)
-            cv2.imwrite('camera_image_' + str(a) + '.jpeg', cv_image)
-            cv2.imwrite('camera_image_' + str(a) + '_threshed.jpeg',
-                        thresh)
+            #print('1')
+            #a = random.randrange(1000)
+            #cv2.imwrite('camera_image_' + str(a) + '.jpeg', cv_image)
+            #cv2.imwrite('camera_image_' + str(a) + '_threshed.jpeg',
+            #            thresh)
             return []
 
         # '''
@@ -639,8 +641,8 @@ class The_Ring:
                     
                     # Convert the image to grayscale
                     img_out = cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY)
-                    cv2.imwrite('img_out_pre_threshold.jpeg', img_out)
-                    img_out_QR = img_out[105:241, 50:195]
+                    #cv2.imwrite('img_out_pre_threshold.jpeg', img_out)
+                    #img_out_QR = img_out[105:241, 50:195]
                     
                     # Option 1 - use ordinairy threshold the image to get a black and white image
                     ret,img_out = cv2.threshold(img_out,100,255,0)
@@ -692,7 +694,8 @@ class The_Ring:
             #----------------------------------
             #----------QR----------------------
             #----------------------------------
-
+            print()
+            print('Looking for qrCodes')
             for i in range(0, 5):
                 qr_data = self.check_for_QR()
                 if(qr_data != 0):
