@@ -94,14 +94,14 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
 
-			rospy.sleep(5)
+			rospy.sleep(4)
 	
 
 def read_map(mapData):
 	# konstante
 	cilj_odmik = 0
-	cilj_stepX = 6	
-	cilj_stepY = 4
+	cilj_stepX = 7	
+	cilj_stepY = 5
 
 	# preberi podatke o zemljevidu
 	meta = mapData.info
