@@ -12,13 +12,13 @@ callFunction = False
 def change_global_variable(g):
 	global callFunction
 	callFunction = True
-	print("omogocam zaznavo valjev")
+	#print("omogocam zaznavo valjev")
 	return []
 
 def call_detection(points):
 	global callFunction
 	if(callFunction):
-		print("klicem funkcijo")
+		#print("klicem funkcijo")
 		points_pub = rospy.Publisher("input", PointCloud2, queue_size=1)
 		points_pub.publish(points)
 		callFunction = False
