@@ -24,7 +24,7 @@ def color_handler(location):
 	#print('I got a new image!')
 	data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
 	try:
-		print('converting image')
+		#print('converting image')
 		cv_image = CvBridge().imgmsg_to_cv2(data, 'bgr8')
 		print('image converted!')
 	except CvBridgeError, e:
