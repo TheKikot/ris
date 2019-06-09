@@ -210,6 +210,8 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 		{
 			std::cerr << "service error" << std::endl;
 		}
+		
+		/*
 	  marker.header.frame_id = "map";
     marker.header.stamp = ros::Time::now();
 
@@ -239,6 +241,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
     marker.lifetime = ros::Duration();
 
     pubm.publish(marker);
+    */
 
     pcl::PCLPointCloud2 outcloud_cylinder;
     pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);

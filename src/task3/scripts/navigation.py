@@ -100,7 +100,8 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 def read_map(mapData):
 	# konstante
 	cilj_odmik = 0
-	cilj_step = 5
+	cilj_stepX = 4
+	cilj_stepY = 2
 
 	# preberi podatke o zemljevidu
 	meta = mapData.info
@@ -147,8 +148,8 @@ def read_map(mapData):
 	
 	print("origin: ", origX, ", ", origY)
 	
-	for k in range(1, sirina/downsize-1, cilj_step):
-		for l in range(1+ cilj_odmik, visina/downsize-1, cilj_step):
+	for k in range(1, sirina/downsize-1, cilj_stepY):
+		for l in range(1+ cilj_odmik, visina/downsize-1, cilj_stepX):
 			if(grid[k][l] == 0 and grid[k+1][l] == 0 and grid[k-1][l] == 0 and grid[k][l+1] == 0 and grid[k][l-1] == 0):
 				poslji_cilj(origX, origY, origOrient, resolucija, downsize, l, k)
 				#poslji_marker(origX, origY, resolucija, downsize, k, l, k+l)
