@@ -346,11 +346,11 @@ class The_Ring:
         #xy = [x_1-x_2, y_1-y_2]
         #print(xy)
         normala = [y_1-y_2, -(x_1-x_2)]
-        #print("normala", normala)
+        print("normala", normala)
         dist = ((normala[0]**2+normala[1]**2)**(1/2))
         normala[0] = normala[0] / dist
         normala[1] = normala[1] / dist
-        #print("normalizirana normala", normala)
+        print("normalizirana normala", normala)
 
         pose3 = Pose()
         pose3.position.x = point_world.point.x + normala[0]
