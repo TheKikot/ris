@@ -435,7 +435,7 @@ class The_Ring:
 
         kernel = np.ones((3, 3), np.uint8)
 
-        #thresh = cv2.dilate(thresh, kernel, iterations = 1)
+        thresh = cv2.dilate(thresh, kernel, iterations = 1)
         #cv2.waitKey(0)
 
         # Extract contours
