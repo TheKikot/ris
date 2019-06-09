@@ -4,7 +4,51 @@
 import rospy
 from task3.msg import *
 from task3.srv import *
+import re
 #from __future__ import print_function
+
+global model
+global features
+global label
+
+def find_urls(string): 
+    # findall() has been used  
+    # with valid conditions for urls in string 
+    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string) 
+    return url 
+
+def get_online_data(url):
+    # Then we cen get the contents
+    resp = urllib2.urlopen(url)
+    text = resp.read()
+
+    # Split the text into lines
+    lines = text.splitlines()
+
+    global features
+    global label
+
+    features = []
+    label = []
+
+    # Extract the data from the text.
+    # You should modify these lines so you put the extracted points into
+    # whatever structure you need for the learning of the classifier.
+    for line in lines[1:]: # For each line except the first (this is the description line)
+        x1, x2, y = [float(x) for x in line.split(',')] # x1 and x2 are inputs and y is the output
+        features.append([x1,x2])
+        label.append(y)
+
+
+def build_classifier():
+    global model, features, label
+    model = KNeighborsClassifier(n_neighbors = 5)
+    model.fit(features, label)
+
+
+def get_prediction(x, y):
+    global model
+    return model.predict([[x,y]])
 
 def finished_scouting():
 	# get cylinder positions
@@ -17,11 +61,14 @@ def finished_scouting():
 	rospy.wait_for_service('check_numbers')
 	check_for_numbers = rospy.ServiceProxy('check_numbers', CheckNumbers)
 	rospy.wait_for_service('check_qr')
-	check_for_numbers = rospy.ServiceProxy('check_qr', CheckQr)
-	rospy.wait_for_service('evaluate_qr')
+	check_for_qr = rospy.ServiceProxy('check_qr', CheckQr)
 
 
-	print(a)
+	x = None
+	y = None
+	color = None
+	podatki = None
+	barvaKroga = None
 
 	#TODO
 
@@ -32,15 +79,71 @@ def finished_scouting():
 	# klasifikator. ce ze ma stevilke, nejde barvo cilindra, 
 	# drgac pac gleda kroge dokler ne najde cifer
 
-	#TODO
+
+	#LOOP cez vse kroge
+	#TODO-pejt do kroga, pocaki da pride do kroga
+
+	#ce se nimamo stevilk
+	if(x == None or y == None):
+		#preglej za stevilke
+		odg = check_for_numbers()
+		if(odg.gotMarkers == 0):
+			#ni uspel prebrat markerjev na sliki, mejbi kej nardimo glede tega
+			print('Ne najdem primernega stevila markerjev. ')
+		else:
+			#prebral markerje, poskusal prebrat cifre
+			if(odg.x == -1 or odg.y == -1):
+				#prebral markerje, ampak ni prebral stevilk, najbrz qr krogec
+			else:
+				x=odg.x
+				y=odg.y
+				if(podatki == 1)
+					color = get_prediction(x, y)
+					break
+				continue
+
+	#ce se nimamo podatkov modela itd.
+	if(podatki == None):
+		odg = check_for_qr()
+
+		if(odg.data == 'No QR codes found'):
+			#ta krog je kompleten fail, morde bi blo treba neki nardit glede tega
+		else if(len(find_urls(odg.data)) > 0):
+			#nasli smo qr, ki vsebuje spletno stran, kar bi tut mogu
+			get_online_data(odg.data)
+			podatki = 1
+			build_classifier()
+			if(x != None and y != None)
+				color = get_prediction(x, y)
+				break
+
+	#KONC LOOPA
 
 	# ko ma cifre in vse to, vemo barvo cilindra
 	# gremo do cilindra s podano barvo, preberemo qr na njem
 
-	#TODO
+	#TODO - pejt do cilindra dane barve
+	# 0 - red
+	# 1 - green
+	# 2 - blue
+	# 3 - yellow
+
+	#TODO - LOOP v katerem se premikamo okol cilindra, dokler ne preberemo QR kode
+	odg = check_for_qr()
+		if(odg.data == 'No QR codes found'):
+			#TODO premakni se
+			#continue
+		else if(len(find_urls(odg.data))>0):
+			#nasli smo QR v enmu od krogov, ignore
+		else:
+			barvaKroga = odg.data
+
+
 
 	# gremo do kroga, ki je take barve kokr pise na cilindru
 	# slikamo mapo
+
+	#TODO
 
 
 def main():

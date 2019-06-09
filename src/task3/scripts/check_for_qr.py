@@ -10,44 +10,7 @@ import numpy as np
 import pyzbar.pyzbar as pyzbar
 
 
-global bridge 
-
-global model
-global features
-global label
-
-def get_online_data(url):
-    # Then we cen get the contents
-    resp = urllib2.urlopen(url)
-    text = resp.read()
-
-    # Split the text into lines
-    lines = text.splitlines()
-
-    global features
-    global label
-
-    features = []
-    label = []
-
-    # Extract the data from the text.
-    # You should modify these lines so you put the extracted points into
-    # whatever structure you need for the learning of the classifier.
-    for line in lines[1:]: # For each line except the first (this is the description line)
-        x1, x2, y = [float(x) for x in line.split(',')] # x1 and x2 are inputs and y is the output
-        features.append([x1,x2])
-        label.append(y)
-
-
-def build_classifier():
-    global model, features, label
-    model = KNeighborsClassifier(n_neighbors = 5)
-    model.fit(features, label)
-
-
-def get_prediction(x, y):
-    global model
-    return model.predict([[x,y]])
+global bridge
 
 def main():
     print("setting up node")
@@ -56,24 +19,11 @@ def main():
     bridge = CvBridge()
 
     call_srv = rospy.Service('check_qr', CheckQr, check_for_QR)
-    eval_srv = rospy.Service('evaluate_numbers', EvaluateQr, evaluate_numbers)
 
     try:
         rospy.spin()
     except KeyboardInterrupt:
         print("Shutting down")
-
-def evaluate_numbers(d):
-    print('evaluating for: ', d.x, d.y)
-
-    res = EvaluateQrResponse()
-    res.barva = -1
-
-    if model == None:
-        return res
-
-    res.barva = get_prediction(d.x, d.y)
-    return res
 
 def check_for_QR(self):
 

@@ -30,6 +30,7 @@ def check_for_numbers(self):
         resp = CheckNumbersResponse()
         resp.x = -1
         resp.y = -1
+        resp.gotMarkers = 0
 
         data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
         print('Grabbed a new image')
@@ -129,14 +130,22 @@ def check_for_numbers(self):
                     x=int(text[0])
                     y=int(text[1])
                     print('The extracted datapoints are x=%d, y=%d' % (x,y))
-                    return []
+                    resp.x = x
+                    resp.y = y
+                    resp.gotMarkers = 1
+                    return resp
                 else:
+                    resp.gotMarkers = 1
                     print('The extracted text has is of length %d. Aborting processing' % len(text))
+                    return resp
                 
             else:
                 print('The number of markers is not ok:',len(ids))
+
         else:
             print('No markers found')
+
+        return resp
 
 if __name__ == "__main__":
     main()
