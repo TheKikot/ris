@@ -8,6 +8,7 @@ from std_msgs.msg import ColorRGBA
 import cv2
 import numpy as np
 import pyzbar.pyzbar as pyzbar
+import pytesseract
 
 
 global bridge, dictm, params
