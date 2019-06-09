@@ -96,7 +96,7 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 	
 
 def read_map(mapData):	
-	#preberi podatke o zemljevidu
+	# preberi podatke o zemljevidu
 	meta = mapData.info
 	staticMap = mapData.data
 	sirina = meta.width
@@ -107,7 +107,7 @@ def read_map(mapData):
 	origOrient = meta.origin.orientation
 	# dimenzije so naceloma 75 x 100
 	# downsize je količnik oz. faktor pomanjšanja
-	# 	pri resoluciji 0.05 in faktorju 4 so celice velike 20cm (malo manj kot roomb roomba)
+	# pri resoluciji 0.05 in faktorju 4 so celice velike 20cm (malo manj kot roomba)
 	downsize = 4
 	
 	grid = [[0] * (visina/downsize) for i in range(0,	sirina/downsize)]
@@ -175,19 +175,5 @@ try:
 except Exception, e:
 	print(e)
 
-'''
 
-def main():
-	rospy.init_node('navigation', anonymous=False)
-	rospy.wait_for_service('static_map')
-	ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
-	try:
-		mapService = rospy.ServiceProxy('static_map', GetMap)
-		mapData = mapService().map
-		read_map(mapData)
-	except Exception, e:
-		print(e)
-
-if __name__ == '__main__':
-	main()
-'''
+# KONEC

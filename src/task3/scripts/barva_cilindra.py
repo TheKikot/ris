@@ -30,14 +30,20 @@ def color_handler(location):
 	except CvBridgeError, e:
 		print(e)
 	
-	
+	print(location)
 	# poiscemo cilinder na sliki
 	
-	kot = math.degrees(math.atan2(location.cam_X,location.cam_Y))
+	kot = math.degrees(math.atan2(location.cam_X,location.cam_Z))
+#	kot = math.atan(location.cam_X/location.cam_Y)
+#	kot = np.arcsin(location.cam_X/location.cam_Z))
+#	print(kot)
+#	kot = math.degrees(kot)
+#	print(kot)
 	print("kot: ", kot, "x: ", location.cam_X, "Y: ", location.cam_Y, "Z: ", location.cam_Z)
+	print("kot: ", kot, "x: ", location.map_X, "Y: ", location.map_Y, "Z: ", location.map_Z)
 	
 	# 640x480
-	odmik = 320 + 525/45 * kot
+	odmik = 320.0 + (525.0/45.0) * kot
 	print("odmik: ", odmik)
 	
 	crop = cv_image[240:250, (int(odmik)-10):(int(odmik)+10)]
@@ -50,8 +56,6 @@ def color_handler(location):
 
 
 def main():
-	global location
-	# print("setting up node")
 	rospy.init_node('cylinder_color', anonymous=False)
 	call_srv = rospy.Service('cylinder_color', GetColor, color_handler)
 	
