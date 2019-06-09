@@ -130,6 +130,7 @@ def finished_scouting():
 				print("")
 			else:
 				print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
+				continue
 	
 	
 		#ce se nimamo stevilk
