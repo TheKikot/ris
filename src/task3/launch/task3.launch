@@ -26,7 +26,7 @@
 	<node name="qr_detection" pkg="task3" type="check_for_qr.py" respawn="true"/>
 	
 	<!-- check if reachable service -->
-	<node name="check_if_reachable" pkg="task3" type"check_if_reachable.py" respawn="true"/>
+	<node name="check_if_reachable" pkg="task3" type="check_if_reachable.py" respawn="true"/>
 	
 	<!-- check for numbers -->
 	<node name="check_for_numbers" pkg="task3" type="check_for_numbers.py" respawn="true"/>
