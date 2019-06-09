@@ -18,7 +18,8 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import PointStamped, Vector3, Pose, Twist, Quaternion, PoseWithCovarianceStamped
 from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
-#from task3.srv import *
+from tf.transformations import quaternion_from_euler, euler_from_quaternion
+from task3.srv import *
 
 def poslji_marker(origX, origY, resolucija, downsize, x, y, marker_id):
 	marker = Marker()
@@ -40,8 +41,6 @@ def poslji_marker(origX, origY, resolucija, downsize, x, y, marker_id):
 
 def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 
-	
-
 	goal = MoveBaseGoal()
 	
 	goal.target_pose.header.frame_id = "map" 
@@ -57,6 +56,44 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 		#print("goal_state: ", goal_state)
 		goal_state = ac.get_state()
 	print("goal_state_fin: ", goal_state)
+	
+	if (goal_state == 3) :
+		for j in range(0,6):
+			# turning
+			print("turn, q = ", origOrient)		
+	
+			#(x, y, z) = euler_from_quaternion(origOrient)
+			q = quaternion_from_euler(0, 0, origOrient.z + j * (3.14/3.0))
+
+			goal.target_pose.pose.orientation.z = q[2]
+			goal.target_pose.pose.orientation.w = q[3]
+			# got to position
+			#rospy.loginfo("Sending goal")
+			#rospy.loginfo(goal[i].target_pose.pose.position.x)
+			ac.send_goal(goal)
+			goal_state = GoalStatus.PENDING
+			while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
+				ac.wait_for_result(rospy.Duration(2.0))
+				#print("goal_state: ", goal_state)
+				goal_state = ac.get_state()
+			print("turn_state_fin: ", goal_state)
+			
+			# look for rings
+			rospy.wait_for_service('get_ring_location')
+			try:
+				get_ring_location = rospy.ServiceProxy('get_ring_location', GetLocation)
+				get_ring_location()
+			except rospy.ServiceException, e:
+				print ("Service call failed: %s"%e)
+			
+			# look for cylinders
+			rospy.wait_for_service('detect_cylinder')
+			try:
+				get_cylinder_location = rospy.ServiceProxy('detect_cylinder', GetLocation)
+				get_cylinder_location()
+			except rospy.ServiceException, e:
+				print ("Service call failed: %s"%e)
+	
 
 def read_map(mapData):	
 	#preberi podatke o zemljevidu
