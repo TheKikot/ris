@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
@@ -386,7 +387,7 @@ class The_Ring:
         ringNormal.normalY = point_world.point.y + normala[1]
         ringNormal.red = avgRed;
         ringNormal.blue = avgBlue;
-        ringNormal.green = abgGreen;
+        ringNormal.green = avgGreen;
         self.rn_pub.publish(ringNormal)
 
         return(avgRingDepth/1000)
