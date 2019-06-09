@@ -14,7 +14,7 @@ global bridge
 
 def main():
     print("setting up node")
-    rospy.init_node('check_for_qr', anonymous=False)
+    rospy.init_node('check_for_numbers', anonymous=False)
     global bridge
     bridge = CvBridge()
 
