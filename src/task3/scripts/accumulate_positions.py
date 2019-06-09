@@ -116,10 +116,10 @@ class Accumulator():
 					print('Found a match')
 					break
 			else:
-				self.rings.append(Ring(rn.ringX, rn.ringY, rn.normalX, rn.normalY))
+				self.rings.append(Ring(rn.ringX, rn.ringY, rn.normalX, rn.normalY, rn.red, rn.green, rn.blue))
 				print('Couldn\'t find a match, creating a new insesrtion on x:', rn.ringX, 'y:', rn.ringY)
 		else:
-			self.rings = [Ring(rn.ringX, rn.ringY, rn.normalX, rn.normalY)]
+			self.rings = [Ring(rn.ringX, rn.ringY, rn.normalX, rn.normalY, rn.red, rn.green, rn.blue)]
 
 	def new_cylinder(self, marker):
 		print('Recieved a new cylinder, looking for matches')
