@@ -34,16 +34,19 @@ class Cylinder():
 	x = 0
 	y = 0
 	count = 1
-	red = 0
-	green = 0
-	blue = 0
+	color = -1
 
 	def __init__(self, x, y, red, green, blue):
 		self.x = x
 		self.y = y
-		self.red = red
-		self.green = green
-		self.blue = blue
+		if(red == 1.0 and green == 1.0):
+			color = 3
+		elif(red == 1.0):
+			color = 0
+		elif(green == 1.0):
+			color = 1
+		elif(blue == 1.0):
+			color = 2
 
 
 class Accumulator():
@@ -52,7 +55,7 @@ class Accumulator():
 		rospy.init_node("accumulator")
         # Subscribe to the image and/or depth topic
 		self.rings_with_normals_sub = rospy.Subscriber("/rings_with_normals", ringAndNormal, self.new_ring_and_normal)
-		self.cylinder_sub = rospy.Subscriber("/cylinders", Marker, self.new_cylinder)
+		self.cylinder_sub = rospy.Subscriber("/cylinder_with_color", Marker, self.new_cylinder)
 		self.service = rospy.Service("/return_positions", GetPositions, self.return_positions)
 		self.rings = None
 		self.cylinders = None
@@ -126,9 +129,6 @@ class Accumulator():
 		if(not self.cylinders == None):
 			for c in self.cylinders:
 				if self.sqr_distance(c.x, c.y, marker.pose.position.x, marker.pose.position.y) < 0.30:
-					c.red = (c.red * c.count + marker.color.r) / (c.count+1)
-					c.green = (c.green * c.count + marker.color.g) / (c.count+1)
-					c.blue = (c.blue * c.count + marker.color.b) / (c.count+1)
 					c.count += 1
 					print('Found a match')
 					break

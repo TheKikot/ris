@@ -28,7 +28,7 @@ class Comparer:
         self.images = {}
 
         # loop over the image paths
-        for imagePath in glob.glob("/home/mihael/ROS/images/*.jpeg"):
+        for imagePath in glob.glob("/home/team_lambda/ROS/images/*.jpeg"):
             print(imagePath)
             # extract the image filename (assumed to be unique) and
             # load the image, updating the images dictionary
@@ -66,6 +66,23 @@ class Comparer:
 
 global comparer
 
+def poslji_marker(x, y, r, g, b):
+	marker = Marker()
+	marker.header.stamp = rospy.Time.now()
+	marker.header.frame_id = "map"
+	marker.pose.position.x = x
+	marker.pose.position.y = y
+	marker.pose.position.z = 5.0
+	marker.type = Marker.CUBE
+	marker.action = Marker.ADD
+	marker.frame_locked = False
+	marker.lifetime = rospy.Duration.from_sec(20)
+	marker.id = 1
+	marker.scale = Vector3(0.1, 0.1, 0.1)
+	marker.color = ColorRGBA(r, g, b, 1)
+	cyl_pub.publish(marker)
+	#print("marker poslan")
+
 def color_handler(location):
 	
 	#print('I got a new image!')
@@ -93,12 +110,25 @@ def color_handler(location):
 	odmik = 320.0 + (525.0/45.0) * kot
 	print("odmik: ", odmik)
 	
-	crop = cv_image[240:250, (int(odmik)-10):(int(odmik)+10)]
+	crop = cv_image[230:260, (int(odmik)-20):(int(odmik)+20)]
 	name, minD = comparer.compare(crop)
 	cv2.imwrite('image.jpeg', cv_image)
 	cv2.imwrite(str(minD)+'.jpeg', crop)
-	
-	# prepoznamo barvo
+
+	if(minD < 0.9):
+		r = 0
+		g = 0
+		b = 0
+		if(name.startswith('red')):
+			r = 1
+		elif(name.startswith('green')):
+			g = 1
+		elif(name.startswith('blue')):
+			b = 1
+		elif(name.startswith('yellow')):
+			r = 1
+			g = 1
+		poslji_marker(location.map_X, location.map_Y, r, g, b)
 	
 	return 0
 
@@ -106,6 +136,7 @@ def color_handler(location):
 def main():
 	rospy.init_node('cylinder_color', anonymous=False)
 	call_srv = rospy.Service('cylinder_color', GetColor, color_handler)
+	cyl_pub = rospy.Publisher('cylinder_with_color', Marker, queue_size=100)
 
 	global comparer
 	comparer = Comparer()

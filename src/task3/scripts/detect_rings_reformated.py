@@ -352,6 +352,8 @@ class The_Ring:
         normala[0] = normala[0] / dist
         normala[1] = normala[1] / dist
         print("normalizirana normala", normala)
+        normala[0] *= 0.4
+        normala[1] *= 0.4
 
         pose3 = Pose()
         pose3.position.x = point_world.point.x - normala[0]
