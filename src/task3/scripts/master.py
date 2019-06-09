@@ -59,6 +59,7 @@ def get_prediction(x, y):
     return model.predict([[x,y]])
     
     
+'''
 def poslji_cilj(x, y, vektorX, vektorY):
 
 	#print(x)
@@ -75,6 +76,36 @@ def poslji_cilj(x, y, vektorX, vektorY):
 	goal.target_pose.header.stamp = rospy.Time.now()
 	goal.target_pose.pose.position.x = x
 	goal.target_pose.pose.position.y = y
+	goal.target_pose.pose.orientation.x = orientacija[0]
+	goal.target_pose.pose.orientation.y = orientacija[1]
+	goal.target_pose.pose.orientation.z = orientacija[2]
+	goal.target_pose.pose.orientation.w = orientacija[3]
+	print("pošiljam cilj: (", goal.target_pose.pose.position.x, ", ", goal.target_pose.pose.position.y, ")")
+	ac.send_goal(goal)
+	goal_state = ac.get_state()
+	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
+		ac.wait_for_result(rospy.Duration(2.0))
+		#print("goal_state: ", goal_state)
+		goal_state = ac.get_state()
+	#print("goal_state_fin: ", goal_state)
+'''
+
+def poslji_cilj2(nX, nY, kX, kY):
+	global ac
+	goal = MoveBaseGoal()
+	orientacija = Quaternion()
+	dist = ((nX-kX)**2 + (nY-kY)**2)**(1.0/2.0)
+	kot = math.asin( (kX-nX) /  dist)
+	if(kY < nY):
+		kot = math.pi - kot
+	#print(orientacija)
+
+	orientacija = quaternion_from_euler(0.0, 0.0, kot)
+	
+	goal.target_pose.header.frame_id = "map" 
+	goal.target_pose.header.stamp = rospy.Time.now()
+	goal.target_pose.pose.position.x = nX
+	goal.target_pose.pose.position.y = nY
 	goal.target_pose.pose.orientation.x = orientacija[0]
 	goal.target_pose.pose.orientation.y = orientacija[1]
 	goal.target_pose.pose.orientation.z = orientacija[2]
@@ -124,17 +155,13 @@ def finished_scouting(dabe):
 
 	#LOOP cez vse kroge
 	for i in range(0, len(ringAndCylinderAttributes.ringsX)):
-	#TODO-pejt do kroga, pocaki da pride do kroga
-	
-	# izracun vektorja
-		vektorX = (ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i])
-		vektorY = (ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i])
-		#print("razdalja: ", (vektorX**2 + vektorY**2))
+		#TODO-pejt do kroga, pocaki da pride do kroga
 	
 		# premik do kroga
-		ciljX = ringAndCylinderAttributes.ringsX[i] + vektorX
-		ciljY = ringAndCylinderAttributes.ringsY[i] + vektorY
+		ciljX = ringAndCylinderAttributes.normalsX[i]
+		ciljY = ringAndCylinderAttributes.normalsY[i]
 	
+		print("preverjam če je ", ciljX, ciljY, " dosegljiv.")
 		rospy.wait_for_service('check_if_reachable')
 		cir = rospy.ServiceProxy('check_if_reachable', GetColor)
 		message = GetColorRequest()
@@ -148,53 +175,12 @@ def finished_scouting(dabe):
 		response = cir(message)
 		res = response.color
 		if(res == 1):
+			print("cilj je dosegljiv")
 			# gremo tja
-			poslji_cilj(ciljX, ciljY, vektorX, vektorY)
+			poslji_cilj2(ciljX, ciljY, ringAndCylinderAttributes.ringsX[i], ringAndCylinderAttributes.ringsY[i])
 		else:
-			# premaknemo cilj	
-			ciljX = ringAndCylinderAttributes.ringsX[i] - vektorX
-			ciljY = ringAndCylinderAttributes.ringsY[i] - vektorY
+			print("cilj ni dosegljiv")
 		
-			rospy.wait_for_service('check_if_reachable')
-			cir = rospy.ServiceProxy('check_if_reachable', GetColor)
-			message = GetColorRequest()
-			message.cam_X = 0.0
-			message.cam_Y = 0.0
-			message.cam_Z = 0.0
-			message.map_X = ciljX
-			message.map_Y = ciljY
-			message.map_Z = 0.0
-
-			response = cir(message)
-			res = response.color
-			if(res == 1):
-				# gremo tja
-				poslji_cilj(ciljX, ciljY, vektorX, vektorY)
-			else:
-				print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
-				#vektor v smeri sredine
-				vekCX = -0.5-ringAndCylinderAttributes.ringsX[i]
-				vekCY = -2.5-ringAndCylinderAttributes.ringsY[i]
-				dist = ((vekCX**2+vekCY**2)**(0.5))
-				vekCX = vekCX/dist
-				vekCY = vekCY/dist
-				message = GetColorRequest()
-				message.cam_X = 0.0
-				message.cam_Y = 0.0
-				message.cam_Z = 0.0
-				message.map_X = ringAndCylinderAttributes.ringsX[i] + vekCX*0.4
-				message.map_Y = ringAndCylinderAttributes.ringsY[i] + vekCY*0.4
-				message.map_Z = 0.0
-
-				reponse = cir(message)
-				res = response.color
-				if(res == 1):
-					print("ekstra cilj hail mary")
-					poslji_cilj(message.map_X, message.map_Y, message.map_X - ringAndCylinderAttributes.ringsX[i], message.map_Y - ringAndCylinderAttributes.ringsY[i])
-
-
-				continue
-	
 	
 		#ce se nimamo stevilk
 		if(x == None or y == None):

@@ -38,8 +38,8 @@ def cir_handler(location):
 	x = int( (location.map_X - origX) / resolucija )
 	y = int( (location.map_Y - origY) / resolucija )
 	
-	for k in range(y-5, y+5):
-		for l in range(x-5, x+5):
+	for k in range(y-3, y+3):
+		for l in range(x-3, x+3):
 			if(y > sirina or y < 0 or x > visina or x < 0):
 				#print("out of map")
 				return 0

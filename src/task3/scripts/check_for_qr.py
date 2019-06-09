@@ -54,38 +54,38 @@ def check_for_QR(self):
 
             # Tranform image to gayscale
 
-            #gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+            gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 
 
             # Do histogram equlization
 
-            #img = cv2.equalizeHist(gray)
+            img = cv2.equalizeHist(gray)
 
 
             # Binarize the image
-            # ret, thresh = cv2.threshold(img, 50, 255, 0)
+            ret, thresh = cv2.threshold(img, 50, 255, 0)
 
-            #thresh = cv2.adaptiveThreshold(
-            #    img,
-            #    255,
-            #    cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            #    cv2.THRESH_BINARY,
-            #    151,
-            #    2,
-            #    )
+            thresh = cv2.adaptiveThreshold(
+                img,
+                255,
+                cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                cv2.THRESH_BINARY,
+                151,
+                2,
+                )
 
-            #kernel = np.ones((3, 3), np.uint8)
+            kernel = np.ones((2, 2), np.uint8)
 
-            #thresh = cv2.dilate(thresh, kernel, iterations = 1)
+            thresh = cv2.dilate(thresh, kernel, iterations = 1)
             #cv2.waitKey(0)
 
 
             
             print("Looking for QR codes")
             # Find a QR code in the image
-            decodedObjects = pyzbar.decode(cv_image)
-            #cv2.imwrite('cv_image_copy.png',
-            #            cv_image)
+            decodedObjects = pyzbar.decode(thresh)
+            cv2.imwrite('cv_image_copy.png',
+                        thresh)
             
             #print(decodedObjects)
 
