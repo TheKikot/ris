@@ -172,6 +172,27 @@ def finished_scouting(dabe):
 				poslji_cilj(ciljX, ciljY, vektorX, vektorY)
 			else:
 				print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
+				#vektor v smeri sredine
+				vekCX = -0.5-ringAndCylinderAttributes.ringsX[i]
+				vekCY = -2.5-ringAndCylinderAttributes.ringsY[i]
+				dist = ((vekCX**2+vekCY**2)**(0.5))
+				vekCX = vekCX/dist
+				vekCY = vekCY/dist
+				message = GetColorRequest()
+				message.cam_X = 0.0
+				message.cam_Y = 0.0
+				message.cam_Z = 0.0
+				message.map_X = ringAndCylinderAttributes.ringsX[i] + vekCX*0.4
+				message.map_Y = ringAndCylinderAttributes.ringsY[i] + vekCY*0.4
+				message.map_Z = 0.0
+
+				reponse = cir(message)
+				res = response.color
+				if(res == 1):
+					print("ekstra cilj hail mary")
+					poslji_cilj(message.map_X, message.map_Y, message.map_X - ringAndCylinderAttributes.ringsX[i], message.map_Y - ringAndCylinderAttributes.ringsY[i])
+
+
 				continue
 	
 	
