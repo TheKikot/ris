@@ -31,7 +31,7 @@ add_service_files(
    FILES
    GetLocation.srv
    GetPositions.srv
-#   Service2.srv
+	 GetColor.srv
 )
 
 ## Generate messages in the 'msg' folder

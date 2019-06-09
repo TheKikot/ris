@@ -1,0 +1,9 @@
+float32 cam_X
+float32 cam_Y
+float32 cam_Z
+
+float32 map_X
+float32 map_Y
+float32 map_Z
+---
+int32 color
