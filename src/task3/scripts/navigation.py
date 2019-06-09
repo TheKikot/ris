@@ -146,6 +146,10 @@ def read_map(mapData):
 			if(grid[k][l] == 0 and grid[k+1][l] == 0 and grid[k-1][l] == 0 and grid[k][l+1] == 0 and grid[k][l-1] == 0):
 				poslji_cilj(origX, origY, origOrient, resolucija, downsize, l, k)
 				#poslji_marker(origX, origY, resolucija, downsize, k, l, k+l)
+	masterService()
+
+
+
 
 ## ZAČETEK SKRIPTE
 
@@ -162,6 +166,7 @@ def read_map(mapData):
 # INICIALIZACIJA
 rospy.init_node('navigation', anonymous=False)
 rospy.wait_for_service('static_map')
+rospy.wait_for_service('start_master')
 ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 pubm = rospy.Publisher('goal_marker', Marker, queue_size=100)
 
@@ -170,6 +175,7 @@ while(not ac.wait_for_server(rospy.Duration.from_sec(3.0))):
 # ZAGON
 try:
 	mapService = rospy.ServiceProxy('static_map', GetMap)
+	masterService = rospy.ServiceProxy('start_master', GetLocation)
 	mapData = mapService().map
 	read_map(mapData)
 except Exception, e:

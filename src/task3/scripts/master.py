@@ -81,7 +81,7 @@ def finished_scouting():
 
 
 	#LOOP cez vse kroge
-	for(i in range(0, len(ringAndCylinderAttributes.ringsX)):
+	for i in range(0, len(ringAndCylinderAttributes.ringsX)):
 	#TODO-pejt do kroga, pocaki da pride do kroga
 	
 	# izracun vektorja
