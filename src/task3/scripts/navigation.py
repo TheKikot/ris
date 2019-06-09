@@ -143,8 +143,8 @@ def read_map(mapData):
 	
 	print("origin: ", origX, ", ", origY)
 	
-	for k in range(1, sirina/downsize-1, 10):
-		for l in range(1, visina/downsize-1, 10):
+	for k in range(1, sirina/downsize-1, 5):
+		for l in range(1, visina/downsize-1, 5):
 			if(grid[k][l] == 0 and grid[k+1][l] == 0 and grid[k-1][l] == 0 and grid[k][l+1] == 0 and grid[k][l-1] == 0):
 				poslji_cilj(origX, origY, origOrient, resolucija, downsize, l, k)
 				#poslji_marker(origX, origY, resolucija, downsize, k, l, k+l)
