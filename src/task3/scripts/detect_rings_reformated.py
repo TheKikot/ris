@@ -348,6 +348,7 @@ class The_Ring:
         normala = [y_1-y_2, -(x_1-x_2)]
         print("normala", normala)
         dist = ((normala[0]**2+normala[1]**2)**(1/2))
+        print(dist)
         normala[0] = normala[0] / dist
         normala[1] = normala[1] / dist
         print("normalizirana normala", normala)
