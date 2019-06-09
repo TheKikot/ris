@@ -336,7 +336,7 @@ class The_Ring:
         marker.lifetime = rospy.Duration.from_sec(10)
         marker.id = self.marker_num
         marker.scale = Vector3(0.1, 0.1, 0.1)
-        marker.color = ColorRGBA(0, 1, 0, 1)
+        marker.color = ColorRGBA(avgBlue, avgGreen, avgRed, 1)
         self.markers_pub.publish(marker)
 
 
