@@ -1,0 +1,28 @@
+<launch>
+
+  <!-- Bringup minimal -->
+
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch">
+  </include>
+	
+	<!-- set the odometry correction parameter! -->
+  <param name="/turtlebot_node/odom_angular_scale_correction" value="1.0" />
+
+
+	<!-- Amcl navigation -->
+	
+	<include file="$(find rins_navigation)/launch/amcl_demo.launch">
+	</include>
+	
+	
+	<!-- Cylinder segmentation -->
+	<node name="cylseg" pkg="task3" type="cylinder_segmentation" respawn="true"/>
+	<node name="call_cylseg" pkg="task3" type="call_cylinder_detection.py" respawn="true"/>
+	
+	<!-- Ring detection -->
+	<node name="ring_detection" pkg="task3" type="detect_rings_reformated.py" respawn="true"/>
+	
+	<!-- QR codes ? -->
+	<node name="qr_detection" pkg="task3" type="check_for_qr.py" respawn="true"/>
+	
+</launch>
