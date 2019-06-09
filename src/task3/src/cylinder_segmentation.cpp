@@ -22,6 +22,7 @@
 ros::Publisher pubx;
 ros::Publisher puby;
 ros::Publisher pubm;
+ros::ServiceClient serv;
 
 tf2_ros::Buffer tf2_buffer;
 
@@ -199,7 +200,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
         message.request.map_Y = point_map.point.y;
         message.request.map_Z = point_map.point.z;
         
-        color_code = serv.call(message);
+        int color_code = serv.call(message);
         
 
 	  	  marker.header.frame_id = "map";
@@ -260,7 +261,7 @@ main (int argc, char** argv)
   pubm = nh.advertise<visualization_msgs::Marker>("cylinders",1);
   
   // Create a ROS service for getting the color of the cylinder
-  ros::ServiceClient serv = nh.serviceClient<task3::GetColor>("cylinder_color");
+  serv = nh.serviceClient<task3::GetColor>("cylinder_color");
 
   // Spin
   ros::spin ();
