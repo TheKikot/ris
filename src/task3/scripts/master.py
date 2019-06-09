@@ -50,7 +50,7 @@ def get_prediction(x, y):
     global model
     return model.predict([[x,y]])
 
-def finished_scouting():
+def finished_scouting(dabe):
 	# get cylinder positions
 	# get ring positions
 	rospy.wait_for_service('return_positions')

@@ -93,6 +93,8 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 				get_cylinder_location()
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
+
+			rospy.sleep(3)
 	
 
 def read_map(mapData):	

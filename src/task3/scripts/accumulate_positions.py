@@ -126,9 +126,9 @@ class Accumulator():
 		if(not self.cylinders == None):
 			for c in self.cylinders:
 				if self.sqr_distance(c.x, c.y, marker.pose.position.x, marker.pose.position.y) < 0.30:
-					c.red = (c.red * c.count + marker.color.r) / (r.count+1)
-					c.green = (c.green * c.count + marker.color.g) / (r.count+1)
-					c.blue = (c.blue * c.count + marker.color.b) / (r.count+1)
+					c.red = (c.red * c.count + marker.color.r) / (c.count+1)
+					c.green = (c.green * c.count + marker.color.g) / (c.count+1)
+					c.blue = (c.blue * c.count + marker.color.b) / (c.count+1)
 					c.count += 1
 					print('Found a match')
 					break
