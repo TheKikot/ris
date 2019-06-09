@@ -10,7 +10,18 @@ import numpy as np
 import pyzbar.pyzbar as pyzbar
 
 
-global bridge 
+global bridge, dictm, params
+
+dictm = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+
+# The object that we will pass to the markerDetect function
+params =  cv2.aruco.DetectorParameters_create()
+
+print(params.adaptiveThreshConstant) 
+print(params.adaptiveThreshWinSizeMax)
+print(params.adaptiveThreshWinSizeMin)
+print(params.minCornerDistanceRate)
+print(params.adaptiveThreshWinSizeStep)
 
 def main():
     print("setting up node")
