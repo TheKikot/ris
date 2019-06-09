@@ -10,8 +10,8 @@ def get_color_client():
 		try:
 				get_cyl_color = rospy.ServiceProxy('cylinder_color', GetColor)
 				message = GetColorRequest()
-				message.cam_X = 0.1
-				message.cam_Y = 0.2
+				message.cam_X = 1.0
+				message.cam_Y = 2.0
 				message.cam_Z = 0.2
 				message.map_X = 0.1
 				message.map_Y = 0.2
