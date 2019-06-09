@@ -111,12 +111,12 @@ def color_handler(location):
 	odmik = 320.0 + (525.0/45.0) * kot
 	print("odmik: ", odmik)
 	
-	crop = cv_image[230:260, (int(odmik)-20):(int(odmik)+20)]
+	crop = cv_image[220:250, (int(odmik)-30):(int(odmik)+30)]
 	name, minD = comparer.compare(crop)
 	#cv2.imwrite('image.jpeg', cv_image)
 	#cv2.imwrite(str(minD)+'.jpeg', crop)
 
-	if(minD < 0.9):
+	if(minD < 0.85):
 		r = 0
 		g = 0
 		b = 0

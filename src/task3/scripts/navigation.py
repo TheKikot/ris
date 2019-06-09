@@ -78,6 +78,7 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 				goal_state = ac.get_state()
 			print("turn_state_fin: ", goal_state)
 			
+			rospy.sleep(0.2)
 			# look for rings
 			rospy.wait_for_service('get_ring_location')
 			try:
@@ -94,7 +95,7 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
 
-			rospy.sleep(2)
+			rospy.sleep(3)
 	
 
 def read_map(mapData):
