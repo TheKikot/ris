@@ -128,7 +128,7 @@ class The_Ring:
 
     def get_pose(self, e, c1, c2, depth_image, bgr_image):
                 
-
+        depth_image = depth_image[120:380, 0:640]
         
         point1X = c1[0][0][0]
         #print(point1X)
