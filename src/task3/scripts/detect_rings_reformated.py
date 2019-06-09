@@ -594,7 +594,7 @@ class The_Ring:
             #----------------------------------
             #----------CIFRE-------------------
             #----------------------------------
-
+            '''
             corners, ids, rejected_corners = cv2.aruco.detectMarkers(cv_image_copy,dictm,parameters=params)
             
             # Increase proportionally if you want a larger image
@@ -692,11 +692,12 @@ class The_Ring:
             #----------------------------------
             #----------CIFRE-------------------
             #----------------------------------
-
+            '''
 
             #----------------------------------
             #----------QR----------------------
             #----------------------------------
+            '''
             print()
             print('Looking for qrCodes')
             for i in range(0, 5):
@@ -708,7 +709,7 @@ class The_Ring:
                 print('No qr codes found')
             else:
                 print("QR data:", qr_data)            
-
+            '''
             
         else:
 
@@ -716,6 +717,7 @@ class The_Ring:
 
         return []
 
+'''
     def check_for_QR(self):
         
         data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
@@ -789,7 +791,7 @@ class The_Ring:
         else:
             print("Found more than 1 QR code")
             return 0;
-
+'''
     def depth_callback(self, data):
 
         try:

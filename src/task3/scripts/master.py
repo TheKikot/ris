@@ -14,6 +14,13 @@ def finished_scouting():
 	ringAndCylinderAttributes = return_positions()
 
 
+	rospy.wait_for_service('check_numbers')
+	check_for_numbers = rospy.ServiceProxy('check_numbers', CheckNumbers)
+	rospy.wait_for_service('check_qr')
+	check_for_numbers = rospy.ServiceProxy('check_qr', CheckQr)
+	rospy.wait_for_service('evaluate_qr')
+
+
 	print(a)
 
 	#TODO
