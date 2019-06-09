@@ -81,41 +81,88 @@ def finished_scouting():
 
 
 	#LOOP cez vse kroge
+	for(i in range(0, len(ringAndCylinderAttributes.ringsX)):
 	#TODO-pejt do kroga, pocaki da pride do kroga
+	
+	# izracun vektorja
+	vektorX = ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i]
+	vektorY = ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i]
+	print("razdalja: ", (vektorX**2 + vektorY**2))
+	
+	# premik do kroga
+	ciljX = ringAndCylinderAttributes.ringsX[i] + vektorX
+	ciljY = ringAndCylinderAttributes.ringsY[i] + vektorY
+	
+	rospy.wait_for_service('check_if_reachable')
+	cir = rospy.ServiceProxy('check_if_reachable', GetColor)
+	message = GetColorRequest()
+	message.cam_X = 0.0
+	message.cam_Y = 0.0
+	message.cam_Z = 0.0
+	message.map_X = ciljX
+	message.map_Y = ciljY
+	message.map_Z = 0.0
 
-	#ce se nimamo stevilk
-	if(x == None or y == None):
-		#preglej za stevilke
-		odg = check_for_numbers()
-		if(odg.gotMarkers == 0):
-			#ni uspel prebrat markerjev na sliki, mejbi kej nardimo glede tega
-			print('Ne najdem primernega stevila markerjev. ')
+	response = cir(message)
+	res = response.color
+	if(res == 1):
+		# gremo tja
+	else:
+		# premaknemo cilj	
+		ciljX = ringAndCylinderAttributes.ringsX[i] - vektorX
+		ciljY = ringAndCylinderAttributes.ringsY[i] - vektorY
+		
+		rospy.wait_for_service('check_if_reachable')
+		cir = rospy.ServiceProxy('check_if_reachable', GetColor)
+		message = GetColorRequest()
+		message.cam_X = 0.0
+		message.cam_Y = 0.0
+		message.cam_Z = 0.0
+		message.map_X = ciljX
+		message.map_Y = ciljY
+		message.map_Z = 0.0
+
+		response = cir(message)
+		res = response.color
+		if(res == 1):
+			# gremo tja
 		else:
-			#prebral markerje, poskusal prebrat cifre
-			if(odg.x == -1 or odg.y == -1):
-				#prebral markerje, ampak ni prebral stevilk, najbrz qr krogec
+			print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
+	
+	
+		#ce se nimamo stevilk
+		if(x == None or y == None):
+			#preglej za stevilke
+			odg = check_for_numbers()
+			if(odg.gotMarkers == 0):
+				#ni uspel prebrat markerjev na sliki, mejbi kej nardimo glede tega
+				print('Ne najdem primernega stevila markerjev. ')
 			else:
-				x=odg.x
-				y=odg.y
-				if(podatki == 1)
+				#prebral markerje, poskusal prebrat cifre
+				if(odg.x == -1 or odg.y == -1):
+					#prebral markerje, ampak ni prebral stevilk, najbrz qr krogec
+				else:
+					x=odg.x
+					y=odg.y
+					if(podatki == 1)
+						color = get_prediction(x, y)
+						break
+					continue
+
+		#ce se nimamo podatkov modela itd.
+		if(podatki == None):
+			odg = check_for_qr()
+
+			if(odg.data == 'No QR codes found'):
+				#ta krog je kompleten fail, morde bi blo treba neki nardit glede tega
+			else if(len(find_urls(odg.data)) > 0):
+				#nasli smo qr, ki vsebuje spletno stran, kar bi tut mogu
+				get_online_data(odg.data)
+				podatki = 1
+				build_classifier()
+				if(x != None and y != None)
 					color = get_prediction(x, y)
 					break
-				continue
-
-	#ce se nimamo podatkov modela itd.
-	if(podatki == None):
-		odg = check_for_qr()
-
-		if(odg.data == 'No QR codes found'):
-			#ta krog je kompleten fail, morde bi blo treba neki nardit glede tega
-		else if(len(find_urls(odg.data)) > 0):
-			#nasli smo qr, ki vsebuje spletno stran, kar bi tut mogu
-			get_online_data(odg.data)
-			podatki = 1
-			build_classifier()
-			if(x != None and y != None)
-				color = get_prediction(x, y)
-				break
 
 	#KONC LOOPA
 
