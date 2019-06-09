@@ -34,10 +34,16 @@ class Cylinder():
 	x = 0
 	y = 0
 	count = 1
+	red = 0
+	green = 0
+	blue = 0
 
-	def __init__(self, x, y):
+	def __init__(self, x, y, red, green, blue):
 		self.x = x
 		self.y = y
+		self.red = red
+		self.green = green
+		self.blue = blue
 
 
 class Accumulator():
@@ -103,9 +109,9 @@ class Accumulator():
 			for r in self.rings:
 				if self.sqr_distance(r.x, r.y, rn.ringX, rn.ringY) < 0.30:
 					# popravim barvno povprecje
-					r.red = (r.red * r.countcount + rn.red) / (r.count+1)
-					r.blue = (r.blue * r.countcount + rn.blue) / (r.count+1)
-					r.green = (r.green * r.countcount + rn.green) / (r.count+1)
+					r.red = (r.red * r.count + rn.red) / (r.count+1)
+					r.blue = (r.blue * r.count + rn.blue) / (r.count+1)
+					r.green = (r.green * r.count + rn.green) / (r.count+1)
 					r.count += 1
 					print('Found a match')
 					break
@@ -120,14 +126,17 @@ class Accumulator():
 		if(not self.cylinders == None):
 			for c in self.cylinders:
 				if self.sqr_distance(c.x, c.y, marker.pose.position.x, marker.pose.position.y) < 0.30:
+					c.red = (c.red * c.count + marker.color.r) / (r.count+1)
+					c.green = (c.green * c.count + marker.color.g) / (r.count+1)
+					c.blue = (c.blue * c.count + marker.color.b) / (r.count+1)
 					c.count += 1
 					print('Found a match')
 					break
 			else:
-				self.cylinders.append(Cylinder(marker.pose.position.x, marker.pose.position.y))
+				self.cylinders.append(Cylinder(marker.pose.position.x, marker.pose.position.y, marker.color.r, marker.color.g, marker.color.b))
 				print('Couldn\'t find a match, creating a new insesrtion on x:', marker.pose.position.x, 'y:', marker.pose.position.y)
 		else:
-			self.cylinders = [Cylinder(marker.pose.position.x, marker.pose.position.y)]
+			self.cylinders = [Cylinder(marker.pose.position.x, marker.pose.position.y, marker.color.r, marker.color.g, marker.color.b)]
 
 
 
