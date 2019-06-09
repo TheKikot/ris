@@ -56,8 +56,6 @@ def color_handler(location):
 
 
 def main():
-	global location
-	# print("setting up node")
 	rospy.init_node('cylinder_color', anonymous=False)
 	call_srv = rospy.Service('cylinder_color', GetColor, color_handler)
 	
