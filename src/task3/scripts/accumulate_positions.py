@@ -45,7 +45,7 @@ class Accumulator():
 
 
 	def sqr_distance(self, x1, y1, x2, y2):
-		return ((abs(x1)-abs(x2))**2 + (abs(y1)-abs(y2))**2)
+		return ((x1 - x2)**2 + (y1 - y2)**2)
 
 	def new_ring_and_normal(self, rn):
 		print('Recieved a new ring, looking for matches')
