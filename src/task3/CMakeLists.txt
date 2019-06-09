@@ -31,7 +31,10 @@ add_service_files(
    FILES
    GetLocation.srv
    GetPositions.srv
-	 GetColor.srv
+   CheckNumbers.srv
+   CheckQr.srv
+   EvaluateQr.srv
+   GetColor.srv
 )
 
 ## Generate messages in the 'msg' folder
