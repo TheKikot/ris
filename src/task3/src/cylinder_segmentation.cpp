@@ -200,9 +200,13 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
         message.request.map_Y = point_map.point.y;
         message.request.map_Z = point_map.point.z;
         
-        int color_code = serv.call(message);
-        
-
+        int color_code;
+        if(serv.call(message)) {
+        	color_code = message.response.color;
+				}
+				else {
+					std::cerr << "service error" << std::endl;
+				}
 	  	  marker.header.frame_id = "map";
         marker.header.stamp = ros::Time::now();
 
