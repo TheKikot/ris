@@ -7,6 +7,7 @@ from task3.srv import *
 import re
 import actionlib
 import math
+import urllib2
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
@@ -213,82 +214,9 @@ def finished_scouting(dabe):
 			if(odg.gotMarkers == 0):
 				#ni uspel prebrat markerjev
 				print('ne najdem markerjev (QR)')
-				pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
-				r = rospy.Rate(5) #
-	
-				twist_msg = Twist()
-				twist_msg.linear.x = 0.1
-				twist_msg.linear.y = 0.0
-				twist_msg.linear.z = 0.0
-				twist_msg.angular.x = 0.0
-				twist_msg.angular.y = 0.0
-				twist_msg.angular.z = 0.0
-				
-				time = 0.0
-				while time < 0.8:	
-					pub.publish(twist_msg)
-					r.sleep()
-					time += 0.1
 
-				twist_msg.angular.x = 0.0
-				pub.publish(twist_msg)
-				
-				odg = check_for_numbers()
-				rospy.sleep(1)
-				if(odg.gotMarkers == 0):
-					#ni uspel prebrat markerjev
-					print('ne najdem markerjev (QR)')
-					pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
-					r = rospy.Rate(5) #
-	
-					twist_msg = Twist()
-					twist_msg.linear.x = 0.0
-					twist_msg.linear.y = 0.0
-					twist_msg.linear.z = 0.0
-					twist_msg.angular.x = 0.0
-					twist_msg.angular.y = 0.0
-					twist_msg.angular.z = -0.3
-				
-	
-	
-					time = 0.0
-					while time < 0.4:	
-						pub.publish(twist_msg)
-						r.sleep()
-						time += 0.1
-	
-					twist_msg.angular.x = 0.0
-					pub.publish(twist_msg)
-					
-					odg = check_for_numbers()
-					rospy.sleep(1)
-					if(odg.gotMarkers == 0):
-						#ni uspel prebrat markerjev
-						print('ne najdem markerjev (QR)')
-						pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
-						r = rospy.Rate(5) #
-	
-						twist_msg = Twist()
-						twist_msg.linear.x = 0.0
-						twist_msg.linear.y = 0.0
-						twist_msg.linear.z = 0.0
-						twist_msg.angular.x = 0.0
-						twist_msg.angular.y = 0.0
-						twist_msg.angular.z = 0.3
-				
-	
-	
-						time = 0.0
-						while time < 0.8:	
-							pub.publish(twist_msg)
-							r.sleep()
-							time += 0.1
-	
-						twist_msg.angular.z = 0.0
-						pub.publish(twist_msg)
 				
 			odg = check_for_qr()
-			rospy.sleep(1)
 
 			if(odg.data == 'No QR codes found'):
 				#ta krog je kompleten fail, morde bi blo treba neki nardit glede tega
