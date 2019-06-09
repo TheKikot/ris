@@ -59,6 +59,16 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pcl::fromPCLPointCloud2 (*cloud_blob, *cloud);
   std::cerr << "PointCloud has: " << cloud->points.size () << " data points." << std::endl;
 
+  geometry_msgs::PointStamped point_camera;
+	point_camera.header.frame_id = "camera_rgb_optical_frame";
+	point_camera.header.stamp = ros::Time::now();
+
+	  point_camera.point.x = centroid[0];
+	  point_camera.point.y = centroid[1];
+	  point_camera.point.z = centroid[2];
+
+
+
   // Build a passthrough filter to remove spurious NaNs
   pass.setInputCloud (cloud);
   pass.setFilterFieldName ("z");
@@ -155,21 +165,13 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
     std::cerr << "centroid of the cylindrical component: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << std::endl;
 
 	  //Create a point in the "camera_rgb_optical_frame"
-    geometry_msgs::PointStamped point_camera;
     geometry_msgs::PointStamped point_map;
+	  point_map.header.frame_id = "map";
+point_map.header.stamp = ros::Time::now();
     visualization_msgs::Marker marker;
     geometry_msgs::TransformStamped tss;
           
-    point_camera.header.frame_id = "camera_rgb_optical_frame";
-    point_camera.header.stamp = ros::Time::now();
-
-	  point_map.header.frame_id = "map";
-    point_map.header.stamp = ros::Time::now();
-
-	  point_camera.point.x = centroid[0];
-	  point_camera.point.y = centroid[1];
-	  point_camera.point.z = centroid[2];
-
+    
 	  try
 	  {
 		  time_test = ros::Time::now();
