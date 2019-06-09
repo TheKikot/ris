@@ -200,7 +200,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
         message.request.map_Y = point_map.point.y;
         message.request.map_Z = point_map.point.z;
         
-        int color_code = serv.call(message).color;
+        int color_code = serv.call(message);
         
 
 	  	  marker.header.frame_id = "map";
