@@ -34,7 +34,7 @@ def color_handler(location):
 	# poiscemo cilinder na sliki
 	
 	kot = math.degrees(math.atan2(location.cam_X,location.cam_Y))
-	print(kot)
+	print("kot: ", kot, "x: ", location.cam_X, "Y: ", location.cam_Y, "Z: ", location.cam_Z)
 	
 	# 640x480
 	odmik = 320 + 525/45 * kot
