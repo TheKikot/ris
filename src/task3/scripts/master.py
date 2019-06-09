@@ -95,10 +95,9 @@ def poslji_cilj2(nX, nY, kX, kY):
 	goal = MoveBaseGoal()
 	orientacija = Quaternion()
 	dist = ((nX-kX)**2 + (nY-kY)**2)**(1.0/2.0)
-	kot = math.asin( (kX-nX) /  dist)
-	if(kY < nY):
+	kot = math.asin( (nY-kY) /  dist)
+	if(kX < nX):
 		kot = math.pi - kot
-	kot -= math.pi/2
 	#print(orientacija)
 
 	orientacija = quaternion_from_euler(0.0, 0.0, kot)
