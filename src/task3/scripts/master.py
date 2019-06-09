@@ -85,8 +85,8 @@ def finished_scouting(dabe):
 	#TODO-pejt do kroga, pocaki da pride do kroga
 	
 	# izracun vektorja
-		vektorX = 3.0 * (ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i])
-		vektorY = 3.0 * (ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i])
+		vektorX = 0.7 * (ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i])
+		vektorY = 0.7 * (ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i])
 		print("razdalja: ", (vektorX**2 + vektorY**2))
 	
 		# premik do kroga
