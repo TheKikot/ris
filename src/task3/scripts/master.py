@@ -85,33 +85,14 @@ def finished_scouting():
 	#TODO-pejt do kroga, pocaki da pride do kroga
 	
 	# izracun vektorja
-	vektorX = ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i]
-	vektorY = ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i]
-	print("razdalja: ", (vektorX**2 + vektorY**2))
+		vektorX = ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i]
+		vektorY = ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i]
+		print("razdalja: ", (vektorX**2 + vektorY**2))
 	
-	# premik do kroga
-	ciljX = ringAndCylinderAttributes.ringsX[i] + vektorX
-	ciljY = ringAndCylinderAttributes.ringsY[i] + vektorY
+		# premik do kroga
+		ciljX = ringAndCylinderAttributes.ringsX[i] + vektorX
+		ciljY = ringAndCylinderAttributes.ringsY[i] + vektorY
 	
-	rospy.wait_for_service('check_if_reachable')
-	cir = rospy.ServiceProxy('check_if_reachable', GetColor)
-	message = GetColorRequest()
-	message.cam_X = 0.0
-	message.cam_Y = 0.0
-	message.cam_Z = 0.0
-	message.map_X = ciljX
-	message.map_Y = ciljY
-	message.map_Z = 0.0
-
-	response = cir(message)
-	res = response.color
-	if(res == 1):
-		# gremo tja
-	else:
-		# premaknemo cilj	
-		ciljX = ringAndCylinderAttributes.ringsX[i] - vektorX
-		ciljY = ringAndCylinderAttributes.ringsY[i] - vektorY
-		
 		rospy.wait_for_service('check_if_reachable')
 		cir = rospy.ServiceProxy('check_if_reachable', GetColor)
 		message = GetColorRequest()
@@ -126,8 +107,29 @@ def finished_scouting():
 		res = response.color
 		if(res == 1):
 			# gremo tja
+			print("")
 		else:
-			print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
+			# premaknemo cilj	
+			ciljX = ringAndCylinderAttributes.ringsX[i] - vektorX
+			ciljY = ringAndCylinderAttributes.ringsY[i] - vektorY
+		
+			rospy.wait_for_service('check_if_reachable')
+			cir = rospy.ServiceProxy('check_if_reachable', GetColor)
+			message = GetColorRequest()
+			message.cam_X = 0.0
+			message.cam_Y = 0.0
+			message.cam_Z = 0.0
+			message.map_X = ciljX
+			message.map_Y = ciljY
+			message.map_Z = 0.0
+
+			response = cir(message)
+			res = response.color
+			if(res == 1):
+				# gremo tja
+				print("")
+			else:
+				print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
 	
 	
 		#ce se nimamo stevilk
@@ -141,10 +143,11 @@ def finished_scouting():
 				#prebral markerje, poskusal prebrat cifre
 				if(odg.x == -1 or odg.y == -1):
 					#prebral markerje, ampak ni prebral stevilk, najbrz qr krogec
+					print("")
 				else:
 					x=odg.x
 					y=odg.y
-					if(podatki == 1)
+					if(podatki == 1):
 						color = get_prediction(x, y)
 						break
 					continue
@@ -155,12 +158,13 @@ def finished_scouting():
 
 			if(odg.data == 'No QR codes found'):
 				#ta krog je kompleten fail, morde bi blo treba neki nardit glede tega
-			else if(len(find_urls(odg.data)) > 0):
+				print("")
+			elif(len(find_urls(odg.data)) > 0):
 				#nasli smo qr, ki vsebuje spletno stran, kar bi tut mogu
 				get_online_data(odg.data)
 				podatki = 1
 				build_classifier()
-				if(x != None and y != None)
+				if(x != None and y != None):
 					color = get_prediction(x, y)
 					break
 
@@ -177,13 +181,15 @@ def finished_scouting():
 
 	#TODO - LOOP v katerem se premikamo okol cilindra, dokler ne preberemo QR kode
 	odg = check_for_qr()
-		if(odg.data == 'No QR codes found'):
-			#TODO premakni se
-			#continue
-		else if(len(find_urls(odg.data))>0):
-			#nasli smo QR v enmu od krogov, ignore
-		else:
-			barvaKroga = odg.data
+	if(odg.data == 'No QR codes found'):
+		#TODO premakni se
+		#continue
+		print("")
+	elif(len(find_urls(odg.data))>0):
+		#nasli smo QR v enmu od krogov, ignore
+		print("")
+	else:
+		barvaKroga = odg.data
 
 
 
