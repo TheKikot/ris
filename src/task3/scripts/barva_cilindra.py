@@ -44,6 +44,8 @@ def color_handler(location):
 	cv2.imwrite('image.jpeg', cv_image)
 	cv2.imwrite('crop.jpeg', crop)
 	
+	# prepoznamo barvo
+	
 	return 0
 
 

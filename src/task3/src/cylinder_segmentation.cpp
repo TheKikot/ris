@@ -17,6 +17,7 @@
 #include "tf2_ros/transform_listener.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "geometry_msgs/PointStamped.h"
+#include "task3/GetColor.h"
 
 ros::Publisher pubx;
 ros::Publisher puby;
@@ -182,46 +183,58 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 	  }
 
           //std::cerr << tss ;
-
+          
           tf2::doTransform(point_camera, point_map, tss);
 
 	      std::cerr << "point_camera: " << point_camera.point.x << " " <<  point_camera.point.y << " " <<  point_camera.point.z << std::endl;
 
 	      std::cerr << "point_map: " << point_map.point.x << " " <<  point_map.point.y << " " <<  point_map.point.z << std::endl;
+	      
+	      // call color service
+        task3::GetColor message;
+        message.request.cam_X = point_camera.point.x;
+        message.request.cam_Y = point_camera.point.y;
+        message.request.cam_Z = point_camera.point.z;
+        message.request.map_X = point_map.point.x;
+        message.request.map_Y = point_map.point.y;
+        message.request.map_Z = point_map.point.z;
+        
+        color_code = serv.call(message);
+        
 
 	  	  marker.header.frame_id = "map";
-          marker.header.stamp = ros::Time::now();
+        marker.header.stamp = ros::Time::now();
 
-          marker.ns = "cylinder";
-          marker.id = 0;
+        marker.ns = "cylinder";
+        marker.id = 0;
 
-          marker.type = visualization_msgs::Marker::CYLINDER;
-          marker.action = visualization_msgs::Marker::ADD;
+        marker.type = visualization_msgs::Marker::CYLINDER;
+        marker.action = visualization_msgs::Marker::ADD;
 
-          marker.pose.position.x = point_map.point.x;
-          marker.pose.position.y = point_map.point.y;
-          marker.pose.position.z = point_map.point.z;
-          marker.pose.orientation.x = 0.0;
+        marker.pose.position.x = point_map.point.x;
+        marker.pose.position.y = point_map.point.y;
+        marker.pose.position.z = point_map.point.z;
+        marker.pose.orientation.x = 0.0;
 	      marker.pose.orientation.y = 0.0;
-          marker.pose.orientation.z = 0.0;
-          marker.pose.orientation.w = 1.0;
+        marker.pose.orientation.z = 0.0;
+        marker.pose.orientation.w = 1.0;
 
-          marker.scale.x = 0.1;
+        marker.scale.x = 0.1;
 	      marker.scale.y = 0.1;
 	      marker.scale.z = 0.1;
 
-          marker.color.r=0.0f;
-          marker.color.g=1.0f;
-          marker.color.b=0.0f;
-          marker.color.a=1.0f;
+        marker.color.r=0.0f;
+        marker.color.g=1.0f;
+        marker.color.b=0.0f;
+        marker.color.a=1.0f;
 
 	      marker.lifetime = ros::Duration();
 
 	      pubm.publish (marker);
 
 	      pcl::PCLPointCloud2 outcloud_cylinder;
-          pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
-          puby.publish (outcloud_cylinder);
+        pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
+        puby.publish (outcloud_cylinder);
 
   }
   
@@ -245,6 +258,9 @@ main (int argc, char** argv)
   puby = nh.advertise<pcl::PCLPointCloud2> ("cylinder", 1);
 
   pubm = nh.advertise<visualization_msgs::Marker>("cylinders",1);
+  
+  // Create a ROS service for getting the color of the cylinder
+  ros::ServiceClient serv = nh.serviceClient<task3::GetColor>("cylinder_color");
 
   // Spin
   ros::spin ();
