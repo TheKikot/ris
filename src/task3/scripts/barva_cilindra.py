@@ -113,8 +113,8 @@ def color_handler(location):
 	
 	crop = cv_image[230:260, (int(odmik)-20):(int(odmik)+20)]
 	name, minD = comparer.compare(crop)
-	cv2.imwrite('image.jpeg', cv_image)
-	cv2.imwrite(str(minD)+'.jpeg', crop)
+	#cv2.imwrite('image.jpeg', cv_image)
+	#cv2.imwrite(str(minD)+'.jpeg', crop)
 
 	if(minD < 0.9):
 		r = 0
