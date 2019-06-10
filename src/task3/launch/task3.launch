@@ -11,7 +11,7 @@
 
 	<!-- Amcl navigation -->
 	
-	<include file="$(find turtlebot_bringup)/launch/amcl_demo.launch">
+	<include file="$(find turtlebot_navigation)/launch/amcl_demo.launch">
 	</include>
 	
 	<!-- 3d sensor -->

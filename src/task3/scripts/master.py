@@ -60,7 +60,7 @@ def poslji_cilj(x, y, vektorX, vektorY):
 
 	goal = MoveBaseGoal()
 	
-	eulerKoti = [0.0, 0.0, math.arcsin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) )]
+	eulerKoti = [0.0, 0.0, math.asin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) )]
 	print("smer: ", eulerKoti[2])
 	orientacija = quaternion_from_euler(eulerKoti)
 	
@@ -115,8 +115,8 @@ def finished_scouting(dabe):
 	#TODO-pejt do kroga, pocaki da pride do kroga
 	
 	# izracun vektorja
-		vektorX = 0.3 * (ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i])
-		vektorY = 0.3 * (ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i])
+		vektorX = (ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i])
+		vektorY = (ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i])
 		print("razdalja: ", (vektorX**2 + vektorY**2))
 	
 		# premik do kroga
