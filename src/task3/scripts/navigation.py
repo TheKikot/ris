@@ -97,7 +97,11 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			rospy.sleep(3)
 	
 
-def read_map(mapData):	
+def read_map(mapData):
+	# konstante
+	cilj_odmik = 2
+	cilj_step = 5
+
 	# preberi podatke o zemljevidu
 	meta = mapData.info
 	staticMap = mapData.data
@@ -143,8 +147,8 @@ def read_map(mapData):
 	
 	print("origin: ", origX, ", ", origY)
 	
-	for k in range(1, sirina/downsize-1, 5):
-		for l in range(1, visina/downsize-1, 5):
+	for k in range(1, sirina/downsize-1, cilj_step):
+		for l in range(1+ cilj_odmik, visina/downsize-1, cilj_step):
 			if(grid[k][l] == 0 and grid[k+1][l] == 0 and grid[k-1][l] == 0 and grid[k][l+1] == 0 and grid[k][l-1] == 0):
 				poslji_cilj(origX, origY, origOrient, resolucija, downsize, l, k)
 				#poslji_marker(origX, origY, resolucija, downsize, k, l, k+l)
