@@ -10,11 +10,14 @@ import math
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from geometry_msgs.msg import PointStamped, Vector3, Pose, Twist, Quaternion, PoseWithCovarianceStamped
 #from __future__ import print_function
 
 global model
 global features
 global label
+global ac
+
 
 def find_urls(string): 
     # findall() has been used  
@@ -58,15 +61,24 @@ def get_prediction(x, y):
     
 def poslji_cilj(x, y, vektorX, vektorY):
 
+	#print(x)
+	#print(y)
+	#print(vektorX)
+	#print(vektorY)
+	global ac
 	goal = MoveBaseGoal()
-	
+	orientacija = Quaternion()
 	orientacija = quaternion_from_euler(0.0, 0.0, math.asin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) ))
+	#print(orientacija)
 	
 	goal.target_pose.header.frame_id = "map" 
 	goal.target_pose.header.stamp = rospy.Time.now()
 	goal.target_pose.pose.position.x = x
 	goal.target_pose.pose.position.y = y
-	goal.target_pose.pose.orientation = orientacija
+	goal.target_pose.pose.orientation.x = orientacija[0]
+	goal.target_pose.pose.orientation.y = orientacija[1]
+	goal.target_pose.pose.orientation.z = orientacija[2]
+	goal.target_pose.pose.orientation.w = orientacija[3]
 	print("pošiljam cilj: (", goal.target_pose.pose.position.x, ", ", goal.target_pose.pose.position.y, ")")
 	ac.send_goal(goal)
 	goal_state = ac.get_state()
@@ -74,11 +86,13 @@ def poslji_cilj(x, y, vektorX, vektorY):
 		ac.wait_for_result(rospy.Duration(2.0))
 		#print("goal_state: ", goal_state)
 		goal_state = ac.get_state()
-	print("goal_state_fin: ", goal_state)
+	#print("goal_state_fin: ", goal_state)
 	
 
 
 def finished_scouting(dabe):
+
+	
 	# get cylinder positions
 	# get ring positions
 	rospy.wait_for_service('return_positions')
@@ -115,7 +129,7 @@ def finished_scouting(dabe):
 	# izracun vektorja
 		vektorX = (ringAndCylinderAttributes.ringsX[i] - ringAndCylinderAttributes.normalsX[i])
 		vektorY = (ringAndCylinderAttributes.ringsY[i] - ringAndCylinderAttributes.normalsY[i])
-		print("razdalja: ", (vektorX**2 + vektorY**2))
+		#print("razdalja: ", (vektorX**2 + vektorY**2))
 	
 		# premik do kroga
 		ciljX = ringAndCylinderAttributes.ringsX[i] + vektorX
@@ -172,27 +186,32 @@ def finished_scouting(dabe):
 				#prebral markerje, poskusal prebrat cifre
 				if(odg.x == -1 or odg.y == -1):
 					#prebral markerje, ampak ni prebral stevilk, najbrz qr krogec
-					print("")
+					print("Nasel markerje, nisem prebral stevilk")
 				else:
 					x=odg.x
 					y=odg.y
+					print("prebral stevilke: ", x, y)
 					if(podatki == 1):
 						color = get_prediction(x, y)
+						print("Dobil color: ", color)
 						break
 					continue
 
 		#ce se nimamo podatkov modela itd.
 		if(podatki == None):
+			print("iscem qr kode")
 			odg = check_for_qr()
 
 			if(odg.data == 'No QR codes found'):
 				#ta krog je kompleten fail, morde bi blo treba neki nardit glede tega
-				print("")
+				print("Nisem nasel nobene QR kode")
 			elif(len(find_urls(odg.data)) > 0):
 				#nasli smo qr, ki vsebuje spletno stran, kar bi tut mogu
+				print("nasel qr kodo za spletno stran")
 				get_online_data(odg.data)
 				podatki = 1
 				build_classifier()
+				print("zgradil classifier")
 				if(x != None and y != None):
 					color = get_prediction(x, y)
 					break
@@ -229,12 +248,12 @@ def finished_scouting(dabe):
 
 
 def main():
-
+	global ac
 	rospy.init_node("master")
 	service = rospy.Service('start_master', GetLocation, finished_scouting)
 	ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 	while(not ac.wait_for_server(rospy.Duration.from_sec(3.0))):
-              rospy.loginfo("Waiting for the move_base action server to come up")
+		rospy.loginfo("Waiting for the move_base action server to come up")
 
 	try:
 		rospy.spin()
