@@ -1,6 +1,5 @@
 build/
 devel/
-*.jpeg
-*.png
+
 .idea/
 \.idea/
