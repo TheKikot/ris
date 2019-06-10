@@ -401,7 +401,7 @@ class The_Ring:
 
         # 640x480
 
-        #cv_image = cv_image[80:420, 0:640]
+        cv_image = cv_image[120:380, 0:640]
         cv_image_copy = cv_image.copy()
 
         # Set the dimensions of the image

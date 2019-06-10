@@ -94,7 +94,7 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
 
-			rospy.sleep(4)
+			rospy.sleep(5)
 	
 
 def read_map(mapData):
