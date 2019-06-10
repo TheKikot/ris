@@ -99,8 +99,8 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 
 def read_map(mapData):
 	# konstante
-	cilj_odmik = 4
-	cilj_step = 6
+	cilj_odmik = 0
+	cilj_step = 5
 
 	# preberi podatke o zemljevidu
 	meta = mapData.info
