@@ -5,6 +5,10 @@ import rospy
 from task3.msg import *
 from task3.srv import *
 import re
+import actionlib
+from tf.transformations import quaternion_from_euler, euler_from_quaternion
+from actionlib_msgs.msg import GoalStatus
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 #from __future__ import print_function
 
 global model
@@ -49,6 +53,31 @@ def build_classifier():
 def get_prediction(x, y):
     global model
     return model.predict([[x,y]])
+    
+    
+def poslji_cilj(x, y, vektorX, vektorY):
+
+	goal = MoveBaseGoal()
+	
+	eulerKoti = [0.0, 0.0, arcsin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) )]
+	print("smer: ", eulerKoti[2])
+	orientacija = quaternion_from_euler(eulerKoti)
+	
+	goal.target_pose.header.frame_id = "map" 
+	goal.target_pose.header.stamp = rospy.Time.now()
+	goal.target_pose.pose.position.x = x
+	goal.target_pose.pose.position.y = y
+	goal.target_pose.pose.orientation = orientacija
+	print("pošiljam cilj: (", goal.target_pose.pose.position.x, ", ", goal.target_pose.pose.position.y, ")")
+	ac.send_goal(goal)
+	goal_state = ac.get_state()
+	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
+		ac.wait_for_result(rospy.Duration(2.0))
+		#print("goal_state: ", goal_state)
+		goal_state = ac.get_state()
+	print("goal_state_fin: ", goal_state)
+	
+
 
 def finished_scouting(dabe):
 	# get cylinder positions
@@ -107,7 +136,7 @@ def finished_scouting(dabe):
 		res = response.color
 		if(res == 1):
 			# gremo tja
-			print("")
+			poslji_cilj(ciljX, cilj_Y, vektorX, vektorY)
 		else:
 			# premaknemo cilj	
 			ciljX = ringAndCylinderAttributes.ringsX[i] - vektorX
@@ -127,7 +156,7 @@ def finished_scouting(dabe):
 			res = response.color
 			if(res == 1):
 				# gremo tja
-				print("")
+				poslji_cilj(ciljX, cilj_Y, vektorX, vektorY)
 			else:
 				print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
 				continue
@@ -204,7 +233,9 @@ def main():
 
 	rospy.init_node("master")
 	service = rospy.Service('start_master', GetLocation, finished_scouting)
-	
+	ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+	while(not ac.wait_for_server(rospy.Duration.from_sec(3.0))):
+              rospy.loginfo("Waiting for the move_base action server to come up")
 
 	try:
 		rospy.spin()
