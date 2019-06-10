@@ -6,6 +6,7 @@ from task3.msg import *
 from task3.srv import *
 import re
 import actionlib
+import math
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
@@ -59,7 +60,7 @@ def poslji_cilj(x, y, vektorX, vektorY):
 
 	goal = MoveBaseGoal()
 	
-	eulerKoti = [0.0, 0.0, arcsin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) )]
+	eulerKoti = [0.0, 0.0, math.arcsin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) )]
 	print("smer: ", eulerKoti[2])
 	orientacija = quaternion_from_euler(eulerKoti)
 	
@@ -136,7 +137,7 @@ def finished_scouting(dabe):
 		res = response.color
 		if(res == 1):
 			# gremo tja
-			poslji_cilj(ciljX, cilj_Y, vektorX, vektorY)
+			poslji_cilj(ciljX, ciljY, vektorX, vektorY)
 		else:
 			# premaknemo cilj	
 			ciljX = ringAndCylinderAttributes.ringsX[i] - vektorX
@@ -156,7 +157,7 @@ def finished_scouting(dabe):
 			res = response.color
 			if(res == 1):
 				# gremo tja
-				poslji_cilj(ciljX, cilj_Y, vektorX, vektorY)
+				poslji_cilj(ciljX, ciljY, vektorX, vektorY)
 			else:
 				print("noben cilj ni dosegljiv: ", ringAndCylinderAttributes.ringsX[i], ", ", ringAndCylinderAttributes.ringsY[i])
 				continue

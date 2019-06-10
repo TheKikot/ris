@@ -58,7 +58,7 @@ def cir_handler(location):
 def main():
 	
 	rospy.init_node('check_if_reachable_node', anonymous=False)
-	call_srv = rospy.Service('check_if_reachable', GetColor, cir_handler)
+	
 	rospy.wait_for_service('static_map')
 	
 	try:
@@ -68,6 +68,8 @@ def main():
 		print("map saved!")
 	except Exception, e:
 		print(e)
+	
+	call_srv = rospy.Service('check_if_reachable', GetColor, cir_handler)
 	
 	try:
 		rospy.spin()

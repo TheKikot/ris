@@ -354,8 +354,8 @@ class The_Ring:
         print("normalizirana normala", normala)
 
         pose3 = Pose()
-        pose3.position.x = point_world.point.x + normala[0]
-        pose3.position.y = point_world.point.y + normala[1]
+        pose3.position.x = point_world.point.x - normala[0]
+        pose3.position.y = point_world.point.y - normala[1]
         pose3.position.z = point_world.point.z
 
         # Marker for point perpendicular
@@ -376,8 +376,8 @@ class The_Ring:
         ringNormal = ringAndNormal()
         ringNormal.ringX = point_world.point.x
         ringNormal.ringY = point_world.point.y
-        ringNormal.normalX = point_world.point.x + normala[0]
-        ringNormal.normalY = point_world.point.y + normala[1]
+        ringNormal.normalX = point_world.point.x - normala[0]
+        ringNormal.normalY = point_world.point.y - normala[1]
         ringNormal.red = avgRed;
         ringNormal.blue = avgBlue;
         ringNormal.green = avgGreen;
