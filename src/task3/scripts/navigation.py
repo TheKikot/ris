@@ -58,12 +58,12 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 	print("goal_state_fin: ", goal_state)
 	
 	if (goal_state == 3) :
-		for j in range(0,8):
+		for j in range(0,10):
 			# turning
 			print("turn, q = ", origOrient)		
 	
 			#(x, y, z) = euler_from_quaternion(origOrient)
-			q = quaternion_from_euler(0, 0, origOrient.z + j * (3.14/4.0))
+			q = quaternion_from_euler(0, 0, origOrient.z + j * (3.14/5.0))
 
 			goal.target_pose.pose.orientation.z = q[2]
 			goal.target_pose.pose.orientation.w = q[3]
@@ -94,14 +94,14 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
 
-			rospy.sleep(7)
+			rospy.sleep(5)
 	
 
 def read_map(mapData):
 	# konstante
 	cilj_odmik = 0
-	cilj_stepX = 4
-	cilj_stepY = 2
+	cilj_stepX = 6	
+	cilj_stepY = 4
 
 	# preberi podatke o zemljevidu
 	meta = mapData.info

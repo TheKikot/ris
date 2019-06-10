@@ -60,9 +60,7 @@ def poslji_cilj(x, y, vektorX, vektorY):
 
 	goal = MoveBaseGoal()
 	
-	eulerKoti = [0.0, 0.0, math.asin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) )]
-	print("smer: ", eulerKoti[2])
-	orientacija = quaternion_from_euler(eulerKoti)
+	orientacija = quaternion_from_euler(0.0, 0.0, math.asin( vektorY / ((vektorX**2 + vektorY**2)**(1/2)) ))
 	
 	goal.target_pose.header.frame_id = "map" 
 	goal.target_pose.header.stamp = rospy.Time.now()
