@@ -151,95 +151,98 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 		std::cerr << "cylinder: " << cloud_cylinder->points[i].y << std::endl;
 	*/
 
-          pcl::compute3DCentroid (*cloud_cylinder, centroid);
-          std::cerr << "centroid of the cylindrical component: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << std::endl;
+    pcl::compute3DCentroid (*cloud_cylinder, centroid);
+    std::cerr << "centroid of the cylindrical component: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << std::endl;
 
 	  //Create a point in the "camera_rgb_optical_frame"
-          geometry_msgs::PointStamped point_camera;
-          geometry_msgs::PointStamped point_map;
-	      visualization_msgs::Marker marker;
-          geometry_msgs::TransformStamped tss;
+    geometry_msgs::PointStamped point_camera;
+    geometry_msgs::PointStamped point_map;
+    visualization_msgs::Marker marker;
+    geometry_msgs::TransformStamped tss;
           
-          point_camera.header.frame_id = "camera_rgb_optical_frame";
-          point_camera.header.stamp = ros::Time::now();
+    point_camera.header.frame_id = "camera_rgb_optical_frame";
+    point_camera.header.stamp = ros::Time::now();
 
-	  	  point_map.header.frame_id = "map";
-          point_map.header.stamp = ros::Time::now();
+	  point_map.header.frame_id = "map";
+    point_map.header.stamp = ros::Time::now();
 
-		  point_camera.point.x = centroid[0];
-		  point_camera.point.y = centroid[1];
-		  point_camera.point.z = centroid[2];
+	  point_camera.point.x = centroid[0];
+	  point_camera.point.y = centroid[1];
+	  point_camera.point.z = centroid[2];
 
-	  try{
+	  try
+	  {
 		  time_test = ros::Time::now();
 
 		  std::cerr << time_rec << std::endl;
 		  std::cerr << time_test << std::endl;
-  	      tss = tf2_buffer.lookupTransform("map","camera_rgb_optical_frame", time_rec);
-          //tf2_buffer.transform(point_camera, point_map, "map", ros::Duration(2));
+      tss = tf2_buffer.lookupTransform("map","camera_rgb_optical_frame", time_rec);
+      //tf2_buffer.transform(point_camera, point_map, "map", ros::Duration(2));
 	  }
-          catch (tf2::TransformException &ex)
+    catch (tf2::TransformException &ex)
 	  {
-	       ROS_WARN("Transform warning: %s\n", ex.what());
+			ROS_WARN("Transform warning: %s\n", ex.what());
 	  }
 
           //std::cerr << tss ;
           
-          tf2::doTransform(point_camera, point_map, tss);
+    tf2::doTransform(point_camera, point_map, tss);
 
-	      std::cerr << "point_camera: " << point_camera.point.x << " " <<  point_camera.point.y << " " <<  point_camera.point.z << std::endl;
+    std::cerr << "point_camera: " << point_camera.point.x << " " <<  point_camera.point.y << " " <<  point_camera.point.z << std::endl;
 
-	      std::cerr << "point_map: " << point_map.point.x << " " <<  point_map.point.y << " " <<  point_map.point.z << std::endl;
+    std::cerr << "point_map: " << point_map.point.x << " " <<  point_map.point.y << " " <<  point_map.point.z << std::endl;
 	      
-	      // call color service
-        task3::GetColor message;
-        message.request.cam_X = point_camera.point.x;
-        message.request.cam_Y = point_camera.point.y;
-        message.request.cam_Z = point_camera.point.z;
-        message.request.map_X = point_map.point.x;
-        message.request.map_Y = point_map.point.y;
-        message.request.map_Z = point_map.point.z;
-        
-        int color_code;
-        if(serv.call(message)) {
-        	color_code = message.response.color;
-				}
-				else {
-					std::cerr << "service error" << std::endl;
-				}
-	  	  marker.header.frame_id = "map";
-        marker.header.stamp = ros::Time::now();
+    // call color service
+    task3::GetColor message;
+    message.request.cam_X = point_camera.point.x;
+    message.request.cam_Y = point_camera.point.y;
+    message.request.cam_Z = point_camera.point.z;
+    message.request.map_X = point_map.point.x;
+    message.request.map_Y = point_map.point.y;
+    message.request.map_Z = point_map.point.z;
+    
+    int color_code;
+    if(serv.call(message))
+    {
+    	color_code = message.response.color;
+		}
+		else
+		{
+			std::cerr << "service error" << std::endl;
+		}
+	  marker.header.frame_id = "map";
+    marker.header.stamp = ros::Time::now();
 
-        marker.ns = "cylinder";
-        marker.id = 0;
+    marker.ns = "cylinder";
+    marker.id = 0;
 
-        marker.type = visualization_msgs::Marker::CYLINDER;
-        marker.action = visualization_msgs::Marker::ADD;
+    marker.type = visualization_msgs::Marker::CYLINDER;
+    marker.action = visualization_msgs::Marker::ADD;
 
-        marker.pose.position.x = point_map.point.x;
-        marker.pose.position.y = point_map.point.y;
-        marker.pose.position.z = point_map.point.z;
-        marker.pose.orientation.x = 0.0;
-	      marker.pose.orientation.y = 0.0;
-        marker.pose.orientation.z = 0.0;
-        marker.pose.orientation.w = 1.0;
+    marker.pose.position.x = point_map.point.x;
+    marker.pose.position.y = point_map.point.y;
+    marker.pose.position.z = point_map.point.z;
+    marker.pose.orientation.x = 0.0;
+    marker.pose.orientation.y = 0.0;
+    marker.pose.orientation.z = 0.0;
+    marker.pose.orientation.w = 1.0;
 
-        marker.scale.x = 0.1;
-	      marker.scale.y = 0.1;
-	      marker.scale.z = 0.1;
+    marker.scale.x = 0.1;
+    marker.scale.y = 0.1;
+    marker.scale.z = 0.1;
 
-        marker.color.r=0.0f;
-        marker.color.g=1.0f;
-        marker.color.b=0.0f;
-        marker.color.a=1.0f;
+    marker.color.r = 0.0f;
+    marker.color.g = 1.0f;
+    marker.color.b = 0.0f;
+    marker.color.a = 1.0f;
 
-	      marker.lifetime = ros::Duration();
+    marker.lifetime = ros::Duration();
 
-	      pubm.publish (marker);
+    pubm.publish(marker);
 
-	      pcl::PCLPointCloud2 outcloud_cylinder;
-        pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
-        puby.publish (outcloud_cylinder);
+    pcl::PCLPointCloud2 outcloud_cylinder;
+    pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
+    puby.publish(outcloud_cylinder);
 
   }
   
