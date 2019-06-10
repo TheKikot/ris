@@ -80,6 +80,7 @@ def poslji_marker(x, y, r, g, b):
 	marker.id = 1
 	marker.scale = Vector3(0.1, 0.1, 0.1)
 	marker.color = ColorRGBA(r, g, b, 1)
+	global cyl_pub
 	cyl_pub.publish(marker)
 	#print("marker poslan")
 
@@ -133,9 +134,12 @@ def color_handler(location):
 	return 0
 
 
+global cyl_pub
+
 def main():
 	rospy.init_node('cylinder_color', anonymous=False)
 	call_srv = rospy.Service('cylinder_color', GetColor, color_handler)
+	global cyl_pub
 	cyl_pub = rospy.Publisher('cylinder_with_color', Marker, queue_size=100)
 
 	global comparer
