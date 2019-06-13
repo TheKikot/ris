@@ -98,6 +98,7 @@ def poslji_cilj2(nX, nY, kX, kY):
 	kot = math.asin( (kX-nX) /  dist)
 	if(kY < nY):
 		kot = math.pi - kot
+	kot -= math.pi/2
 	#print(orientacija)
 
 	orientacija = quaternion_from_euler(0.0, 0.0, kot)
