@@ -213,7 +213,7 @@ point_map.header.stamp = ros::Time::now();
 			std::cerr << "service error" << std::endl;
 		}
 		
-		/*
+		
 	  marker.header.frame_id = "map";
     marker.header.stamp = ros::Time::now();
 
@@ -243,7 +243,7 @@ point_map.header.stamp = ros::Time::now();
     marker.lifetime = ros::Duration();
 
     pubm.publish(marker);
-    */
+    
 
     pcl::PCLPointCloud2 outcloud_cylinder;
     pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
@@ -270,7 +270,7 @@ main (int argc, char** argv)
   pubx = nh.advertise<pcl::PCLPointCloud2> ("planes", 1);
   puby = nh.advertise<pcl::PCLPointCloud2> ("cylinder", 1);
 
-  pubm = nh.advertise<visualization_msgs::Marker>("cylinders",1);
+  pubm = nh.advertise<visualization_msgs::Marker>("cylindersAll",1);
   
   // Create a ROS service for getting the color of the cylinder
   serv = nh.serviceClient<task3::GetColor>("cylinder_color");
