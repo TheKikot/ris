@@ -34,5 +34,8 @@
 	<!-- accumulate positions -->
 	<node name="accumulate_positions" pkg="task3" type="accumulate_positions.py" respawn="true"/>
 	
+	<!-- check color -->
+	<node name="check_color" pkg="task3" type="barva_cilindra.py" respawn="true"/>
+	
 	
 </launch>
