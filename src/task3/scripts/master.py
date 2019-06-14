@@ -8,6 +8,7 @@ import re
 import actionlib
 import math
 import urllib2
+from sklearn.neighbors import KNeighborsClassifier
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
@@ -236,6 +237,7 @@ def finished_scouting(dabe):
 
 	# ko ma cifre in vse to, vemo barvo cilindra
 	# gremo do cilindra s podano barvo, preberemo qr na njem
+	print("iscemo cilinder barve ", color[0])
 
 	#TODO - pejt do cilindra dane barve
 	# 0 - red
