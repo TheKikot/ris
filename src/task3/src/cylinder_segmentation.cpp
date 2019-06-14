@@ -9,6 +9,7 @@
 #include <pcl/point_types.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/passthrough.h>
+#include <pcl/filters/voxel_grid.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/sample_consensus/method_types.h>
 #include <pcl/sample_consensus/model_types.h>
@@ -45,6 +46,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pcl::ExtractIndices<pcl::Normal> extract_normals;
   pcl::search::KdTree<PointT>::Ptr tree (new pcl::search::KdTree<PointT> ());
   Eigen::Vector4f centroid;
+  pcl::VoxelGrid<PointT> vox_grid;
 
   // Datasets
   pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);
@@ -74,15 +76,20 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pass.setFilterFieldName ("z");
   pass.setFilterLimits (0, 2.3);
   pass.filter (*cloud_filtered);
-  std::cerr << "PointCloud after filtering z has: " << cloud_filtered->points.size () << " data points." << std::endl;
+  std::cerr << "PointCloud after filtering z has " << cloud_filtered->points.size () << " data points." << std::endl;
 
   pass.setInputCloud (cloud_filtered);
   pass.setFilterFieldName ("y");
   pass.setFilterLimits (-0.1, 0.3);
   pass.filter (*cloud_filtered);
-  std::cerr << "PointCloud after filtering y has: " << cloud_filtered->points.size () << " data points." << std::endl;
-	
+  std::cerr << "PointCloud after filtering y has " << cloud_filtered->points.size () << " data points." << std::endl;
   
+	// Reduce load by downsampling the cloud
+	vox_grid.setInputCloud (cloud_filtered);
+	vox_grid.setLeafSize (0.001f, 0.001f, 0.001f);
+  vox_grid.filter(*cloud_filtered);
+  
+  std::cerr << "PointCloud after downsampling has " << cloud_filtered->points.size () << " data points." << std::endl;
 
   // Estimate point normals
   ne.setSearchMethod (tree);
