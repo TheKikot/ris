@@ -94,14 +94,14 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
 
-			rospy.sleep(5)
+			rospy.sleep(2)
 	
 
 def read_map(mapData):
 	# konstante
 	cilj_odmik = 0
-	cilj_stepX = 7	
-	cilj_stepY = 5
+	cilj_stepX = 6
+	cilj_stepY = 4
 
 	# preberi podatke o zemljevidu
 	meta = mapData.info
@@ -153,6 +153,8 @@ def read_map(mapData):
 			if(grid[k][l] == 0 and grid[k+1][l] == 0 and grid[k-1][l] == 0 and grid[k][l+1] == 0 and grid[k][l-1] == 0):
 				poslji_cilj(origX, origY, origOrient, resolucija, downsize, l, k)
 				#poslji_marker(origX, origY, resolucija, downsize, k, l, k+l)
+				
+	
 	masterService()
 
 
