@@ -237,7 +237,7 @@ def finished_scouting(dabe):
 
 	# ko ma cifre in vse to, vemo barvo cilindra
 	# gremo do cilindra s podano barvo, preberemo qr na njem
-	print("iscemo cilinder barve ", color[0])
+	print("iscemo cilinder barve ", int(color[0]))
 
 	#TODO - pejt do cilindra dane barve
 	# 0 - red
@@ -263,6 +263,9 @@ def finished_scouting(dabe):
 	# slikamo mapo
 
 	#TODO
+	
+	
+	return []
 
 
 def main():

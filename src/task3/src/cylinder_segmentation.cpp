@@ -137,13 +137,15 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setNormalDistanceWeight (0.1);
   seg.setMaxIterations (10000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.06, 0.24);
+  seg.setRadiusLimits (0.10, 0.15);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 
+
+	std::cerr << "Looking for cylinders with a radius between 0.1 and 0.15 m" << std::endl;
   // Obtain the cylinder inliers and coefficients
   seg.segment (*inliers_cylinder, *coefficients_cylinder);
-  std::cerr << "Cylinder coefficients: " << *coefficients_cylinder << std::endl;
+  // std::cerr << "Cylinder coefficients: " << *coefficients_cylinder << std::endl;
 
   // Write the cylinder inliers to disk
   extract.setInputCloud (cloud_filtered2);
@@ -162,7 +164,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 	*/
 
     pcl::compute3DCentroid (*cloud_cylinder, centroid);
-    std::cerr << "centroid of the cylindrical component: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << std::endl;
+    //std::cerr << "centroid of the cylindrical component: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << std::endl;
 
 	  //Create a point in the "camera_rgb_optical_frame"
     geometry_msgs::PointStamped point_map;
