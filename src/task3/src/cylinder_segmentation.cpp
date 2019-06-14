@@ -86,10 +86,10 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   
 	// Reduce load by downsampling the cloud
 	vox_grid.setInputCloud (cloud_filtered);
-	vox_grid.setLeafSize (0.001f, 0.001f, 0.001f);
+	vox_grid.setLeafSize (0.01f, 0.01f, 0.01f);
   vox_grid.filter(*cloud_filtered);
   
-  std::cerr << "PointCloud after downsampling has " << cloud_filtered->points.size () << " data points." << std::endl;
+  std::cerr << "PointCloud after downsampling with leaf size " << vox_grid.getLeafSize() << " has " << cloud_filtered->points.size () << " data points." << std::endl;
 
   // Estimate point normals
   ne.setSearchMethod (tree);
