@@ -116,6 +116,11 @@ class Accumulator():
 					r.blue = (r.blue * r.count + rn.blue) / (r.count+1)
 					r.green = (r.green * r.count + rn.green) / (r.count+1)
 					r.count += 1
+					
+					# popravim povprečje normal
+					r.normalX = (r.normalX * r.count + rn.normalX) / (r.count+1)
+					r.normalY = (r.normalY * r.count + rn.normalY) / (r.count+1)
+										
 					print('Found a match')
 					break
 			else:
