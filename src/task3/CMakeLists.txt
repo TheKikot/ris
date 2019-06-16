@@ -92,7 +92,6 @@ catkin_package(
 #add_executable (find_plane src/find_plane.cpp)
 #add_executable (dominant_plane_with_obstacle_clustering src/dominant_plane_with_obstacle_clustering.cpp)
 add_executable (cylinder_segmentation src/cylinder_segmentation.cpp)
-add_executable (cylinder_segmentation_service src/cylinder_segmentation_service.cpp)
 #rosbuild_add_executable (cloud_viewer src/cloud_viewer.cpp)
 #rosbuild_add_executable (pose_estimation_cluster src/pose_estimation_cluster.cpp)
 #add_executable (don_segmentation src/don_segmentation.cpp)
