@@ -139,7 +139,7 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 				goal_state = ac.get_state()
 			#print("turn_state_fin: ", goal_state)
 			
-			#rospy.sleep(0.4)
+			rospy.sleep(0.4)
 			# look for rings
 			start = time.time()
 			rospy.wait_for_service('get_ring_location')
