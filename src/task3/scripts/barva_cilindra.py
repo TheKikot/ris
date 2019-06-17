@@ -69,6 +69,7 @@ class Comparer:
     	return name, minD
 
 
+
 global comparer
 
 def poslji_marker(x, y, r, g, b):
