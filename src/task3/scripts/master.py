@@ -258,7 +258,7 @@ def finished_scouting(dabe):
 
 
 
-	oddaljenost = 0.6
+	oddaljenost = 0.5
 	for i in range(0,12):
 		ciljX = cilinderX + (math.sin((math.pi/6.0)*i) * oddaljenost)
 		ciljY = cilinderY + (math.cos((math.pi/6.0)*i) * oddaljenost)
