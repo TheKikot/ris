@@ -11,6 +11,7 @@ import numpy as np
 import tf2_geometry_msgs
 import tf2_ros
 import actionlib
+import time
 from nav_msgs.srv import GetMap
 from nav_msgs.msg import OccupancyGrid, MapMetaData
 from actionlib_msgs.msg import GoalStatus
@@ -138,15 +139,17 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 				goal_state = ac.get_state()
 			#print("turn_state_fin: ", goal_state)
 			
-			rospy.sleep(0.2)
+			rospy.sleep(0.4)
 			# look for rings
+			start = time.time()
 			rospy.wait_for_service('get_ring_location')
 			try:
 				get_ring_location = rospy.ServiceProxy('get_ring_location', GetLocation)
 				get_ring_location()
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
-			
+			end = time.time()
+			print("cas za kroge: ", end-start)
 			# look for cylinders
 			rospy.wait_for_service('detect_cylinder')
 			try:
@@ -155,7 +158,7 @@ def poslji_cilj(origX, origY, origOrient, resolucija, downsize, x, y):
 			except rospy.ServiceException, e:
 				print ("Service call failed: %s"%e)
 
-			rospy.sleep(3.5)
+			rospy.sleep(1.5)
 	
 
 def read_map(mapData):
