@@ -36,35 +36,33 @@ def read_map_from_img():
 	
 	# ce algoritem ne bo dovolj robusten, dodaj tu homografijo z markerji!
 	print("berem sliko")
+	
+	'''
+	# SIFT
 	img = cv2.imread('/home/kikot/ROS/map_pictures/map_red.jpg')
+	gray= cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+	print("1")
+	sift = cv2.xfeatures2d.SIFT_create()
+	print("2")
+	kp = sift.detect(gray,None)
+	print("3")
+	img=cv2.drawKeypoints(gray,kp,img)
+	print("4")	
+	cv2.imwrite('/home/kikot/ROS/map_pictures/sift_keypoints.jpg',img)
+	print("5")
+	'''
 	
-	# Initiate FAST object with default values
-	fast = cv2.FastFeatureDetector()
-
-	# find and draw the keypoints
-	kp = fast.detect(img,None)
-	img2 = cv2.drawKeypoints(img, kp, color=(255,0,0))
-
-	# Print all default params
-	print( "Threshold: ", fast.getInt('threshold') )
-	print( "nonmaxSuppression: ", fast.getBool('nonmaxSuppression') )
-	print( "neighborhood: ", fast.getInt('type') )
-	print( "Total Keypoints with nonmaxSuppression: ", len(kp) )
-
-	cv2.imwrite('fast_true.png',img2)
-
-	# Disable nonmaxSuppression
-	fast.setBool('nonmaxSuppression',0)
-	kp = fast.detect(img,None)
-
-	print( "Total Keypoints without nonmaxSuppression: ", len(kp) )
-
-	img3 = cv2.drawKeypoints(img, kp, color=(255,0,0))
-
-	cv2.imwrite('fast_false.png',img3)
+	# SURF
 	
-	
-	
+	img = cv2.imread('/home/kikot/ROS/map_pictures/map_red.jpg', 0)
+	print("1")
+	surf = cv2.xfeatures2d.SURF_create(40000)
+	print("2")
+	kp, des = surf.detectAndCompute(img,None)
+	print("3")
+	img2 = cv2.drawKeypoints(img,kp,None,(255,0,0),4)
+	print("4")
+	plt.imshow(img2),plt.show()
 	## ustvari deskriptor
 	
 	## poisci homografijo
