@@ -165,11 +165,13 @@ def read_map_from_img():
 	kriz_hist, kriz_bins = np.histogram(img.ravel(),256,[0,256])
 	plt.hist(img.ravel(),256,[0,256]); plt.show()
 	
-	for i in range(0, h):
-		for j in range(0, w):
+	for i in range(0, h-krizecSize):
+		for j in range(0, w-krizecSize)
 			#preveri, ali je ta del znotraj vcrtane kroznice
+			img_patch = cv_image[i*krizecSize:(i+1)*krizecSize, j*krizecSize:(j+1)*krizecSize]
+			patch_hist, patch_bins = np.histogram(img.ravel(),256,[0,256])
+			#preveri ujemanje histogramov
 			
-			#preveri, ali ima vec rdece kot ostalo
 			print("")
 	
 	# TODO

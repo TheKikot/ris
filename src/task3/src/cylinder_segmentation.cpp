@@ -95,6 +95,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   ne.setKSearch (50);
   ne.compute (*cloud_normals);
 
+	/*
   // Create the segmentation object for the planar model and set all the parameters
   seg.setOptimizeCoefficients (true);
   seg.setModelType (pcl::SACMODEL_NORMAL_PLANE);
@@ -117,7 +118,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pcl::PointCloud<PointT>::Ptr cloud_plane (new pcl::PointCloud<PointT> ());
   extract.filter (*cloud_plane);
   std::cerr << "PointCloud representing the planar component: " << cloud_plane->points.size () << " data points." << std::endl;
-  
+  */
   /*
   for (int i = 0; i < cloud_plane->points.size(); i+= 20)
   	std::cerr << "plane: " << cloud_plane->points[i].y << std::endl;
