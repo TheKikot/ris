@@ -10,6 +10,7 @@ from task3.msg import *
 from task3.srv import *
 from sklearn.neighbors import KNeighborsClassifier
 from os.path import expanduser
+import math
 
 class Ring():
 
