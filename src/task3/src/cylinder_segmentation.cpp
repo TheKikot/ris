@@ -76,7 +76,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   
 	// Reduce load by downsampling the cloud
 	vox_grid.setInputCloud (cloud_filtered);
-	vox_grid.setLeafSize (0.02f, 0.02f, 0.02f);
+	vox_grid.setLeafSize (0.01f, 0.01f, 0.01f);
   vox_grid.filter(*cloud_filtered);
   
   std::cerr << "PointCloud after downsampling with leaf size " << vox_grid.getLeafSize() << " has " << cloud_filtered->points.size () << " data points." << std::endl;
@@ -132,9 +132,9 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_CYLINDER);
   seg.setMethodType (pcl::SAC_RANSAC);
   seg.setNormalDistanceWeight (0.1);
-  seg.setMaxIterations (5000);
+  seg.setMaxIterations (10000);
   seg.setDistanceThreshold (0.05);
-  seg.setRadiusLimits (0.11, 0.14);
+  seg.setRadiusLimits (0.10, 0.15);
   seg.setInputCloud (cloud_filtered2);
   seg.setInputNormals (cloud_normals2);
 

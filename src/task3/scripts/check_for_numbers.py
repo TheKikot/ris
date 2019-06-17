@@ -9,8 +9,6 @@ import cv2
 import numpy as np
 import pyzbar.pyzbar as pyzbar
 import pytesseract
-
-
 global bridge, dictm, params
 
 dictm = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
