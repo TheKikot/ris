@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ros/ros.h>
+#include <time.h>
 #include <math.h>
 #include <visualization_msgs/Marker.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -34,6 +35,13 @@ void
 cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 {
   // All the objects needed
+  
+  // start time
+  time_t timer;
+  //struct tm y2k = {0}
+  double seconds;
+  time(&timer);
+  
 
   ros::Time time_rec, time_test;
   time_rec = ros::Time::now();
@@ -132,7 +140,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_CYLINDER);
   seg.setMethodType (pcl::SAC_RANSAC);
   seg.setNormalDistanceWeight (0.1);
-  seg.setMaxIterations (10000);
+  seg.setMaxIterations (20000);
   seg.setDistanceThreshold (0.05);
   seg.setRadiusLimits (0.10, 0.15);
   seg.setInputCloud (cloud_filtered2);
@@ -249,8 +257,10 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
           pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
           puby.publish (outcloud_cylinder);
 
-    
-
+    // end time
+    time_t timer2;
+		time(&timer2);
+		std::cerr << "Celotni cas: " << difftime(timer, timer2) << std::endl;
   }
   
 }

@@ -28,6 +28,8 @@ params =  cv2.aruco.DetectorParameters_create()
 def read_map_from_img():
 	# parameter za spodnjo mejo iskanja projekcije
 	MIN_MATCH_COUNT = 10
+	# parameter za velikost krizca v pikslih
+	krizecSize = 20
 	
 	## preberi sliko ---------- 	
 	
@@ -91,14 +93,14 @@ def read_map_from_img():
 
 			h, status = cv2.findHomography(src_points, out_pts)
 			img_out = cv2.warpPerspective(cv_image, h, (img_out.shape[1],img_out.shape[0]))
-			#cv2.imwrite('/home/kikot/ROS/uncropped_image.jpg', img_out)			
+			cv2.imwrite('/home/kikot/ROS/uncropped_image.jpg', img_out)			
 			
 			###################################################
 			## racunanje homografije za zemljevid
 			##################################################
 
 			## SURF ----------
-			img = img_out[95:260,55:200]
+			img = img_out[115:265,55:205]
 			#cv2.imwrite('/home/kikot/ROS/cropped_image.jpg', img)
 
 			h,w = img.shape
@@ -159,6 +161,16 @@ def read_map_from_img():
 	
 	
 	## poisci rdeci krizec ----------
+	kriz_img = cv2.imread('/home/kikot/ROS/krizec.png', 0)
+	kriz_hist, kriz_bins = np.histogram(img.ravel(),256,[0,256])
+	plt.hist(img.ravel(),256,[0,256]); plt.show()
+	
+	for i in range(0, h):
+		for j in range(0, w):
+			#preveri, ali je ta del znotraj vcrtane kroznice
+			
+			#preveri, ali ima vec rdece kot ostalo
+			print("")
 	
 	# TODO
 	# poiscemo krizec na sliki in ga preslikamo na zemljevid : dest = cv2.perspectiveTransform(krizec,M)
