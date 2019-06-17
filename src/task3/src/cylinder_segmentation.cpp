@@ -64,7 +64,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   // Build a passthrough filter to remove spurious NaNs
   pass.setInputCloud (cloud);
   pass.setFilterFieldName ("z");
-  pass.setFilterLimits (0, 2.5);
+  pass.setFilterLimits (0, 2.2);
   pass.filter (*cloud_filtered);
   std::cerr << "PointCloud after filtering z has " << cloud_filtered->points.size () << " data points." << std::endl;
 
@@ -76,7 +76,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   
 	// Reduce load by downsampling the cloud
 	vox_grid.setInputCloud (cloud_filtered);
-	vox_grid.setLeafSize (0.03f, 0.03f, 0.03f);
+	vox_grid.setLeafSize (0.02f, 0.02f, 0.02f);
   vox_grid.filter(*cloud_filtered);
   
   std::cerr << "PointCloud after downsampling with leaf size " << vox_grid.getLeafSize() << " has " << cloud_filtered->points.size () << " data points." << std::endl;
@@ -236,9 +236,9 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 	      marker.scale.y = 0.2;
 	      marker.scale.z = 0.2;
 
-          marker.color.r=0.0f;
-          marker.color.g=0.0f;
-          marker.color.b=0.0f;
+          marker.color.r=0.6f;
+          marker.color.g=0.6f;
+          marker.color.b=0.6f;
           marker.color.a=1.0f;
 
 	      marker.lifetime = ros::Duration();

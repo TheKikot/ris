@@ -85,7 +85,7 @@ class Accumulator():
 		self.cylinders = None
 		self.build_classifier()
 
-	def getCylColor(b, g, r):
+	def getCylColor(self, b, g, r):
 		if (b == 1):
 			return 2
 		elif (g == 1 and r == 1):
@@ -126,7 +126,7 @@ class Accumulator():
 				cylX.append(c.x)
 				cylY.append(c.y)
 				cylCount.append(c.count)
-				cylColors.append(getCylColor(c.blue, c.green, c.red))
+				cylColors.append(c.color)
 				print("Cylinder - X, Y, count, color")
 				print(cylX[-1], cylY[-1], cylCount[-1], cylColors[-1])
 
