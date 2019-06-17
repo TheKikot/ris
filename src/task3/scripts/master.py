@@ -263,9 +263,6 @@ def finished_scouting(dabe):
 		cilyX = cilinderX + (math.sin((math.pi/6.0)*i) * oddaljenost)
 		cilyY = cilinderY + (math.cos((math.pi/6.0)*i) * oddaljenost)
 
-		# premik do kroga
-		ciljX = ringAndCylinderAttributes.normalsX[i]
-		ciljY = ringAndCylinderAttributes.normalsY[i]
 	
 		print("preverjam ce je ", ciljX, ciljY, " dosegljiv. to je ", i, "ti od 12ih ciljev okoli valja")
 		message = GetColorRequest()
