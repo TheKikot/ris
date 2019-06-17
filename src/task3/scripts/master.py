@@ -139,6 +139,9 @@ def finished_scouting(dabe):
 	rospy.wait_for_service('check_qr')
 	check_for_qr = rospy.ServiceProxy('check_qr', CheckQr)
 
+	rospy.wait_for_service('check_if_reachable')
+	cir = rospy.ServiceProxy('check_if_reachable', GetColor)
+
 
 	x = None
 	y = None
@@ -165,8 +168,7 @@ def finished_scouting(dabe):
 		ciljY = ringAndCylinderAttributes.normalsY[i]
 	
 		print("preverjam če je ", ciljX, ciljY, " dosegljiv.")
-		rospy.wait_for_service('check_if_reachable')
-		cir = rospy.ServiceProxy('check_if_reachable', GetColor)
+
 		message = GetColorRequest()
 		message.cam_X = 0.0
 		message.cam_Y = 0.0
@@ -230,33 +232,71 @@ def finished_scouting(dabe):
 				build_classifier()
 				print("zgradil classifier")
 				if(x != None and y != None):
-					color = get_prediction(x, y)
+					color = int(get_prediction(x, y)[0])
 					break
 
 	#KONC LOOPA
 
 	# ko ma cifre in vse to, vemo barvo cilindra
 	# gremo do cilindra s podano barvo, preberemo qr na njem
-	print("iscemo cilinder barve ", int(color[0]))
+	print("iscemo cilinder barve ", color)
 
-	#TODO - pejt do cilindra dane barve
-	# 0 - red
-	# 1 - green
-	# 2 - blue
-	# 3 - yellow
 
-	#TODO - LOOP v katerem se premikamo okol cilindra, dokler ne preberemo QR kode
-	odg = check_for_qr()
-	if(odg.data == 'No QR codes found'):
-		#TODO premakni se
-		#continue
-		print("")
-	elif(len(find_urls(odg.data))>0):
-		#nasli smo QR v enmu od krogov, ignore
-		print("")
+	cilinderX = 10000
+	cilinderY = 10000
+
+	for i in range(0,len(ringAndCylinderAttributes.cylnsColor)):
+		if(ringAndCylinderAttributes.cylnsColor[i] == color):
+			print("nasli smo cilinder prave barve")
+			print("cilinderX: ", ringAndCylinderAttributes.cylnsX[i])
+			print("cilinderY: ", ringAndCylinderAttributes.cylnsY[i])
+			cilinderX = ringAndCylinderAttributes.cylnsX[i]
+			cilinderY = ringAndCylinderAttributes.cylnsY[i]
+			break;
 	else:
-		barvaKroga = odg.data
+		print("nismo nasli cilindra prave barve :( ")
 
+
+
+	oddaljenost = 0.6
+	for i in range(0,12):
+		cilyX = cilinderX + (math.sin((math.pi/6.0)*i) * oddaljenost)
+		cilyY = cilinderY + (math.cos((math.pi/6.0)*i) * oddaljenost)
+
+		# premik do kroga
+		ciljX = ringAndCylinderAttributes.normalsX[i]
+		ciljY = ringAndCylinderAttributes.normalsY[i]
+	
+		print("preverjam ce je ", ciljX, ciljY, " dosegljiv. to je ", i, "ti od 12ih ciljev okoli valja")
+		message = GetColorRequest()
+		message.cam_X = 0.0
+		message.cam_Y = 0.0
+		message.cam_Z = 0.0
+		message.map_X = ciljX
+		message.map_Y = ciljY
+		message.map_Z = 0.0
+
+		response = cir(message)
+		res = response.color
+		if(res == 1):
+			print("cilj je dosegljiv")
+			# gremo tja
+			poslji_cilj2(ciljX, ciljY, cilinderX, cilinderY)
+
+			odg = check_for_qr()
+			if(odg.data == 'No QR codes found'):
+				#TODO premakni se
+				#continue
+				print("Ni qr kode")
+			elif(len(find_urls(odg.data))>0):
+				#nasli smo QR v enmu od krogov, ignore
+				print("Qr koda vsebuje URL, torej je napacna")
+			else:
+				barvaKroga = odg.data
+				print("Nasli barvo kroga: ", barvaKroga)
+		else:
+			print("cilj ni dosegljiv")
+			continue
 
 
 	# gremo do kroga, ki je take barve kokr pise na cilindru
