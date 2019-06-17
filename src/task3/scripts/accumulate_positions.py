@@ -57,15 +57,19 @@ class Accumulator():
 	def build_classifier(self):
 		home = expanduser("~")
 		f = open(home + "/ROS/barvni_podatki.txt", "r")
+		text = f.read()
 		lines = text.splitlines()
+		self.features = []
+		self.label = []
 
 		for line in lines[1:]: # For each line except the first (this is the description line)
-	        b, g, r, barva = [int(x) for x in line.split(',')] # x1 and x2 are inputs and y is the output
-	        self.features.append([b,g,r])
-	        self.label.append(barva)
+			#print(line)
+			b, g, r, barva = [float(x) for x in line.split(',')] # x1 and x2 are inputs and y is the output
+			self.features.append([b,g,r])
+			self.label.append(barva)
 
-    	self.model = KNeighborsClassifier(n_neighbors = 5)
-    	self.model.fit(self.features, self.label)
+		self.model = KNeighborsClassifier(n_neighbors = 5)
+		self.model.fit(self.features, self.label)
 
 
 	def get_prediction(self, b, g, r):
@@ -108,7 +112,7 @@ class Accumulator():
 				count.append(r.count)
 				normalX.append(r.normalX)
 				normalY.append(r.normalY)
-				colors.append(get_prediction(r.blue, r.green, r.red))
+				colors.append(self.get_prediction(r.blue, r.green, r.red))
 				print("Ring - X, Y, count, color")
 				print(x[-1], y[-1], count[-1], colors[-1])
 

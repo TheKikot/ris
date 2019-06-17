@@ -192,6 +192,25 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 
           tf2::doTransform(point_camera, point_map, tss);
 
+          // call color service
+	    task3::GetColor message;
+	    message.request.cam_X = point_camera.point.x;
+	    message.request.cam_Y = point_camera.point.y;
+	    message.request.cam_Z = point_camera.point.z;
+	    message.request.map_X = point_map.point.x;
+	    message.request.map_Y = point_map.point.y;
+	    message.request.map_Z = point_map.point.z;
+	    
+	    int color_code;
+	    if(serv.call(message))
+	    {
+	    	color_code = message.response.color;
+		}
+		else
+		{
+			std::cerr << "service error" << std::endl;
+		}
+
 	      //std::cerr << "point_camera: " << point_camera.point.x << " " <<  point_camera.point.y << " " <<  point_camera.point.z << std::endl;
 
 	      //std::cerr << "point_map: " << point_map.point.x << " " <<  point_map.point.y << " " <<  point_map.point.z << std::endl;
@@ -230,24 +249,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
           pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
           puby.publish (outcloud_cylinder);
 
-    // call color service
-    task3::GetColor message;
-    message.request.cam_X = point_camera.point.x;
-    message.request.cam_Y = point_camera.point.y;
-    message.request.cam_Z = point_camera.point.z;
-    message.request.map_X = point_map.point.x;
-    message.request.map_Y = point_map.point.y;
-    message.request.map_Z = point_map.point.z;
     
-    int color_code;
-    if(serv.call(message))
-    {
-    	color_code = message.response.color;
-	}
-	else
-	{
-		std::cerr << "service error" << std::endl;
-	}
 
   }
   

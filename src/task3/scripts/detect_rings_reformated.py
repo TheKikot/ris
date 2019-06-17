@@ -336,7 +336,7 @@ class The_Ring:
         marker.lifetime = rospy.Duration.from_sec(10)
         marker.id = self.marker_num
         marker.scale = Vector3(0.1, 0.1, 0.1)
-        marker.color = ColorRGBA(avgBlue, avgGreen, avgRed, 1)
+        marker.color = ColorRGBA(avgBlue/255.0, avgGreen/255.0, avgRed/255.0, 1)
         self.markers_pub.publish(marker)
 
 
@@ -380,9 +380,9 @@ class The_Ring:
         ringNormal.ringY = point_world.point.y
         ringNormal.normalX = point_world.point.x - normala[0]
         ringNormal.normalY = point_world.point.y - normala[1]
-        ringNormal.red = avgRed/255;
-        ringNormal.blue = avgBlue/255;
-        ringNormal.green = avgGreen/255;
+        ringNormal.red = avgRed;
+        ringNormal.blue = avgBlue;
+        ringNormal.green = avgGreen;
         self.rn_pub.publish(ringNormal)
 
         return(avgRingDepth/1000)
