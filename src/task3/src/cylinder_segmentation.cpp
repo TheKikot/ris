@@ -92,7 +92,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   // Estimate point normals
   ne.setSearchMethod (tree);
   ne.setInputCloud (cloud_filtered);
-  ne.setKSearch (50);
+  ne.setKSearch (20);
   ne.compute (*cloud_normals);
 
 	/*
