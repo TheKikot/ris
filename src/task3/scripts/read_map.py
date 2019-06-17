@@ -57,8 +57,11 @@ def read_map_from_img():
 	
 	## SURF ----------
 	
-	img = cv2.imread('/home/kikot/ROS/map_pictures/map_red.jpg', 0)
-	ref_img = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
+	img = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
+	h,w = img.shape
+	img = img[0+(h/4):(3*h/4), 0+(w/4):(3*w/4)]
+	# ref_img = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
+	ref_img = cv2.imread('/home/kikot/ROS/maps/mapa_ref.pgm', 0)
 	# za realno uporabo parameter spremenimo na vrednost med 300 in 500
 	surf = cv2.xfeatures2d.SURF_create(400)
 	# kp -> keypoints, des -> deskriptor slike
@@ -82,13 +85,13 @@ def read_map_from_img():
 		if m.distance < 0.7*n.distance:
 			good.append(m)
   
-  # if enough matches are found, 
+  # if enough matches are found, proceed with projection
 	if len(good)>MIN_MATCH_COUNT:
 		src_pts = np.float32([ kp[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
 		dst_pts = np.float32([ ref_kp[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
 		M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
 		matchesMask = mask.ravel().tolist()
-		h,w = img.shape
+		# h,w = img.shape
 		pts = np.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
 		dst = cv2.perspectiveTransform(pts,M)
 		ref_img_match = cv2.polylines(ref_img,[np.int32(dst)],True,255,3, cv2.LINE_AA)
@@ -107,9 +110,12 @@ def read_map_from_img():
 	
 	## poisci rdeci krizec ----------
 	
+	# TODO
+	# poiscemo krizec na sliki in ga preslikamo na zemljevid : dest = cv2.perspectiveTransform(krizec,M)
+	
 	## objavi lokacijo krizca na zemljevidu ----------
 	
-	
+	# TODO
 	
 	print("Koncano")
 
