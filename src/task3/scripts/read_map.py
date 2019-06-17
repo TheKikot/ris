@@ -18,7 +18,10 @@ from std_msgs.msg import ColorRGBA
 from task3.srv import *
 
 def read_map_from_img():
-	## preberi sliko
+	# parameter za spodnjo mejo iskanja projekcije
+	MIN_MATCH_COUNT = 10
+	
+	## preberi sliko ---------- 	
 	
 	'''
 	# pridobivanje slike
@@ -52,24 +55,59 @@ def read_map_from_img():
 	print("5")
 	'''
 	
-	# SURF
+	## SURF ----------
 	
 	img = cv2.imread('/home/kikot/ROS/map_pictures/map_red.jpg', 0)
-	print("1")
-	surf = cv2.xfeatures2d.SURF_create(40000)
-	print("2")
+	ref_img = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
+	# za realno uporabo parameter spremenimo na vrednost med 300 in 500
+	surf = cv2.xfeatures2d.SURF_create(400)
+	# kp -> keypoints, des -> deskriptor slike
 	kp, des = surf.detectAndCompute(img,None)
-	print("3")
-	img2 = cv2.drawKeypoints(img,kp,None,(255,0,0),4)
-	print("4")
-	plt.imshow(img2),plt.show()
-	## ustvari deskriptor
+	ref_kp, ref_des = surf.detectAndCompute(ref_img,None)
+	img_kp = cv2.drawKeypoints(img,kp,None,(255,0,0),4)
+	ref_img_kp = cv2.drawKeypoints(ref_img,ref_kp,None,(255,0,0),4)
+	#plt.imshow(img2),plt.show()
+	cv2.imwrite('/home/kikot/ROS/sift_keypoints.jpg',ref_img_kp)
 	
-	## poisci homografijo
+	## poisci homografijo ----------
 	
-	## poisci rdeci krizec
+	FLANN_INDEX_KDTREE = 1
+	index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+	search_params = dict(checks = 50)
+	flann = cv2.FlannBasedMatcher(index_params, search_params)
+	matches = flann.knnMatch(des, ref_des, k=2)
+	# store all the good matches as per Lowe's ratio test.
+	good = []
+	for m,n in matches:
+		if m.distance < 0.7*n.distance:
+			good.append(m)
+  
+  # if enough matches are found, 
+	if len(good)>MIN_MATCH_COUNT:
+		src_pts = np.float32([ kp[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
+		dst_pts = np.float32([ ref_kp[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
+		M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
+		matchesMask = mask.ravel().tolist()
+		h,w = img.shape
+		pts = np.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
+		dst = cv2.perspectiveTransform(pts,M)
+		ref_img_match = cv2.polylines(ref_img,[np.int32(dst)],True,255,3, cv2.LINE_AA)
+		cv2.imwrite('/home/kikot/ROS/img_match.jpg', ref_img_match)
+	else:
+		print( "Not enough matches are found - {}/{}".format(len(good), MIN_MATCH_COUNT) )
+		matchesMask = None
 	
-	## objavi lokacijo krizca na zemljevidu
+	draw_params = dict(matchColor = (0,255,0), # draw matches in green color
+		               singlePointColor = None,
+		               matchesMask = matchesMask, # draw only inliers
+		               flags = 2)
+	img_fin = cv2.drawMatches(img, kp, ref_img, ref_kp, good, None, **draw_params)
+	#plt.imshow(img_fin, 'gray'),plt.show()
+	cv2.imwrite('/home/kikot/ROS/final.jpg', img_fin)
+	
+	## poisci rdeci krizec ----------
+	
+	## objavi lokacijo krizca na zemljevidu ----------
 	
 	
 	
