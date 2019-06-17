@@ -17,6 +17,10 @@ from std_msgs.msg import ColorRGBA
 from task3.srv import *
 import glob2 as glob
 from scipy.spatial import distance as dist
+from os.path import expanduser
+
+global zaporednaSlika
+zaporednaSlika = 0
 
 class Comparer:
     def __init__(self):
@@ -28,7 +32,8 @@ class Comparer:
         self.images = {}
 
         # loop over the image paths
-        for imagePath in glob.glob("/home/team_lambda/ROS/images/*.jpeg"):
+        home = expanduser("~")
+        for imagePath in glob.glob(home+"/ROS/images/*.jpeg"):
             print(imagePath)
             # extract the image filename (assumed to be unique) and
             # load the image, updating the images dictionary
@@ -60,7 +65,7 @@ class Comparer:
             if(d < minD):
                 minD = d
                 name = key
-        print("name: ", name, "minD", minD)
+        #print("name: ", name, "minD", minD)
     	return name, minD
 
 
@@ -91,11 +96,11 @@ def color_handler(location):
 	try:
 		#print('converting image')
 		cv_image = CvBridge().imgmsg_to_cv2(data, 'bgr8')
-		print('image converted!')
+		#print('image converted!')
 	except CvBridgeError, e:
 		print(e)
 	
-	print(location)
+	#print(location)
 	# poiscemo cilinder na sliki
 	
 	kot = math.degrees(math.atan2(location.cam_X,location.cam_Z))
@@ -104,17 +109,20 @@ def color_handler(location):
 #	print(kot)
 #	kot = math.degrees(kot)
 #	print(kot)
-	print("kot: ", kot, "x: ", location.cam_X, "Y: ", location.cam_Y, "Z: ", location.cam_Z)
-	print("kot: ", kot, "x: ", location.map_X, "Y: ", location.map_Y, "Z: ", location.map_Z)
+	#print("kot: ", kot, "x: ", location.cam_X, "Y: ", location.cam_Y, "Z: ", location.cam_Z)
+	#print("kot: ", kot, "x: ", location.map_X, "Y: ", location.map_Y, "Z: ", location.map_Z)
 	
 	# 640x480
 	odmik = 320.0 + (525.0/45.0) * kot
-	print("odmik: ", odmik)
+	#print("odmik: ", odmik)
 	
-	crop = cv_image[220:250, (int(odmik)-30):(int(odmik)+30)]
+	crop = cv_image[240:270, (int(odmik)-30):(int(odmik)+30)]
+	global zaporednaSlika
 	name, minD = comparer.compare(crop)
-	#cv2.imwrite('image.jpeg', cv_image)
-	#cv2.imwrite(str(minD)+'.jpeg', crop)
+	cv2.imwrite('image'+str(zaporednaSlika)+'.jpeg', cv_image)
+	cv2.imwrite('crop'+str(zaporednaSlika)+'.jpeg', crop)
+	print(zaporednaSlika, minD)
+	zaporednaSlika += 1
 
 	if(minD < 0.85):
 		r = 0
