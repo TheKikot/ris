@@ -84,7 +84,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   
 	// Reduce load by downsampling the cloud
 	vox_grid.setInputCloud (cloud_filtered);
-	vox_grid.setLeafSize (0.01f, 0.01f, 0.01f);
+	vox_grid.setLeafSize (0.005f, 0.005f, 0.005f);
   vox_grid.filter(*cloud_filtered);
   
   std::cerr << "PointCloud after downsampling with leaf size " << vox_grid.getLeafSize() << " has " << cloud_filtered->points.size () << " data points." << std::endl;
@@ -140,7 +140,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setModelType (pcl::SACMODEL_CYLINDER);
   seg.setMethodType (pcl::SAC_RANSAC);
   seg.setNormalDistanceWeight (0.1);
-  seg.setMaxIterations (20000);
+  seg.setMaxIterations (30000);
   seg.setDistanceThreshold (0.05);
   seg.setRadiusLimits (0.10, 0.15);
   seg.setInputCloud (cloud_filtered2);
@@ -257,15 +257,16 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
           pcl::toPCLPointCloud2 (*cloud_cylinder, outcloud_cylinder);
           puby.publish (outcloud_cylinder);
 
-    // end time
-    long seconds, useconds, mtime;
-		gettimeofday(&end, NULL);
-		seconds = end.tv_sec - start.tv_sec;
-		useconds = end.tv_usec - start.tv_usec;
-		mtime = ((seconds)*1000 + useconds/1000);
-		std::cerr << "Celotni cas: " << mtime << std::endl;
+    
   }
   
+  // end time
+	long seconds, useconds, mtime;
+	gettimeofday(&end, NULL);
+	seconds = end.tv_sec - start.tv_sec;
+	useconds = end.tv_usec - start.tv_usec;
+	mtime = ((seconds)*1000 + useconds/1000);
+	std::cerr << "Celotni cas: " << mtime << std::endl;
 }
 
 int
