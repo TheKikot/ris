@@ -78,7 +78,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
 
   pass.setInputCloud (cloud_filtered);
   pass.setFilterFieldName ("y");
-  pass.setFilterLimits (-0.1, 0.3);
+  pass.setFilterLimits (-0.15, 0.3);
   pass.filter (*cloud_filtered);
   std::cerr << "PointCloud after filtering y has " << cloud_filtered->points.size () << " data points." << std::endl;
   
@@ -155,7 +155,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   // std::cerr << "Cylinder coefficients: " << *coefficients_cylinder << std::endl;
 
   // Write the cylinder inliers to disk
-  extract.setInputCloud (cloud_filtered2);
+  extract.setInputCloud (cloud_filtered);
   extract.setIndices (inliers_cylinder);
   extract.setNegative (false);
   pcl::PointCloud<PointT>::Ptr cloud_cylinder (new pcl::PointCloud<PointT> ());
