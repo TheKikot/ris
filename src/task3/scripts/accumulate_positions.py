@@ -178,7 +178,7 @@ class Accumulator():
 
 	def new_cylinder(self, marker):
 		print('Recieved a new cylinder, looking for matches')
-		if(math.isnan(x) or math.isnan(y)):
+		if(math.isnan(marker.pose.position.x) or math.isnan(marker.pose.position.y)):
 			print('The cylinders had nans')
 			return
 
