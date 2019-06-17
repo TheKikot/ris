@@ -326,7 +326,7 @@ def finished_scouting(dabe):
 				response = cir(message)
 				res = response.color
 				if(res == 1):
-					poslji_cilj2(ringAndCylinderAttributes.normalsX, ringAndCylinderAttributes.normalsY, ringAndCylinderAttributes.ringsX[i], ringAndCylinderAttributes.ringsY[i])
+					poslji_cilj2(ringAndCylinderAttributes.normalsX[i], ringAndCylinderAttributes.normalsY[i], ringAndCylinderAttributes.ringsX[i], ringAndCylinderAttributes.ringsY[i])
 					odg = check_for_numbers()
 					if(odg.gotMarkers == 0):
 						print("nisem nasel markerjev")
