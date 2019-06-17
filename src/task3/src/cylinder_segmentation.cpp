@@ -118,15 +118,15 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   pcl::PointCloud<PointT>::Ptr cloud_plane (new pcl::PointCloud<PointT> ());
   extract.filter (*cloud_plane);
   std::cerr << "PointCloud representing the planar component: " << cloud_plane->points.size () << " data points." << std::endl;
-  */
+  
   /*
   for (int i = 0; i < cloud_plane->points.size(); i+= 20)
   	std::cerr << "plane: " << cloud_plane->points[i].y << std::endl;
-  	*/
+
 
   /*pcl::PCLPointCloud2 outcloud_plane;
   pcl::toPCLPointCloud2 (*cloud_plane, outcloud_plane);
-  pubx.publish (outcloud_plane);*/
+  pubx.publish (outcloud_plane);
 
   // Remove the planar inliers, extract the rest
   extract.setNegative (true);
@@ -135,6 +135,7 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   extract_normals.setInputCloud (cloud_normals);
   extract_normals.setIndices (inliers_plane);
   extract_normals.filter (*cloud_normals2);
+  */
 
   // Create the segmentation object for cylinder segmentation and set all the parameters
   seg.setOptimizeCoefficients (true);
@@ -144,8 +145,8 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   seg.setMaxIterations (30000);
   seg.setDistanceThreshold (0.05);
   seg.setRadiusLimits (0.10, 0.15);
-  seg.setInputCloud (cloud_filtered2);
-  seg.setInputNormals (cloud_normals2);
+  seg.setInputCloud (cloud_filtered);
+  seg.setInputNormals (cloud_normals);
 
 
 	std::cerr << "Looking for cylinders with a radius between 0.11 and 0.14 m" << std::endl;
