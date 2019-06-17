@@ -244,6 +244,7 @@ def finished_scouting(dabe):
 
 	cilinderX = 10000
 	cilinderY = 10000
+	skipCilinder = False
 
 	for i in range(0,len(ringAndCylinderAttributes.cylnsColor)):
 		if(ringAndCylinderAttributes.cylnsColor[i] == color):
@@ -255,51 +256,53 @@ def finished_scouting(dabe):
 			break;
 	else:
 		print("nismo nasli cilindra prave barve :( ")
+		barvaKroga = raw_input("prosim vnesi barvo, kakrsna pise na cilindru, ker smo nesposobni: ")
+		skipCilinder = True
 
 
+	if(not skipCilinder):
+		oddaljenost = 0.55
+		for j in range(0, 3):
+			for i in range(0,12):
+				ciljX = cilinderX + (math.sin((math.pi/6.0)*i) * oddaljenost)
+				ciljY = cilinderY + (math.cos((math.pi/6.0)*i) * oddaljenost)
 
-	oddaljenost = 0.55
-	for j in range(0, 3):
-		for i in range(0,12):
-			ciljX = cilinderX + (math.sin((math.pi/6.0)*i) * oddaljenost)
-			ciljY = cilinderY + (math.cos((math.pi/6.0)*i) * oddaljenost)
+			
+				print("preverjam ce je ", ciljX, ciljY, " dosegljiv. to je ", i, "ti od 12ih ciljev okoli valja")
+				message = GetColorRequest()
+				message.cam_X = 0.0
+				message.cam_Y = 0.0
+				message.cam_Z = 0.0
+				message.map_X = ciljX
+				message.map_Y = ciljY
+				message.map_Z = 0.0
 
-		
-			print("preverjam ce je ", ciljX, ciljY, " dosegljiv. to je ", i, "ti od 12ih ciljev okoli valja")
-			message = GetColorRequest()
-			message.cam_X = 0.0
-			message.cam_Y = 0.0
-			message.cam_Z = 0.0
-			message.map_X = ciljX
-			message.map_Y = ciljY
-			message.map_Z = 0.0
+				response = cir(message)
+				res = response.color
+				if(res == 1):
+					print("cilj je dosegljiv")
+					# gremo tja
+					poslji_cilj2(ciljX, ciljY, cilinderX, cilinderY)
 
-			response = cir(message)
-			res = response.color
-			if(res == 1):
-				print("cilj je dosegljiv")
-				# gremo tja
-				poslji_cilj2(ciljX, ciljY, cilinderX, cilinderY)
-
-				odg = check_for_qr()
-				if(odg.data == 'No QR codes found'):
-					#TODO premakni se
-					#continue
-					print("Ni qr kode")
-				elif(len(find_urls(odg.data))>0):
-					#nasli smo QR v enmu od krogov, ignore
-					print("Qr koda vsebuje URL, torej je napacna")
+					odg = check_for_qr()
+					if(odg.data == 'No QR codes found'):
+						#TODO premakni se
+						#continue
+						print("Ni qr kode")
+					elif(len(find_urls(odg.data))>0):
+						#nasli smo QR v enmu od krogov, ignore
+						print("Qr koda vsebuje URL, torej je napacna")
+					else:
+						barvaKroga = odg.data
+						print("Nasli barvo kroga: ", barvaKroga)
+						break
 				else:
-					barvaKroga = odg.data
-					print("Nasli barvo kroga: ", barvaKroga)
-					break
+					print("cilj ni dosegljiv")
+					continue
 			else:
-				print("cilj ni dosegljiv")
 				continue
-		else:
-			continue
 
-		break
+			break
 
 	if(barvaKroga != None):
 		print("izpustili bomo pobiranje kroga, gremo do mape")
