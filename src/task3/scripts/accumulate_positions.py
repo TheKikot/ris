@@ -42,13 +42,13 @@ class Cylinder():
 		self.x = x
 		self.y = y
 		if(red == 1.0 and green == 1.0):
-			color = 3
+			self.color = 3
 		elif(red == 1.0):
-			color = 0
+			self.color = 0
 		elif(green == 1.0):
-			color = 1
+			self.color = 1
 		elif(blue == 1.0):
-			color = 2
+			self.color = 2
 
 
 class Accumulator():
@@ -177,6 +177,10 @@ class Accumulator():
 
 	def new_cylinder(self, marker):
 		print('Recieved a new cylinder, looking for matches')
+		if(math.isnan(x) or math.isnan(y)):
+			print('The cylinders had nans')
+			return
+
 		if(not self.cylinders == None):
 			for c in self.cylinders:
 				if self.sqr_distance(c.x, c.y, marker.pose.position.x, marker.pose.position.y) < 0.30:

@@ -117,26 +117,28 @@ def color_handler(location):
 	#print("odmik: ", odmik)
 	
 	crop = cv_image[240:270, (int(odmik)-30):(int(odmik)+30)]
-	global zaporednaSlika
 	name, minD = comparer.compare(crop)
+	'''
+	global zaporednaSlika
 	cv2.imwrite('image'+str(zaporednaSlika)+'.jpeg', cv_image)
 	cv2.imwrite('crop'+str(zaporednaSlika)+'.jpeg', crop)
 	print(zaporednaSlika, minD)
 	zaporednaSlika += 1
+	'''
 
 	if(minD < 0.85):
-		r = 0
-		g = 0
-		b = 0
+		r = 0.0
+		g = 0.0
+		b = 0.0
 		if(name.startswith('red')):
-			r = 1
+			r = 1.0
 		elif(name.startswith('green')):
-			g = 1
+			g = 1.0
 		elif(name.startswith('blue')):
-			b = 1
+			b = 1.0
 		elif(name.startswith('yellow')):
-			r = 1
-			g = 1
+			r = 1.0
+			g = 1.0
 		poslji_marker(location.map_X, location.map_Y, r, g, b)
 	
 	return 0
