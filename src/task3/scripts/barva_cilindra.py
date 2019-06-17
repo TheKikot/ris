@@ -113,7 +113,7 @@ def color_handler(location):
 	#print("kot: ", kot, "x: ", location.map_X, "Y: ", location.map_Y, "Z: ", location.map_Z)
 	
 	# 640x480
-	odmik = 320.0 + (525.0/62.0) * kot
+	odmik = 320.0 + (640.0/62.0) * kot
 	#print("odmik: ", odmik)
 	
 	crop = cv_image[240:270, (int(odmik)-30):(int(odmik)+30)]
