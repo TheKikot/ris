@@ -113,7 +113,7 @@ def poslji_cilj2(nX, nY, kX, kY):
 	goal.target_pose.pose.orientation.y = orientacija[1]
 	goal.target_pose.pose.orientation.z = orientacija[2]
 	goal.target_pose.pose.orientation.w = orientacija[3]
-	print("pošiljam cilj: (", goal.target_pose.pose.position.x, ", ", goal.target_pose.pose.position.y, ")")
+	print("posiljam cilj: (", goal.target_pose.pose.position.x, ", ", goal.target_pose.pose.position.y, ")")
 	ac.send_goal(goal)
 	goal_state = ac.get_state()
 	while (goal_state == GoalStatus.PENDING or goal_state == GoalStatus.ACTIVE):
