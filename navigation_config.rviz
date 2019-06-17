@@ -525,7 +525,7 @@ Visualization Manager:
       Marker Topic: /cylindersAll
       Name: Marker
       Namespaces:
-        {}
+        cylinder: true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -533,7 +533,7 @@ Visualization Manager:
       Marker Topic: /rings
       Name: Marker
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -541,7 +541,7 @@ Visualization Manager:
       Marker Topic: /cylinder_with_color
       Name: Marker
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -549,7 +549,7 @@ Visualization Manager:
       Marker Topic: /normals
       Name: Marker
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -588,8 +588,8 @@ Visualization Manager:
       Scale: 96.648201
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: -1.35336006
-      Y: 2.04397988
+      X: -1.93511689
+      Y: -2.8458426
     Saved: ~
 Window Geometry:
   Displays:

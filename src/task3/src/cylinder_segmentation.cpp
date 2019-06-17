@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ros/ros.h>
-#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 #include <math.h>
 #include <visualization_msgs/Marker.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -37,10 +38,9 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
   // All the objects needed
   
   // start time
-  time_t timer;
-  //struct tm y2k = {0}
-  double seconds;
-  time(&timer);
+  struct timeval start, end;
+  gettimeofday(&start, NULL);
+
   
 
   ros::Time time_rec, time_test;
@@ -258,9 +258,12 @@ cloud_cb (const pcl::PCLPointCloud2ConstPtr& cloud_blob)
           puby.publish (outcloud_cylinder);
 
     // end time
-    time_t timer2;
-		time(&timer2);
-		std::cerr << "Celotni cas: " << difftime(timer, timer2) << std::endl;
+    long seconds, useconds, mtime;
+		gettimeofday(&end, NULL);
+		seconds = end.tv_sec - start.tv_sec;
+		useconds = end.tv_usec - start.tv_usec;
+		mtime = ((seconds)*1000 + useconds/1000);
+		std::cerr << "Celotni cas: " << mtime << std::endl;
   }
   
 }
