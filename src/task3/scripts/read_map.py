@@ -25,10 +25,12 @@ dictm = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
 params =  cv2.aruco.DetectorParameters_create()
 
 def hellingerDist(vec1, vec2):
-	vec3 = []
-	return vec3	
+	vsota = 0.0
+	for i in range(0,len(vec1)):
+		vsota += np.sqrt(vec1[i]) - np.sqrt(vec2[i])
+	return vsota	
 	
-def read_map_from_img():
+def read_map_from_img(ignore):
 	# parameter za spodnjo mejo iskanja projekcije
 	MIN_MATCH_COUNT = 10
 	# parameter za velikost krizca v pikslih
@@ -103,10 +105,10 @@ def read_map_from_img():
 			##################################################
 
 			## SURF ----------
-			img = img_out[115:265,55:205]
+			img = img_out[110:270,50:210]
 			#cv2.imwrite('/home/kikot/ROS/cropped_image.jpg', img)
 
-			h,w = img.shape
+			h,w,d = img.shape
 			# ref_img = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
 			ref_img = cv2.imread('/home/kikot/ROS/maps/mapa_ref.pgm', 0)
 			# za realno uporabo parameter spremenimo na vrednost med 300 in 500
@@ -162,12 +164,12 @@ def read_map_from_img():
 		print('No markers found')
 
 	
-	
+	'''
 	## poisci rdeci krizec ----------
 	kriz_img = cv2.imread('/home/kikot/ROS/krizec.png', 0)
 	kriz_hist, kriz_bins = np.histogram(img.ravel(),256,[0,256])
-	plt.hist(img.ravel(),256,[0,256]); plt.show()
-	
+	#plt.hist(img.ravel(),256,[0,256]); plt.show()
+	minDist = 1000.0
 	for i in range(0, h-krizecSize):
 		for j in range(0, w-krizecSize):
 			#preveri, ali je ta del znotraj vcrtane kroznice
@@ -175,20 +177,28 @@ def read_map_from_img():
 			patch_hist, patch_bins = np.histogram(img.ravel(),256,[0,256])
 			#preveri ujemanje histogramov
 			dist = hellingerDist(kriz_hist, patch_hist)
-			print("")
-	
-	# TODO
+			
+			if(dist < minDist):
+				minDist = dist
+				loci = i
+				locj = j
+				
+	print("dist: ", dist)
+	print("mesto na sliki: (", loci, ", ", locj, ")")
 	# poiscemo krizec na sliki in ga preslikamo na zemljevid : dest = cv2.perspectiveTransform(krizec,M)
 	
 	## objavi lokacijo krizca na zemljevidu ----------
 	
 	# TODO
-	
+	'''
 	print("Koncano")
+	return []
 
 def main():
 	rospy.init_node("read_map")
 	service = rospy.Service('read_map', GetLocation, read_map_from_img)
+	global bridge
+	bridge = CvBridge()
 
 	try:
 		rospy.spin()
