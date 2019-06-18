@@ -24,7 +24,10 @@ dictm = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
 # The object that we will pass to the markerDetect function
 params =  cv2.aruco.DetectorParameters_create()
 
-
+def hellingerDist(vec1, vec2):
+	vec3 = []
+	return vec3	
+	
 def read_map_from_img():
 	# parameter za spodnjo mejo iskanja projekcije
 	MIN_MATCH_COUNT = 10
@@ -33,20 +36,20 @@ def read_map_from_img():
 	
 	## preberi sliko ---------- 	
 	
-	'''
+	
 	# pridobivanje slike
 	data = rospy.wait_for_message('/camera/rgb/image_raw', Image)
-  print('slika prejeta')
+	print('slika prejeta')
   # pretvorba slike
-  try:
+	try:
 		#print('converting image')
 		global bridge
-		img = bridge.imgmsg_to_cv2(data, 'bgr8')
+		cv_image = bridge.imgmsg_to_cv2(data, 'bgr8')
 		print('slika pretvorjena')
-  except CvBridgeError, e:
-    print(e)
-  '''
-	cv_image = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
+	except CvBridgeError, e:
+		print(e)
+
+	#cv_image = cv2.imread('/home/kikot/ROS/map_pictures/map_blue.jpg', 0)
 	# ce algoritem ne bo dovolj robusten, dodaj tu homografijo z markerji!
 	print("berem sliko")
 	
@@ -166,12 +169,12 @@ def read_map_from_img():
 	plt.hist(img.ravel(),256,[0,256]); plt.show()
 	
 	for i in range(0, h-krizecSize):
-		for j in range(0, w-krizecSize)
+		for j in range(0, w-krizecSize):
 			#preveri, ali je ta del znotraj vcrtane kroznice
 			img_patch = cv_image[i*krizecSize:(i+1)*krizecSize, j*krizecSize:(j+1)*krizecSize]
 			patch_hist, patch_bins = np.histogram(img.ravel(),256,[0,256])
 			#preveri ujemanje histogramov
-			
+			dist = hellingerDist(kriz_hist, patch_hist)
 			print("")
 	
 	# TODO
@@ -184,16 +187,14 @@ def read_map_from_img():
 	print("Koncano")
 
 def main():
-	#rospy.init_node("read_map")
-	#service = rospy.Service('read_map', GetLocation, read_map_from_img)
-	read_map_from_img()
+	rospy.init_node("read_map")
+	service = rospy.Service('read_map', GetLocation, read_map_from_img)
 
-	'''
 	try:
 		rospy.spin()
 	except KeyboardInterrupt:
 		print('Shutting down')
-	'''
+	
 
 if __name__ == '__main__':
     main()

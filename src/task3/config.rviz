@@ -7,6 +7,9 @@ Panels:
         - /TF1/Tree1
         - /PointCloud1
         - /plane1
+        - /Map1
+        - /Marker1
+        - /Marker2
       Splitter Ratio: 0.5
     Tree Height: 531
   - Class: rviz/Selection
@@ -26,7 +29,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: plane
+    SyncSource: PointCloud
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
@@ -487,6 +490,32 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: false
+      Marker Topic: /cylindersAll
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /cylinder_with_color
+      Name: Marker
+      Namespaces:
+        "": true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -507,25 +536,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.71205759
+      Distance: 8.83266163
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.35092616
-        Y: -1.69336879
-        Z: 1.29453576
+        X: 0.46382913
+        Y: 0.356952965
+        Z: 1.12330401
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.315399975
+      Pitch: 1.22039914
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.39857101
+      Yaw: 3.13856721
     Saved: ~
 Window Geometry:
   Displays:
