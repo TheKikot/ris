@@ -298,8 +298,67 @@ def finished_scouting(dabe):
 				continue
 		else:
 			continue
-			
+
 		break
+
+	if(barvaKroga != None):
+		print("izpustili bomo pobiranje kroga, gremo do mape")
+		if(barvaKroga == 'red'):
+			barvaKroga = 0
+		elif(barvaKroga == 'green'):
+			barvaKroga = 1
+		elif(barvaKroga == 'blue'):
+			barvaKroga = 2
+		else:
+			barvaKroga = 4
+			print("neznana barva kroga")
+
+		for i in range(0,len(ringAndCylinderAttributes.ringsColor)):
+			if(ringAndCylinderAttributes.ringsColor[i] == barvaKroga):
+				message = GetColorRequest()
+				message.cam_X = 0.0
+				message.cam_Y = 0.0
+				message.cam_Z = 0.0
+				message.map_X = ciljX
+				message.map_Y = ciljY
+				message.map_Z = 0.0
+
+				response = cir(message)
+				res = response.color
+				if(res == 1):
+					poslji_cilj2(ringAndCylinderAttributes.normalsX, ringAndCylinderAttributes.normalsY, ringAndCylinderAttributes.ringsX[i], ringAndCylinderAttributes.ringsY[i])
+					odg = check_for_numbers()
+					if(odg.gotMarkers == 0):
+						print("nisem nasel markerjev")
+						#TODO premikej se mal, da morda najdes markerje
+						continue
+					else:
+						if(odg.x == -1 or odg.y == -1):
+							print("nasel markerje, ampak ne stevilk")
+							print("testiram se za markerje")
+							odg = check_for_qr()
+
+							if(odg.data == 'No QR codes found'):
+								print("nisem nasel qr kode, torej naj bi bla noter mapa")
+								rospy.wait_for_service('read_map')
+								read_map = rospy.ServiceProxy('read_map', GetLocation)
+								read_map()
+								break;
+
+							elif(len(find_urls(odg.data)) > 0):
+								print("nasel qr kodo :( ")
+								continue
+
+						else:
+							print("prebral stevilke")
+							continue
+		else:
+			print("noben izmed detektiranih krogov dane barve se ne strinja s tem, da vsebuje mapo :( ")
+
+
+
+	else:
+		print("ne poznamo barve kroga")
 
 
 	# gremo do kroga, ki je take barve kokr pise na cilindru
