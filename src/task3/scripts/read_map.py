@@ -23,12 +23,7 @@ dictm = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
 
 # The object that we will pass to the markerDetect function
 params =  cv2.aruco.DetectorParameters_create()
-
-def hellingerDist(vec1, vec2):
-	vsota = 0.0
-	for i in range(0,len(vec1)):
-		vsota += np.sqrt(vec1[i]) - np.sqrt(vec2[i])
-	return vsota	
+	
 	
 def read_map_from_img(ignore):
 	# parameter za spodnjo mejo iskanja projekcije
@@ -176,7 +171,7 @@ def read_map_from_img(ignore):
 			img_patch = cv_image[i*krizecSize:(i+1)*krizecSize, j*krizecSize:(j+1)*krizecSize]
 			patch_hist, patch_bins = np.histogram(img.ravel(),256,[0,256])
 			#preveri ujemanje histogramov
-			dist = hellingerDist(kriz_hist, patch_hist)
+			dist = cv2.compareHist(kriz_hist, patch_hist, CV_COMP_CHISQR)
 			
 			if(dist < minDist):
 				minDist = dist
